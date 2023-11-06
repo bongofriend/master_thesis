@@ -330,3 +330,5 @@ pip-selfcheck.json
 
 project/psmart/dataset/**
 project/sources/**
+
+project/dataset/*
