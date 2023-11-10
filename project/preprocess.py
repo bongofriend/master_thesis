@@ -167,4 +167,3 @@ if __name__ == '__main__':
         logging.error(e)
     finally:
         config.clean_up()
-
