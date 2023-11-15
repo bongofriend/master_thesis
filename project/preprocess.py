@@ -7,6 +7,7 @@ import zipfile
 import sys
 from xml.dom.minidom import Element, parse
 from typing import List
+from models import RoleEntry, RoleDescriptor
 
 class Config:
     source_files_archive_dir: str
@@ -16,8 +17,8 @@ class Config:
 
     def __init__(self, source_files_archive_dir: str, dataset_dir: str):
         current_location = path.dirname(path.realpath(sys.argv[0]))
-        self.source_files_archive_dir = path.join(current_location, source_files_archive_dir)
-        self.dataset_dir = path.join(current_location, dataset_dir)
+        self.source_files_archive_dir = path.realpath(path.join(current_location, source_files_archive_dir))
+        self.dataset_dir = path.realpath(path.join(current_location, dataset_dir))
         
         self.__tmpDir = tempfile.TemporaryDirectory()
         self.source_dir = path.join(self.get_tmp_dir(), 'sources')
@@ -29,69 +30,12 @@ class Config:
         self.__tmpDir.cleanup()
 
 
-class RoleEntry:
-    role: str
-    role_kind: str
-    entity: str
-        
-    def __init__(self, role: str, role_kind: str, entity: str):
-        self.role = role
-        self.role_kind = role_kind
-        self.entity = entity
-        
-    @staticmethod
-    def from_xml(el: Element):
-        role = el.tagName
-        role_kind = el.getAttribute('roleKind')
-        entity_value = ''
-        entities = el.getElementsByTagName('entity')
-        if len(entities) > 0 and entities[0].firstChild != None:
-            entity_value = entities[0].firstChild.nodeValue
-        entity = entity_value
-        return RoleEntry(role, role_kind, entity)
-    
-    def to_csv(self, delimiter: str) -> str:
-        return delimiter.join([self.role, self.role_kind, self.entity])
-
-class RoleDescriptor:
-
-    roleEntries: List[RoleEntry]
-
-    def __init__(self, roles: [RoleEntry]) -> None:
-        self.roleEntries = roles
-
-    @staticmethod
-    def from_xml(el: Element):
-        role_nodes: List[Element] = []
-        role_entries = []
-        for e in el.getElementsByTagName('roles'):
-            role_nodes.append(e)
-        for e in el.getElementsByTagName('actors'):
-            role_nodes.append(e)
-        for r in role_nodes[0].childNodes:
-            if not r.hasChildNodes():
-                continue
-            for c in r.childNodes:
-                if not c.hasChildNodes():
-                    continue
-                role_entries.append(RoleEntry.from_xml(c))
-        return RoleDescriptor(role_entries)
-            
-
-
-    def to_csv(self, delimiter='|') -> str:
-        content = [delimiter.join(['role', 'role_kind', 'entity'])]
-        content = content + [e.to_csv(delimiter) for e in self.roleEntries]
-        return '\n'.join(content)
-
-
-
 def parse_args() -> Config:
     parser = argparse.ArgumentParser(
         prog='Unzip and extract files for dataset'
     )
-    parser.add_argument('--sourceFilesArchive', type=str, help='Location of archive with source files', dest='archive_dir')
-    parser.add_argument('--datasetDir', type=str, help='Directory to where dataset files are to be located', dest='dataset_dir')
+    parser.add_argument('--sourceFilesArchive', type=str, help='Location of archive with source files', dest='archive_dir', required=True)
+    parser.add_argument('--datasetDir', type=str, help='Directory to where dataset files are to be located', dest='dataset_dir', required=True)
     #parser.add_argument('--sourceDir', type=str, help='Directory where unpr')
     args = parser.parse_args()
     return Config(args.archive_dir, args.dataset_dir)
