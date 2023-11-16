@@ -8,6 +8,8 @@ import sys
 from xml.dom.minidom import Element, parse
 from typing import List
 from models import RoleEntry, RoleDescriptor
+from pathlib import Path
+import os
 
 class Config:
     source_files_archive_dir: str
@@ -28,6 +30,10 @@ class Config:
     
     def clean_up(self):
         self.__tmpDir.cleanup()
+
+    @staticmethod
+    def default() -> "Config":
+        return Config('./source_files.zip', './dataset')
 
 
 def parse_args() -> Config:
@@ -70,8 +76,7 @@ def parse_micro_arch(micro_arch_node: Element, pattern_path: str, project_name: 
     role_descriptor = RoleDescriptor.from_xml(micro_arch_node)
     if len(role_descriptor.roleEntries) == 0:
         return
-    with open(path.join(micro_arch_path, 'roles.csv'), mode='w') as f:
-        f.write(role_descriptor.to_csv())
+    role_descriptor.to_csv(path.join(micro_arch_path, 'roles.csv'))
     with open(path.join(micro_arch_path, 'project.txt'), mode='w') as f:
         f.write(project_name)
 
@@ -85,6 +90,7 @@ def parse_pattern_node(config: Config, project_name: str, pattern_node: Element)
     for micro_arch_node in pattern_node.getElementsByTagName('microArchitecture'):
         parse_micro_arch(micro_arch_node, pattern_path, project_name)
 
+
 def extract_metadata_from_source(config: Config):
     xml_config_path = path.join(config.dataset_dir, 'psmart.xml')
     if not path.exists(xml_config_path):
@@ -97,16 +103,43 @@ def extract_metadata_from_source(config: Config):
             for pattern_node in programNode.getElementsByTagName('designPattern'):
                 parse_pattern_node(config, project_name, pattern_node)
 
+def resolve_source_file_path(config: Config, role: RoleEntry, project_name) -> (str, str):
+    base_path = path.join(config.get_tmp_dir(), 'sources', project_name)
+    parsed_path_segments = []
+    for seg in role.entity.split('.'):
+        parsed_path_segments.append(seg)
+        if len(seg) == 0 or seg[0].islower():
+            continue
+        possible_paths = [
+            f"{path.join(base_path, 'src', os.sep.join(parsed_path_segments))}.java",
+            f"{path.join(base_path, os.sep.join(parsed_path_segments))}.java"
+        ]
+        for p in possible_paths:
+            if path.exists(p) and path.isfile(p):
+                return (p, seg)
+    return None
 
-        
+def move_source_files(config: Config):
+    for dp in filter(lambda s: path.isdir(path.join(config.dataset_dir, s)), listdir(path.join(config.dataset_dir))):
+        for micro_arch in listdir(path.join(config.dataset_dir, dp)):
+            micro_arch_dir = path.join(config.dataset_dir, dp, micro_arch)
+            role_desc = RoleDescriptor.from_csv(micro_arch_dir)
+            project_name = Path(path.join(micro_arch_dir, 'project.txt')).read_text()
+            for r in role_desc.roleEntries:
+                source_file_path = resolve_source_file_path(config, r, project_name)
+                if source_file_path == None:
+                    continue
+                shutil.copyfile(source_file_path[0], f"{path.join(micro_arch_dir, source_file_path[1])}.java")       
 
 
 if __name__ == '__main__':
-    config = parse_args()
+    #config = parse_args()
+    config = Config.default() 
     try:
         logging.basicConfig(level='INFO')
         unzip_source_files(config)
         extract_metadata_from_source(config)
+        move_source_files(config)
     except Exception as e:
         logging.error(e)
     finally:

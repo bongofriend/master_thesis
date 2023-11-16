@@ -10,9 +10,9 @@ class RoleEntry:
     entity: str
         
     def __init__(self, role: str, role_kind: str, entity: str):
-        self.role = role
-        self.role_kind = role_kind
-        self.entity = entity
+        self.role = role.strip()
+        self.role_kind = role_kind.strip()
+        self.entity = entity.strip()
         
     @staticmethod
     def from_xml(el: Element) -> 'RoleEntry':
@@ -25,8 +25,8 @@ class RoleEntry:
         entity = entity_value
         return RoleEntry(role, role_kind, entity)
     
-    def to_csv(self, delimiter: str) -> str:
-        return delimiter.join([self.role, self.role_kind, self.entity])
+    def to_csv(self, writer) -> str:
+        return writer.writerow([self.role, self.role_kind, self.entity])
 
 class RoleDescriptor:
 
@@ -63,7 +63,8 @@ class RoleDescriptor:
 
 
 
-    def to_csv(self, delimiter='|') -> str:
-        content = [delimiter.join(['role', 'role_kind', 'entity'])]
-        content = content + [e.to_csv(delimiter) for e in self.roleEntries]
-        return '\n'.join(content)
+    def to_csv(self, path: str, delimiter='|') -> str:
+        with open(path, mode="w") as f:
+            writer = csv.writer(f, delimiter=delimiter)
+            writer.writerow(['role', 'role_kind', 'entity'])
+            [r.to_csv(writer) for r in self.roleEntries]
