@@ -3,7 +3,7 @@ import os
 import argparse
 import logging
 import sys
-from evaluators import MeticEvaluaterInterface, FirstTestEvaluator, SecondTestEvaluator
+import evaluators
 from models import RoleDescriptor, RoleEntry
 import pandas as pd
 from typing import List, Dict
@@ -20,7 +20,7 @@ class Context:
     dataset_dir: str
     csv_file_path: str
     __metric_buffer: List[Dict[str, str]]
-    __evaluaters: List[MeticEvaluaterInterface] = []
+    __evaluaters: List[evaluators.MetricEvaluationInterface] = []
 
     def __init__(self, dataset_dir: str, csv_file_path: str) -> None:
         current_location = path.dirname(path.realpath(sys.argv[0]))
@@ -31,8 +31,15 @@ class Context:
         self.__metric_buffer = []
         #TODO: Determine evaluaters and implement them
         self.__evaluaters = [
-           FirstTestEvaluator(),
-           SecondTestEvaluator()
+            evaluators.NumberOfFieldsEvaluation(),
+            evaluators.NumberOfStaticFieldsEvaluation(),
+            evaluators.NumberOfMethodsEvaluation(),
+            evaluators.NumberOfStaticMethodsEvaluation(),
+            evaluators.NumberOfInterfacesEvaluation(),
+            evaluators.NumberOfAbstractMethodsEvaluation(),
+            evaluators.NumberOfOverriddenMethodsEvaluation(),
+            evaluators.NumberOfPrivateConstrcutorsEvaluation()
+
         ]
 
     def add_metric_row(self, dp: str, micro_arch: str, role: RoleEntry, metrics: Dict[str, float]):
@@ -53,7 +60,7 @@ class Context:
     def resolve_dataset_dir(self, *p: str) -> str:
         return path.join(self.dataset_dir, *p)
 
-    def get_evaluaters(self) -> List[MeticEvaluaterInterface]:
+    def get_evaluaters(self) -> List[evaluators.MetricEvaluationInterface]:
         return self.__evaluaters
 
     @staticmethod
@@ -116,7 +123,7 @@ def generate_metrics(ctx: Context):
                 continue
             evaluation_results: Dict[str, float] = {}
             for e in ctx.get_evaluaters():
-                evaluation_results[e.get_metric_name()] = e.evaluate(n.entity_node)
+                evaluation_results[e.get_metric_name()] = e.evaluate(n.entity_node.node)
             ctx.add_metric_row(n.entity_node.dp, n.entity_node.micro_arch, n.entity_node.role_entry, evaluation_results)
 
 

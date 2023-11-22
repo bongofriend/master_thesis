@@ -11,6 +11,7 @@ from models import RoleEntry, RoleDescriptor
 from pathlib import Path
 import os
 
+
 class Config:
     source_files_archive_dir: str
     dataset_dir: str
@@ -21,13 +22,13 @@ class Config:
         current_location = path.dirname(path.realpath(sys.argv[0]))
         self.source_files_archive_dir = path.realpath(path.join(current_location, source_files_archive_dir))
         self.dataset_dir = path.realpath(path.join(current_location, dataset_dir))
-        
+
         self.__tmpDir = tempfile.TemporaryDirectory()
         self.source_dir = path.join(self.get_tmp_dir(), 'sources')
-    
+
     def get_tmp_dir(self) -> str:
         return self.__tmpDir.name
-    
+
     def clean_up(self):
         self.__tmpDir.cleanup()
 
@@ -40,11 +41,14 @@ def parse_args() -> Config:
     parser = argparse.ArgumentParser(
         prog='Unzip and extract files for dataset'
     )
-    parser.add_argument('--sourceFilesArchive', type=str, help='Location of archive with source files', dest='archive_dir', required=True)
-    parser.add_argument('--datasetDir', type=str, help='Directory to where dataset files are to be located', dest='dataset_dir', required=True)
-    #parser.add_argument('--sourceDir', type=str, help='Directory where unpr')
+    parser.add_argument('--sourceFilesArchive', type=str, help='Location of archive with source files',
+                        dest='archive_dir', required=True)
+    parser.add_argument('--datasetDir', type=str, help='Directory to where dataset files are to be located',
+                        dest='dataset_dir', required=True)
+    # parser.add_argument('--sourceDir', type=str, help='Directory where unpr')
     args = parser.parse_args()
     return Config(args.archive_dir, args.dataset_dir)
+
 
 def unzip_source_files(config: Config):
     logging.info('Extracting source files...')
@@ -63,6 +67,7 @@ def unzip_source_files(config: Config):
         with zipfile.ZipFile(p, mode='r') as zip:
             logging.info(f'Extracting {p}...')
             zip.extractall(config.source_dir)
+
 
 def parse_micro_arch(micro_arch_node: Element, pattern_path: str, project_name: str):
     arch_number = micro_arch_node.getAttribute('number')
@@ -103,6 +108,7 @@ def extract_metadata_from_source(config: Config):
             for pattern_node in programNode.getElementsByTagName('designPattern'):
                 parse_pattern_node(config, project_name, pattern_node)
 
+
 def resolve_source_file_path(config: Config, role: RoleEntry, project_name) -> (str, str):
     base_path = path.join(config.get_tmp_dir(), 'sources', project_name)
     parsed_path_segments = []
@@ -116,8 +122,9 @@ def resolve_source_file_path(config: Config, role: RoleEntry, project_name) -> (
         ]
         for p in possible_paths:
             if path.exists(p) and path.isfile(p):
-                return (p, seg)
+                return p, seg
     return None
+
 
 def move_source_files(config: Config):
     for dp in filter(lambda s: path.isdir(path.join(config.dataset_dir, s)), listdir(path.join(config.dataset_dir))):
@@ -129,12 +136,12 @@ def move_source_files(config: Config):
                 source_file_path = resolve_source_file_path(config, r, project_name)
                 if source_file_path == None:
                     continue
-                shutil.copyfile(source_file_path[0], f"{path.join(micro_arch_dir, source_file_path[1])}.java")       
+                shutil.copyfile(source_file_path[0], f"{path.join(micro_arch_dir, source_file_path[1])}.java")
 
 
 if __name__ == '__main__':
-    #config = parse_args()
-    config = Config.default() 
+    # config = parse_args()
+    config = Config.default()
     try:
         logging.basicConfig(level='INFO')
         unzip_source_files(config)
