@@ -85,6 +85,7 @@ def get_entity_name(r: RoleEntry) -> str:
     classes =  filter(lambda s: s[0].isupper(), r.entity.split('.'))
     return (list(classes))[-1]
 
+
 def parse_source_files(ctx: Context):
         for dp_dir in filter(lambda s: path.isdir(ctx.resolve_dataset_dir(s)), os.listdir(ctx.dataset_dir)):
             logging.info(f'Parsing design pattern {dp_dir}...')
@@ -102,8 +103,8 @@ def parse_source_files(ctx: Context):
                             source_file_path).read_text(encoding='utf-8')
                     enitiy_name = get_entity_name(role_entry)
                     source_tree = javalang.parse.parse(source_file_content)
-                    for _, node in source_tree.filter(javalang.tree.ClassDeclaration):
-                        if hasattr(node, 'name') and node.name == enitiy_name:
+                    for _, node in source_tree:
+                        if  (isinstance(node, javalang.tree.ClassDeclaration) or isinstance(node, javalang.tree.InterfaceDeclaration)) and hasattr(node, 'name') and node.name == enitiy_name:
                             yield GeneratorResult(EnityNode(node, dp_dir, micro_arch_dir, role_entry), None)
                 except Exception as e:
                     logging.error(e)
