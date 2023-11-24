@@ -14,8 +14,8 @@ class RoleEntry:
         self.role_kind = role_kind.strip()
         self.entity = entity.strip()
 
-    @staticmethod
-    def from_xml(el: Element) -> 'RoleEntry':
+    @classmethod
+    def from_xml(cls, el: Element) -> 'RoleEntry':
         role = el.tagName
         role_kind = el.getAttribute('roleKind')
         entity_value = ''
@@ -23,7 +23,7 @@ class RoleEntry:
         if len(entities) > 0 and entities[0].firstChild != None:
             entity_value = entities[0].firstChild.nodeValue
         entity = entity_value
-        return RoleEntry(role, role_kind, entity)
+        return cls(role, role_kind, entity)
 
     def to_csv(self, writer) -> str:
         return writer.writerow([self.role, self.role_kind, self.entity])
@@ -52,14 +52,14 @@ class RoleDescriptor:
                 role_entries.append(RoleEntry.from_xml(c))
         return RoleDescriptor(role_entries)
 
-    @staticmethod
-    def from_csv(micro_arch_path: str, delimiter: str = '|') -> 'RoleDescriptor':
+    @classmethod
+    def from_csv(cls, micro_arch_path: str, delimiter: str = '|') -> 'RoleDescriptor':
         roles: List[RoleEntry] = []
         with open(path.join(micro_arch_path, 'roles.csv'), mode='r') as f:
             reader = list(csv.DictReader(f, delimiter=delimiter))
             for e in reader:
                 roles.append(RoleEntry(e['role'], e['role_kind'], e['entity']))
-        return RoleDescriptor(roles)
+        return cls(roles)
 
     def to_csv(self, file_path: str, delimiter='|'):
         with open(file_path, mode="w") as f:
