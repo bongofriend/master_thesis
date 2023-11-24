@@ -3,7 +3,7 @@ import os
 import argparse
 import logging
 import sys
-import evaluators
+import class_evaluators
 from models import RoleDescriptor, RoleEntry
 import pandas as pd
 from typing import List, Dict
@@ -20,7 +20,7 @@ class Context:
     dataset_dir: str
     csv_file_path: str
     __metric_buffer: List[Dict[str, str]]
-    __evaluaters: List[evaluators.MetricEvaluationInterface] = []
+    __evaluaters: List[class_evaluators.MetricEvaluationInterface] = []
 
     def __init__(self, dataset_dir: str, csv_file_path: str) -> None:
         current_location = path.dirname(path.realpath(sys.argv[0]))
@@ -31,14 +31,14 @@ class Context:
         self.__metric_buffer = []
         #TODO: Determine evaluaters and implement them
         self.__evaluaters = [
-            evaluators.NumberOfFieldsEvaluation(),
-            evaluators.NumberOfStaticFieldsEvaluation(),
-            evaluators.NumberOfMethodsEvaluation(),
-            evaluators.NumberOfStaticMethodsEvaluation(),
-            evaluators.NumberOfInterfacesEvaluation(),
-            evaluators.NumberOfAbstractMethodsEvaluation(),
-            evaluators.NumberOfOverriddenMethodsEvaluation(),
-            evaluators.NumberOfPrivateConstrcutorsEvaluation()
+            class_evaluators.NumberOfFieldsEvaluation(),
+            class_evaluators.NumberOfStaticFieldsEvaluation(),
+            class_evaluators.NumberOfMethodsEvaluation(),
+            class_evaluators.NumberOfStaticMethodsEvaluation(),
+            class_evaluators.NumberOfInterfacesEvaluation(),
+            class_evaluators.NumberOfAbstractMethodsEvaluation(),
+            class_evaluators.NumberOfOverriddenMethodsEvaluation(self),
+            class_evaluators.NumberOfPrivateConstrcutorsEvaluation()
 
         ]
 
@@ -60,7 +60,7 @@ class Context:
     def resolve_dataset_dir(self, *p: str) -> str:
         return path.join(self.dataset_dir, *p)
 
-    def get_evaluaters(self) -> List[evaluators.MetricEvaluationInterface]:
+    def get_evaluaters(self) -> List[class_evaluators.MetricEvaluationInterface]:
         return self.__evaluaters
 
     @staticmethod
@@ -123,7 +123,7 @@ def generate_metrics(ctx: Context):
                 continue
             evaluation_results: Dict[str, float] = {}
             for e in ctx.get_evaluaters():
-                evaluation_results[e.get_metric_name()] = e.evaluate(n.entity_node.node)
+                evaluation_results[e.get_metric_name()] = e.evaluate(n.entity_node.node, n.entity_node.dp, n.entity_node.micro_arch)
             ctx.add_metric_row(n.entity_node.dp, n.entity_node.micro_arch, n.entity_node.role_entry, evaluation_results)
 
 
