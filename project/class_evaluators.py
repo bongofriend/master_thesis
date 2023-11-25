@@ -1,10 +1,12 @@
 import abc
-from javalang.tree import Node
+from javalang.tree import Node, MethodDeclaration
 from typing import Dict, List, Set
 #from generate_metrics import Context
 import pathlib
 import javalang
 from os import path
+from dataclasses import dataclass, field
+from collections import namedtuple
 
 class MetricEvaluationInterface(metaclass=abc.ABCMeta):
 
@@ -87,8 +89,27 @@ class NumberOfAbstractMethodsEvaluation(MetricEvaluationInterface):
                 counter += 1
         return counter
 
+@dataclass(unsafe_hash=True)
+class MethodParameter:
+    name: str
+    type: str
+
+@dataclass(unsafe_hash=True)
+class MethodReference:
+    name: str
+    return_type: str
+    parameters: Set[MethodParameter] = field(default_factory=set(), hash=True)
+
+    @classmethod
+    def from_node(cls, method: MethodDeclaration) :
+        method_parameters = frozenset({ MethodParameter(p.name, p.type.name) for p in method.parameters })
+        return_type = method.return_type.name if method.return_type else 'void'
+        return MethodReference(method.name, return_type, method_parameters)
+            
+
 class NumberOfOverriddenMethodsEvaluation(MetricEvaluationInterface):
     #__context
+
 
     def __init__(self, context):
         self.__context = context
@@ -103,14 +124,14 @@ class NumberOfOverriddenMethodsEvaluation(MetricEvaluationInterface):
         counter = 0
         overriden_methods = self.__get_reference_methods(node, dp_name, micro_arch)
         for m in node.methods:
-            if m.name in overriden_methods or (hasattr(m, 'annotations') and 'override' in m.annotations):
+            if MethodReference.from_node(m) in overriden_methods or (hasattr(m, 'annotations') and 'override' in m.annotations):
                 counter += 1
         return counter
     
     #TODO: Check for method signature is the same
     #TODO: Check for overriden methods in parent classews
-    def __get_reference_methods(self, node: Node, dp_name: str, mirco_arch: str) -> Dict[str, Set[str]]:
-        reference_methods: Set[str] = set()
+    def __get_reference_methods(self, node: Node, dp_name: str, mirco_arch: str) -> Set[MethodReference]:
+        reference_methods: Set[MethodReference] = set()
         if not self.__has_references(node):
             return reference_methods
         references = self.__get_references(node, 'implements') + self.__get_references(node, 'extends')
@@ -121,11 +142,13 @@ class NumberOfOverriddenMethodsEvaluation(MetricEvaluationInterface):
             reference_class_node = javalang.parse.parse(pathlib.Path(r).read_text())
             for _, n in reference_class_node.filter(javalang.tree.ClassDeclaration):
                 for m in n.methods:
-                    reference_methods.add(m.name)
+                    #reference_methods.add(m.name)
+                    reference_methods.add(MethodReference.from_node(m))
             for _, n in reference_class_node.filter(javalang.tree.InterfaceDeclaration):
                 for m in n.methods:
-                    reference_methods.add(m.name)
-        return reference_methods
+                    #reference_methods.add(m.name)
+                    reference_methods.add(MethodReference.from_node(m))
+        return frozenset(reference_methods)
     
     def __has_references(self, node: Node) -> bool:
         has_implement_refs = hasattr(node, 'implements') and node.implements != None

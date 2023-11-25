@@ -98,24 +98,27 @@ def parse_source_files(ctx: Context):
             logging.info(f'Parsing design pattern {dp_dir}...')
             for micro_arch_dir in os.listdir(path.join(ctx.dataset_dir, dp_dir)):
                 logging.info(f'Parsing micro architecture {micro_arch_dir}...')
-            role_desc = RoleDescriptor.from_csv(
-                ctx.resolve_dataset_dir(dp_dir, micro_arch_dir))
-            for role_entry in role_desc.roleEntries:
-                source_file_path = get_source_file_path(
-                    ctx, dp_dir, micro_arch_dir, role_entry.entity)
-                if source_file_path is None:
-                    continue
-                try:    
-                    source_file_content: str = Path(
-                            source_file_path).read_text(encoding='utf-8')
-                    enitiy_name = get_entity_name(role_entry)
-                    source_tree = javalang.parse.parse(source_file_content)
-                    for _, node in source_tree:
-                        if  (isinstance(node, javalang.tree.ClassDeclaration) or isinstance(node, javalang.tree.InterfaceDeclaration)) and hasattr(node, 'name') and node.name == enitiy_name:
-                            yield GeneratorResult(EnityNode(node, dp_dir, micro_arch_dir, role_entry), None)
-                except Exception as e:
-                    logging.error(e)
-                    yield GeneratorResult(None, e)
+                role_desc = RoleDescriptor.from_csv(
+                    ctx.resolve_dataset_dir(dp_dir, micro_arch_dir))
+                for role_entry in role_desc.roleEntries:
+                    source_file_path = get_source_file_path(
+                        ctx, dp_dir, micro_arch_dir, role_entry.entity)
+                    if source_file_path is None:
+                        continue
+                    try:    
+                        source_file_content: str = Path(
+                                source_file_path).read_text(encoding='utf-8')
+                        enitiy_name = get_entity_name(role_entry)
+                        source_tree = javalang.parse.parse(source_file_content)
+                        for _, node in source_tree:
+                            if  (isinstance(node, javalang.tree.ClassDeclaration) or isinstance(node, javalang.tree.InterfaceDeclaration)) and hasattr(node, 'name') and node.name == enitiy_name:
+                                yield GeneratorResult(EnityNode(node, dp_dir, micro_arch_dir, role_entry), None)
+                    except JavaSyntaxError as j:
+                        logging.error(j.description)
+                        yield GeneratorResult(None, j)
+                    except Exception as e:
+                        logging.error(e.reason)
+                        yield GeneratorResult(None, e)
 
 def generate_metrics(ctx: Context):
         for n in parse_source_files(ctx):
@@ -123,8 +126,18 @@ def generate_metrics(ctx: Context):
                 continue
             evaluation_results: Dict[str, float] = {}
             for e in ctx.get_evaluaters():
-                evaluation_results[e.get_metric_name()] = e.evaluate(n.entity_node.node, n.entity_node.dp, n.entity_node.micro_arch)
+                try:
+                    evaluation_results[e.get_metric_name()] = e.evaluate(n.entity_node.node, n.entity_node.dp, n.entity_node.micro_arch)
+                except JavaSyntaxError as j:
+                    logging.error(j.description)
+                    evaluation_results[e.get_metric_name()] = 0
+                    continue   
+                except Exception as ex:
+                    logging.error(ex.reason)
+                    evaluation_results[e.get_metric_name()] = 0
+                    continue   
             ctx.add_metric_row(n.entity_node.dp, n.entity_node.micro_arch, n.entity_node.role_entry, evaluation_results)
+         
 
 
 if __name__ == '__main__':

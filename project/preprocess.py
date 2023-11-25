@@ -140,7 +140,7 @@ def move_source_files(config: Config):
 
 
 if __name__ == '__main__':
-    # config = parse_args()
+    #config = parse_args()
     config = Config.default()
     try:
         logging.basicConfig(level='INFO')

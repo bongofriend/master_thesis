@@ -10,14 +10,14 @@ class RoleEntry:
     entity: str
 
     def __init__(self, role: str, role_kind: str, entity: str):
-        self.role = role.strip()
-        self.role_kind = role_kind.strip()
-        self.entity = entity.strip()
+        self.role = role.rstrip()
+        self.role_kind = role_kind.rstrip()
+        self.entity = entity.rstrip()
 
     @classmethod
     def from_xml(cls, el: Element) -> 'RoleEntry':
         role = el.tagName
-        role_kind = el.getAttribute('roleKind')
+        role_kind = el.getAttribute('rolekind') if el.hasAttribute('rolekind') else el.getAttribute('roleKind')
         entity_value = ''
         entities = el.getElementsByTagName('entity')
         if len(entities) > 0 and entities[0].firstChild != None:
