@@ -11,6 +11,7 @@ from models import RoleEntry, RoleDescriptor
 from pathlib import Path
 import os
 
+#TODO: Add jdk for source file processing
 
 class Config:
     source_files_archive_dir: str
@@ -110,7 +111,11 @@ def extract_metadata_from_source(config: Config):
 
 
 def resolve_source_file_path(config: Config, role: RoleEntry, project_name) -> (str, str):
-    base_path = path.join(config.get_tmp_dir(), 'sources', project_name)
+    first_seg = role.entity.split('.')[0]
+    if 'java' in first_seg:
+        base_path = path.join(config.get_tmp_dir(), 'sources', 'Extra - JDK7', 'src', 'share' ,'classes')
+    else:
+        base_path = path.join(config.get_tmp_dir(), 'sources', project_name)
     parsed_path_segments = []
     for seg in role.entity.split('.'):
         parsed_path_segments.append(seg)

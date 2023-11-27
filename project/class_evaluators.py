@@ -128,8 +128,7 @@ class NumberOfOverriddenMethodsEvaluation(MetricEvaluationInterface):
                 counter += 1
         return counter
     
-    #TODO: Check for method signature is the same
-    #TODO: Check for overriden methods in parent classews
+    #TODO: Move some methods to paranet base class
     def __get_reference_methods(self, node: Node, dp_name: str, mirco_arch: str) -> Set[MethodReference]:
         reference_methods: Set[MethodReference] = set()
         if not self.__has_references(node):
@@ -173,6 +172,7 @@ class NumberOfOverriddenMethodsEvaluation(MetricEvaluationInterface):
                 return p
         return None
 
+#TODO: Constructors not marked, search manually for node points
 class NumberOfPrivateConstrcutorsEvaluation(MetricEvaluationInterface):
     def get_metric_name(self) -> str:
         return 'NOPC'
@@ -188,5 +188,5 @@ class NumberOfPrivateConstrcutorsEvaluation(MetricEvaluationInterface):
         return counter
 
 
-
+#TODO: Implement rest of metrics
 
