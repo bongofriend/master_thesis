@@ -23,23 +23,28 @@ class Context:
     __evaluaters: List[class_evaluators.MetricEvaluationInterface] = []
 
     def __init__(self, dataset_dir: str, csv_file_path: str) -> None:
+        import class_evaluators
+        
         current_location = path.dirname(path.realpath(sys.argv[0]))
         self.dataset_dir = path.realpath(
             path.join(current_location, dataset_dir))
         self.csv_file_path = path.realpath(
             path.join(current_location, csv_file_path))
         self.__metric_buffer = []
-        #TODO: Determine evaluaters and implement them
         self.__evaluaters = [
-            class_evaluators.NumberOfFieldsEvaluation(),
-            class_evaluators.NumberOfStaticFieldsEvaluation(),
-            class_evaluators.NumberOfMethodsEvaluation(),
-            class_evaluators.NumberOfStaticMethodsEvaluation(),
-            class_evaluators.NumberOfInterfacesEvaluation(),
-            class_evaluators.NumberOfAbstractMethodsEvaluation(),
-            class_evaluators.NumberOfOverriddenMethodsEvaluation(self),
-            class_evaluators.NumberOfPrivateConstrcutorsEvaluation()
-
+            #class_evaluators.NumberOfFieldsEvaluation(),
+            #class_evaluators.NumberOfStaticFieldsEvaluation(),
+            #class_evaluators.NumberOfMethodsEvaluation(),
+            #class_evaluators.NumberOfStaticMethodsEvaluation(),
+            #class_evaluators.NumberOfInterfacesEvaluation(),
+            #class_evaluators.NumberOfAbstractMethodsEvaluation(),
+            #class_evaluators.NumberOfOverriddenMethodsEvaluation(self),
+            #class_evaluators.NumberOfPrivateConstrcutorsEvaluation()
+            #class_evaluators.NumberOfPrivateConstrcutorsEvaluation()
+            #class_evaluators.NumberOfConstructorsWithObjectTypeArgumentEvaluation()
+            #class_evaluators.NumberOfObjectFieldsEvaluation()
+            #class_evaluators.NumberOfMethodGeneratingInstancesEvaluation()
+            class_evaluators.NumberOfOtherClassesWithFieldOfOwnTypeEvaluation(self)
         ]
 
     def add_metric_row(self, dp: str, micro_arch: str, role: RoleEntry, metrics: Dict[str, float]):

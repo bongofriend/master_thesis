@@ -1,15 +1,14 @@
 import abc
-from javalang.tree import Node, MethodDeclaration
+from javalang.tree import Node, MethodDeclaration, ReferenceType, ClassDeclaration, FieldDeclaration
 from typing import Dict, List, Set
 #from generate_metrics import Context
 import pathlib
 import javalang
-from os import path
+from os import path, listdir
 from dataclasses import dataclass, field
 from collections import namedtuple
 
 class MetricEvaluationInterface(metaclass=abc.ABCMeta):
-
     @classmethod
     def __subclasshook__(cls, subclass):
         return (
@@ -128,8 +127,7 @@ class NumberOfOverriddenMethodsEvaluation(MetricEvaluationInterface):
                 counter += 1
         return counter
     
-    #TODO: Move some methods to paranet base class
-    def __get_reference_methods(self, node: Node, dp_name: str, mirco_arch: str) -> Set[MethodReference]:
+    def __get_reference_methods(self, node: Node, dp_name: str, mirco_arch: str, declaration) -> Set[MethodReference]:
         reference_methods: Set[MethodReference] = set()
         if not self.__has_references(node):
             return reference_methods
@@ -172,21 +170,99 @@ class NumberOfOverriddenMethodsEvaluation(MetricEvaluationInterface):
                 return p
         return None
 
-#TODO: Constructors not marked, search manually for node points
 class NumberOfPrivateConstrcutorsEvaluation(MetricEvaluationInterface):
     def get_metric_name(self) -> str:
         return 'NOPC'
     
     def evaluate(self, node: Node, dp_name: str = '', micro_arch: str = '') -> float:
-        if not hasattr(node, 'constructors') or len(node.constructors) == 0:
+        if not hasattr(node, 'body') or not node.body:
             return 0
         
+        entity_name = node.name
         counter = 0
-        for c in node.constructors:
-            if hasattr(c, 'modifiers') and 'private' in c.modifiers:
+        for n in node.body:
+            if not hasattr(n, 'name') or not n.name:
+                continue
+            if not hasattr(n, 'modifiers') or not n.modifiers:
+                continue
+            if n.name == entity_name and 'private' in n.modifiers:
                 counter += 1
         return counter
 
+class NumberOfConstructorsWithObjectTypeArgumentEvaluation(MetricEvaluationInterface):
+    def get_metric_name(self) -> str:
+        return 'NOTC'
+    
+    def evaluate(self, node: Node, dp_name: str = '', micro_arch: str = '') -> float:
+        if not hasattr(node, 'body') or not node.body:
+            return 0
+        
+        entity_name = node.name
+        counter = 0
+        for n in node.body:
+            if not hasattr(n, 'name') or not n.name:
+                continue
+            if not hasattr(n, 'parameters') or not n.parameters:
+                continue
+            if n.name == entity_name and self.__has_reference_type_in_parameters(n):
+                counter += 1
+        return counter
+    
+    def __has_reference_type_in_parameters(self, node: Node) -> bool:
+        reference_type_parameters = [p for p in node.parameters if isinstance(p.type, ReferenceType)]
+        return len(reference_type_parameters) > 0
+
+class NumberOfObjectFieldsEvaluation(MetricEvaluationInterface):
+    def get_metric_name(self) -> str:
+        return 'NOOF'
+    
+    def evaluate(self, node: Node, dp_name: str = '', micro_arch: str = '') -> float:
+        if not isinstance(node, ClassDeclaration):
+            return 0
+        if not hasattr(node, 'body') or not node.body:
+            return 0
+        fields_with_object_type = [f for f in node.body if isinstance(f, FieldDeclaration) and isinstance(f.type, ReferenceType)]
+        return len(fields_with_object_type)
+#TODO: Test if working correctly
+class NumberOfOtherClassesWithFieldOfOwnTypeEvaluation(MetricEvaluationInterface):
+    def __init__(self, context):
+        self.__context = context
+    
+    def get_metric_name(self) -> str:
+        return 'NCOF'
+    
+    def evaluate(self, node: Node, dp_name: str = '', micro_arch: str = '') -> float:
+        entity_type = node.name
+        counter = 0
+
+        for src_file in  listdir(self.__context.resolve_dataset_dir(dp_name, micro_arch)):
+            src_file_path = self.__context.resolve_dataset_dir(dp_name, micro_arch, src_file)
+            if not path.isfile(src_file_path):
+                continue
+            src_file_content = pathlib.Path(src_file_path).read_text()
+            source_tree = javalang.parse.parse(src_file_content)
+            for _, n in source_tree.filter(ClassDeclaration):
+                if not hasattr(n, 'fields') or not len(n.fields):
+                    continue
+                fields_with_reference_type = [f for f in n.fields if isinstance(f, FieldDeclaration) and isinstance(f.type, ReferenceType)]
+                for f in fields_with_reference_type:
+                    if f.type.name == entity_type:
+                        counter += 1
+        return counter    
+
+
+
+class NumberOfMethodGeneratingInstancesEvaluation(MetricEvaluationInterface):
+    def get_metric_name(self) -> str:
+        return 'NMGI'
+    
+    def evaluate(self, node: Node, dp_name: str = '', micro_arch: str = '') -> float:
+        method_declarations = [m for m in node.body if isinstance(m, MethodDeclaration) and hasattr(m, 'body') and m.body]
+        if not len(method_declarations):
+            return 0
+        for m in method_declarations:
+            pass
+        return 0
 
 #TODO: Implement rest of metrics
 

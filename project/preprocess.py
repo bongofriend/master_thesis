@@ -11,8 +11,6 @@ from models import RoleEntry, RoleDescriptor
 from pathlib import Path
 import os
 
-#TODO: Add jdk for source file processing
-
 class Config:
     source_files_archive_dir: str
     dataset_dir: str
