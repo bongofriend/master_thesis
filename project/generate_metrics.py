@@ -2,6 +2,7 @@ from os import path
 import os
 import argparse
 import logging
+import re
 import sys
 import class_evaluators
 from models import RoleDescriptor, RoleEntry
@@ -10,7 +11,14 @@ from typing import List, Dict
 from pathlib import Path
 import javalang
 from javalang.parser import JavaSyntaxError
+from javalang.tree import Node
 from collections import namedtuple
+import time
+
+#TODO  Add parallel processing to yielded files
+#TODO Refactor source file resolution
+#TODO Introduce better caching for parsed source files 
+
 
 EnityNode = namedtuple('ClassNode', ['node', 'dp', 'micro_arch', 'role_entry'])
 GeneratorResult = namedtuple('GeneratorResult', ['entity_node', 'exception'])
@@ -21,9 +29,9 @@ class Context:
     csv_file_path: str
     __metric_buffer: List[Dict[str, str]]
     __evaluaters: List[class_evaluators.MetricEvaluationInterface] = []
+    __node_pool: Dict[str, Node] = {}
 
     def __init__(self, dataset_dir: str, csv_file_path: str) -> None:
-        import class_evaluators
         
         current_location = path.dirname(path.realpath(sys.argv[0]))
         self.dataset_dir = path.realpath(
@@ -32,18 +40,18 @@ class Context:
             path.join(current_location, csv_file_path))
         self.__metric_buffer = []
         self.__evaluaters = [
-            #class_evaluators.NumberOfFieldsEvaluation(),
-            #class_evaluators.NumberOfStaticFieldsEvaluation(),
-            #class_evaluators.NumberOfMethodsEvaluation(),
-            #class_evaluators.NumberOfStaticMethodsEvaluation(),
-            #class_evaluators.NumberOfInterfacesEvaluation(),
-            #class_evaluators.NumberOfAbstractMethodsEvaluation(),
-            #class_evaluators.NumberOfOverriddenMethodsEvaluation(self),
-            #class_evaluators.NumberOfPrivateConstrcutorsEvaluation()
-            #class_evaluators.NumberOfPrivateConstrcutorsEvaluation()
-            #class_evaluators.NumberOfConstructorsWithObjectTypeArgumentEvaluation()
-            #class_evaluators.NumberOfObjectFieldsEvaluation()
-            #class_evaluators.NumberOfMethodGeneratingInstancesEvaluation()
+            class_evaluators.NumberOfFieldsEvaluation(),
+            class_evaluators.NumberOfStaticFieldsEvaluation(),
+            class_evaluators.NumberOfMethodsEvaluation(),
+            class_evaluators.NumberOfStaticMethodsEvaluation(),
+            class_evaluators.NumberOfInterfacesEvaluation(),
+            class_evaluators.NumberOfAbstractMethodsEvaluation(),
+            class_evaluators.NumberOfOverriddenMethodsEvaluation(self),
+            class_evaluators.NumberOfPrivateConstrcutorsEvaluation(),
+            class_evaluators.NumberOfPrivateConstrcutorsEvaluation(),
+            class_evaluators.NumberOfConstructorsWithObjectTypeArgumentEvaluation(),
+            class_evaluators.NumberOfObjectFieldsEvaluation(),
+            class_evaluators.NumberOfMethodGeneratingInstancesEvaluation(),
             class_evaluators.NumberOfOtherClassesWithFieldOfOwnTypeEvaluation(self)
         ]
 
@@ -68,9 +76,20 @@ class Context:
     def get_evaluaters(self) -> List[class_evaluators.MetricEvaluationInterface]:
         return self.__evaluaters
 
-    @staticmethod
-    def default() -> "Context":
-        return Context('./dataset', './metrics.csv')
+    @classmethod
+    def default(cls) -> "Context":
+        return cls('./dataset', './metrics.csv')
+    
+    def parse_java_source_file(self, src_path: str):
+        if src_path in self.__node_pool:
+            return self.__node_pool[src_path]
+        src_content= Path(src_path).read_bytes().decode('urf-8', 'ignore')
+        if not re.search(r'enum\s[A-Z]{1,}', src_content):
+            src_content = src_content.replace('enum', 'enumz')
+        source_tree = javalang.parse.parse(src_content)
+        self.__node_pool[src_path] = source_tree
+        return source_tree
+
 
 def parse_arguments() -> Context:
     parser = argparse.ArgumentParser(
@@ -111,10 +130,13 @@ def parse_source_files(ctx: Context):
                     if source_file_path is None:
                         continue
                     try:    
-                        source_file_content: str = Path(
-                                source_file_path).read_text(encoding='utf-8')
+                        src_content: str = Path(
+                                source_file_path).read_bytes().decode('utf-8', 'ignore')
+                        if not re.search(r'enum\s[A-Z]{1,}', src_content):
+                            src_content = src_content.replace('enum', 'enumz')
                         enitiy_name = get_entity_name(role_entry)
-                        source_tree = javalang.parse.parse(source_file_content)
+                        source_tree = javalang.parse.parse(src_content)
+                        #source_tree = ctx.parse_java_source_file(source_file_path)
                         for _, node in source_tree:
                             if  (isinstance(node, javalang.tree.ClassDeclaration) or isinstance(node, javalang.tree.InterfaceDeclaration)) and hasattr(node, 'name') and node.name == enitiy_name:
                                 yield GeneratorResult(EnityNode(node, dp_dir, micro_arch_dir, role_entry), None)
@@ -149,8 +171,11 @@ if __name__ == '__main__':
     logging.basicConfig(level='INFO')
     #context = parse_arguments()
     context = Context.default()
+    start = time.process_time()
     try:
         generate_metrics(context)
         context.save_metrics()
     except Exception as e:
         logging.error(e)
+    finally:
+        logging.info(f'Duration: {time.process_time() - start} s')

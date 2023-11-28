@@ -1,4 +1,5 @@
 import abc
+import re
 from javalang.tree import Node, MethodDeclaration, ReferenceType, ClassDeclaration, FieldDeclaration
 from typing import Dict, List, Set
 #from generate_metrics import Context
@@ -8,7 +9,7 @@ from os import path, listdir
 from dataclasses import dataclass, field
 from collections import namedtuple
 
-class MetricEvaluationInterface(metaclass=abc.ABCMeta):
+class MetricEvaluationInterface(metaclass=abc.ABCMeta):    
     @classmethod
     def __subclasshook__(cls, subclass):
         return (
@@ -24,6 +25,8 @@ class MetricEvaluationInterface(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def evaluate(self, node: Node, dp_name: str = '', micro_arch: str = '') -> float:
         raise NotImplementedError
+    
+
 
 
 class NumberOfFieldsEvaluation(MetricEvaluationInterface):
@@ -127,7 +130,7 @@ class NumberOfOverriddenMethodsEvaluation(MetricEvaluationInterface):
                 counter += 1
         return counter
     
-    def __get_reference_methods(self, node: Node, dp_name: str, mirco_arch: str, declaration) -> Set[MethodReference]:
+    def __get_reference_methods(self, node: Node, dp_name: str, mirco_arch: str) -> Set[MethodReference]:
         reference_methods: Set[MethodReference] = set()
         if not self.__has_references(node):
             return reference_methods
@@ -136,7 +139,10 @@ class NumberOfOverriddenMethodsEvaluation(MetricEvaluationInterface):
         for r in reference_paths:
             if r is None:
                 continue
-            reference_class_node = javalang.parse.parse(pathlib.Path(r).read_text())
+            src_content = pathlib.Path(r).read_bytes().decode('utf-8', 'ignore')
+            if not re.search(r'enum\s[A-Z]{1,}', src_content):
+                src_content = src_content.replace('enum', 'enumz')
+            reference_class_node = javalang.parse.parse(src_content)
             for _, n in reference_class_node.filter(javalang.tree.ClassDeclaration):
                 for m in n.methods:
                     #reference_methods.add(m.name)
@@ -225,8 +231,22 @@ class NumberOfObjectFieldsEvaluation(MetricEvaluationInterface):
         return len(fields_with_object_type)
 #TODO: Test if working correctly
 class NumberOfOtherClassesWithFieldOfOwnTypeEvaluation(MetricEvaluationInterface):
+    __node_pool: Dict[str, Node]
+
     def __init__(self, context):
         self.__context = context
+        self.__node_pool = {}
+    
+    def __get_node(self, src_file_path: str):
+        if src_file_path in self.__node_pool:
+            return self.__node_pool[src_file_path]
+        src_content = pathlib.Path(src_file_path).read_bytes().decode('utf-8', 'ignore')
+        if not re.search(r'enum\s[A-Z]{1,}', src_content):
+            src_content = src_content.replace('enum', 'enumz')
+        source_tree = javalang.parse.parse(src_content)
+        self.__node_pool[src_file_path] = source_tree
+        source_tree = javalang.parse.parse(src_content)
+        return source_tree
     
     def get_metric_name(self) -> str:
         return 'NCOF'
@@ -236,11 +256,10 @@ class NumberOfOtherClassesWithFieldOfOwnTypeEvaluation(MetricEvaluationInterface
         counter = 0
 
         for src_file in  listdir(self.__context.resolve_dataset_dir(dp_name, micro_arch)):
-            src_file_path = self.__context.resolve_dataset_dir(dp_name, micro_arch, src_file)
-            if not path.isfile(src_file_path):
+            src_file_path: str = self.__context.resolve_dataset_dir(dp_name, micro_arch, src_file)
+            if not path.isfile(src_file_path) or not src_file_path.endswith('.java') or src_file == f'{entity_type}.java':
                 continue
-            src_file_content = pathlib.Path(src_file_path).read_text()
-            source_tree = javalang.parse.parse(src_file_content)
+            source_tree = self.__get_node(src_file_path)
             for _, n in source_tree.filter(ClassDeclaration):
                 if not hasattr(n, 'fields') or not len(n.fields):
                     continue
@@ -263,6 +282,3 @@ class NumberOfMethodGeneratingInstancesEvaluation(MetricEvaluationInterface):
         for m in method_declarations:
             pass
         return 0
-
-#TODO: Implement rest of metrics
-
