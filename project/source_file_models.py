@@ -10,9 +10,9 @@ class RoleEntry:
     entity: str
 
     def __init__(self, role: str, role_kind: str, entity: str):
-        self.role = role.rstrip()
-        self.role_kind = role_kind.rstrip()
-        self.entity = entity.rstrip()
+        self.role = role.strip()
+        self.role_kind = role_kind.strip()
+        self.entity = entity.strip()
 
     @classmethod
     def from_xml(cls, el: Element) -> 'RoleEntry':

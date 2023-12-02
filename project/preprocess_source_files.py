@@ -7,7 +7,7 @@ import zipfile
 import sys
 from xml.dom.minidom import Element, parse
 from typing import List
-from models import RoleEntry, RoleDescriptor
+from source_file_models import RoleEntry, RoleDescriptor
 from pathlib import Path
 import os
 
@@ -130,6 +130,8 @@ def resolve_source_file_path(config: Config, role: RoleEntry, project_name) -> (
 
 
 def move_source_files(config: Config):
+    missing_files = 0
+    total_files = 0
     for dp in filter(lambda s: path.isdir(path.join(config.dataset_dir, s)), listdir(path.join(config.dataset_dir))):
         for micro_arch in listdir(path.join(config.dataset_dir, dp)):
             micro_arch_dir = path.join(config.dataset_dir, dp, micro_arch)
@@ -137,9 +139,12 @@ def move_source_files(config: Config):
             project_name = Path(path.join(micro_arch_dir, 'project.txt')).read_text()
             for r in role_desc.roleEntries:
                 source_file_path = resolve_source_file_path(config, r, project_name)
-                if source_file_path == None:
+                total_files += 1
+                if not source_file_path:
+                    missing_files += 1
                     continue
                 shutil.copyfile(source_file_path[0], f"{path.join(micro_arch_dir, source_file_path[1])}.java")
+    print(f"Missing {missing_files} out of {total_files}")
 
 
 if __name__ == '__main__':
