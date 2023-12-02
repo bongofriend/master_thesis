@@ -11,6 +11,7 @@ from source_file_models import RoleEntry, RoleDescriptor
 from pathlib import Path
 import os
 
+
 class Config:
     source_files_archive_dir: str
     dataset_dir: str
@@ -19,8 +20,10 @@ class Config:
 
     def __init__(self, source_files_archive_dir: str, dataset_dir: str):
         current_location = path.dirname(path.realpath(sys.argv[0]))
-        self.source_files_archive_dir = path.realpath(path.join(current_location, source_files_archive_dir))
-        self.dataset_dir = path.realpath(path.join(current_location, dataset_dir))
+        self.source_files_archive_dir = path.realpath(
+            path.join(current_location, source_files_archive_dir))
+        self.dataset_dir = path.realpath(
+            path.join(current_location, dataset_dir))
 
         self.__tmpDir = tempfile.TemporaryDirectory()
         self.source_dir = path.join(self.get_tmp_dir(), 'sources')
@@ -88,7 +91,8 @@ def parse_micro_arch(micro_arch_node: Element, pattern_path: str, project_name: 
 def parse_pattern_node(config: Config, project_name: str, pattern_node: Element):
     pattern_name = pattern_node.getAttribute('name')
     logging.info(f'Extracting {pattern_name} from {project_name}')
-    pattern_path = path.join(config.dataset_dir, pattern_name.lower().replace(' ', '_'))
+    pattern_path = path.join(
+        config.dataset_dir, pattern_name.lower().replace(' ', '_'))
     if not path.exists(pattern_path):
         mkdir(pattern_path)
     for micro_arch_node in pattern_node.getElementsByTagName('microArchitecture'):
@@ -102,8 +106,10 @@ def extract_metadata_from_source(config: Config):
     with open(xml_config_path, mode='r') as xml_content:
         document = parse(xml_content)
         for programNode in document.getElementsByTagName('program'):
-            project_name = programNode.getElementsByTagName('name')[0].firstChild.nodeValue
-            logging.info(f'Extracting design patterns and roles for {project_name}')
+            project_name = programNode.getElementsByTagName(
+                'name')[0].firstChild.nodeValue
+            logging.info(
+                f'Extracting design patterns and roles for {project_name}')
             for pattern_node in programNode.getElementsByTagName('designPattern'):
                 parse_pattern_node(config, project_name, pattern_node)
 
@@ -111,7 +117,8 @@ def extract_metadata_from_source(config: Config):
 def resolve_source_file_path(config: Config, role: RoleEntry, project_name) -> (str, str):
     first_seg = role.entity.split('.')[0]
     if 'java' in first_seg:
-        base_path = path.join(config.get_tmp_dir(), 'sources', 'Extra - JDK7', 'src', 'share' ,'classes')
+        base_path = path.join(config.get_tmp_dir(), 'sources',
+                              'Extra - JDK7', 'src', 'share', 'classes')
     else:
         base_path = path.join(config.get_tmp_dir(), 'sources', project_name)
     parsed_path_segments = []
@@ -136,19 +143,21 @@ def move_source_files(config: Config):
         for micro_arch in listdir(path.join(config.dataset_dir, dp)):
             micro_arch_dir = path.join(config.dataset_dir, dp, micro_arch)
             role_desc = RoleDescriptor.from_csv(micro_arch_dir)
-            project_name = Path(path.join(micro_arch_dir, 'project.txt')).read_text()
+            project_name = Path(
+                path.join(micro_arch_dir, 'project.txt')).read_text()
             for r in role_desc.roleEntries:
-                source_file_path = resolve_source_file_path(config, r, project_name)
+                source_file_path = resolve_source_file_path(
+                    config, r, project_name)
                 total_files += 1
                 if not source_file_path:
                     missing_files += 1
                     continue
-                shutil.copyfile(source_file_path[0], f"{path.join(micro_arch_dir, source_file_path[1])}.java")
+                shutil.copyfile(
+                    source_file_path[0], f"{path.join(micro_arch_dir, source_file_path[1])}.java")
     print(f"Missing {missing_files} out of {total_files}")
 
 
 if __name__ == '__main__':
-    #config = parse_args()
     config = Config.default()
     try:
         logging.basicConfig(level='INFO')
