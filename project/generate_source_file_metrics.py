@@ -23,6 +23,7 @@ class GeneratorValue:
     dp: str
     micro_arch: str
     role_entry: RoleEntry
+    project: str
 
 
 @dataclass
@@ -76,6 +77,10 @@ class Resolver:
         if not re.search(r'enum\s[A-Z]{1,}', src_content):
             src_content = src_content.replace('enum', 'enumz')
         return src_content
+    
+    def get_project_name(self, micro_arch_dir: str):
+        with open(path.join(micro_arch_dir, 'project.txt')) as file:
+            return file.readline()
 
     @classmethod
     def default(cls) -> "Resolver":
@@ -122,8 +127,9 @@ class SourceFileParser:
             logging.info(f'Parsing design pattern {dp_dir}...')
             for micro_arch_dir in os.listdir(path.join(self.resolver.dataset_dir, dp_dir)):
                 logging.info(f'Parsing micro architecture {micro_arch_dir}...')
-                role_desc = RoleDescriptor.from_csv(
-                    self.resolver.resolve_dataset_dir(dp_dir, micro_arch_dir))
+                micro_arch_path = self.resolver.resolve_dataset_dir(dp_dir, micro_arch_dir)
+                role_desc = RoleDescriptor.from_csv(micro_arch_path)
+                project_name = self.resolver.get_project_name(micro_arch_path)
                 for role_entry in role_desc.roleEntries:
                     try:
                         entity_name = self.__get_entity_name(role_entry)
@@ -136,7 +142,7 @@ class SourceFileParser:
                         for _, n in source_tree:
                             if (self.__is_class_or_interface_node(n) and hasattr(n, 'name') and n.name == entity_name):
                                 value = GeneratorValue(
-                                    n, dp_dir, micro_arch_dir, role_entry)
+                                    n, dp_dir, micro_arch_dir, role_entry, project_name)
                                 yield GeneratorResult.with_value(value)
                     except JavaSyntaxError as j:
                         yield GeneratorResult.with_error(j.description)
@@ -470,6 +476,7 @@ def enhance_metrics(value: GeneratorValue, metrics: Dict[str, float]) -> Dict[st
     metric_entry['entity'] = value.role_entry.entity
     metric_entry['design_pattern'] = value.dp
     metric_entry['micro_architecture'] = value.micro_arch
+    metric_entry['project'] = value.project
     metric_entry = metric_entry | metrics
 
     return metric_entry
