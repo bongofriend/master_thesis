@@ -148,7 +148,7 @@ public class MetricGatherer {
         return classesToParse;
     }
 
-    public ClassOrInterfaceDeclaration getCompilationUnit(String name) throws IOException {
+    public ClassOrInterfaceDeclaration getCompilationUnit(String name)  {
         return classDeclarationPool.get(name);
     }
 

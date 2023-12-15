@@ -13,7 +13,6 @@ public class NumberOfFieldsMetricEvaluation extends BaseMetricEvaluation {
 
     @Override
     public int evaluate(ClassOrInterfaceDeclaration declaration, MetricGatherer metricGatherer, Set<String> microArchitectureParticipants) {
-        var count = declaration.getFields().size();
-        return count;
+       return declaration.getFields().size();
     }
 }

@@ -13,6 +13,21 @@ public class NumberOfOtherClassesWithFieldOfOwnTypeEvaluation extends BaseMetric
 
     @Override
     public int evaluate(ClassOrInterfaceDeclaration unit, MetricGatherer metricGatherer, Set<String> microStructureEntities) {
-        return 0;
+        var ownName = unit.getNameAsString();
+        var counter = 0;
+
+        for (var c: microStructureEntities) {
+            var d = metricGatherer.getCompilationUnit(c);
+            if(d == null) {
+                continue;
+            }
+            for (var f: d.getFields()) {
+                var fieldTypeName = f.getCommonType().asString();
+                if (fieldTypeName.equals(ownName)) {
+                    counter++;
+                }
+            }
+        }
+        return counter;
     }
 }
