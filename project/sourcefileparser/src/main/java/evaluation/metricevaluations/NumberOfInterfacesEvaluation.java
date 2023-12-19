@@ -1,11 +1,11 @@
 package evaluation.metricevaluations;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import evaluation.MetricGatherer;
+import evaluation.Parser;
 
 import java.util.Set;
 
-public class NumberOfInterfacesEvaluation extends BaseMetricEvaluation {
+public class NumberOfInterfacesEvaluation implements MetricEvaluation {
 
     @Override
     public String getMetricName() {
@@ -13,7 +13,7 @@ public class NumberOfInterfacesEvaluation extends BaseMetricEvaluation {
     }
 
     @Override
-    public int evaluate(ClassOrInterfaceDeclaration unit, MetricGatherer metricGatherer, Set<String> microArchitectureParticipants) {
+    public int evaluate(ClassOrInterfaceDeclaration unit, Parser metricGatherer, Set<String> microArchitectureParticipants) {
         return unit.getImplementedTypes().size();
     }
 }

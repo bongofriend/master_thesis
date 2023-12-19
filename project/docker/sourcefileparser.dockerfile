@@ -8,6 +8,7 @@ FROM eclipse-temurin:21-jre
 ENV HOME /home/app
 ENV DATASET_PATH ""
 ENV OUTPUT_CSV ""
+ENV INCLUDE_CK_METRICS "true"
 COPY  --from=builder ${HOME}/sourcefileparser/target/sourcefileparser-1.0-SNAPSHOT-jar-with-dependencies.jar ${HOME}/sourcefileparser.jar
 WORKDIR ${HOME}
-CMD  java -jar sourcefileparser.jar -s ./volume/${DATASET_PATH} -o ./volume/${OUTPUT_CSV}
+ENTRYPOINT java -jar sourcefileparser.jar -s ./volume/${DATASET_PATH} -o ./volume/${OUTPUT_CSV} -ck ${INCLUDE_CK_METRICS}

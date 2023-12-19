@@ -2,15 +2,14 @@ package evaluation.metricevaluations;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import evaluation.MetricGatherer;
+import evaluation.Parser;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class NumberOfOverriddenMethodsEvaluation extends BaseMetricEvaluation {
+public class NumberOfOverriddenMethodsEvaluation implements MetricEvaluation {
     @Override
     public String getMetricName() {
         return "NORM";
@@ -18,7 +17,7 @@ public class NumberOfOverriddenMethodsEvaluation extends BaseMetricEvaluation {
 
     //TODO
     @Override
-    public int evaluate(ClassOrInterfaceDeclaration unit, MetricGatherer metricGatherer, Set<String> microArchitectureParticipants) {
+    public int evaluate(ClassOrInterfaceDeclaration unit, Parser metricGatherer, Set<String> microArchitectureParticipants) {
         var implementedOrExtended = new LinkedList<>(unit.getExtendedTypes());
         implementedOrExtended.addAll(unit.getImplementedTypes());
         if (implementedOrExtended.isEmpty()) {
@@ -32,20 +31,20 @@ public class NumberOfOverriddenMethodsEvaluation extends BaseMetricEvaluation {
                     var segments = s.split("\\.");
                     entityToNameMap.put(segments[segments.length - 1], s);
                 });
-        for(var e: implementedOrExtended) {
-            if(!entityToNameMap.containsKey(e.getNameAsString())) {
+        for (var e : implementedOrExtended) {
+            if (!entityToNameMap.containsKey(e.getNameAsString())) {
                 continue;
             }
             var classOrInterfaceDeclaration = metricGatherer.getCompilationUnit(entityToNameMap.get(e.getNameAsString()));
-            if(classOrInterfaceDeclaration == null) {
+            if (classOrInterfaceDeclaration == null) {
                 continue;
             }
             var methodsDeclarations = classOrInterfaceDeclaration.findAll(MethodDeclaration.class);
-            for (var mEx: methodsDeclarations) {
+            for (var mEx : methodsDeclarations) {
                 var returnTypeExtended = mEx.getType();
                 var nameExtended = mEx.getNameAsString();
                 var parametersTypesExtended = mEx.getParameters();
-                for (var mCls: classMethodDeclarations) {
+                for (var mCls : classMethodDeclarations) {
                     var returnTypeCls = mCls.getType();
                     var nameCls = mCls.getNameAsString();
                     var parametersCls = mCls.getParameters();

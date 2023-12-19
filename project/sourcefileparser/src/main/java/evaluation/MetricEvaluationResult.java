@@ -21,111 +21,148 @@ public class MetricEvaluationResult {
     private String project;
 
     @CsvBindByName(column = "NOF")
-    private int NOF;
+    private float NOF;
     @CsvBindByName(column = "NSF")
-    private int NSF;
+    private float NSF;
     @CsvBindByName(column = "NOM")
-    private int NOM;
+    private float NOM;
     @CsvBindByName(column = "NOI")
-    private int NOI;
+    private float NOI;
+    @CsvBindByName(column = "NSM")
+    private float NSM;
+    @CsvBindByName(column = "NOAM")
+    private float NOAM;
+    @CsvBindByName(column = "NOPC")
+    private float NOPC;
+    @CsvBindByName(column = "NORM")
+    private float NORM;
+    @CsvBindByName(column = "NOTC")
+    private float NOTC;
+    @CsvBindByName(column = "NOOF")
+    private float NOOF;
+    @CsvBindByName(column = "NCOP")
+    private float NCOF;
+    @CsvBindByName(column = "CBO")
+    private float CBO;
+    @CsvBindByName(column = "WBO")
+    private float WBO;
+    @CsvBindByName(column = "FAN_IN")
+    private float fanIn;
+    @CsvBindByName(column = "FAN_OUT")
+    private float fanOut;
 
-    public int getNSM() {
+    public MetricEvaluationResult() {
+    }
+
+    public float getNSM() {
         return NSM;
     }
 
-    public void setNSM(int NSM) {
+    public void setNSM(float NSM) {
         this.NSM = NSM;
     }
 
-    @CsvBindByName(column = "NSM")
-    private int NSM;
+    public float getCBO() {
+        return CBO;
+    }
 
-    @CsvBindByName(column = "NOAM")
-    private int NOAM;
-    @CsvBindByName(column = "NOPC")
-    private int NOPC;
+    public void setCBO(float CBO) {
+        this.CBO = CBO;
+    }
 
-    @CsvBindByName(column = "NORM")
-    private int NORM;
+    public float getWBO() {
+        return WBO;
+    }
 
-    @CsvBindByName(column = "NOTC")
-    private int NOTC;
+    public void setWBO(float WBO) {
+        this.WBO = WBO;
+    }
 
-    @CsvBindByName(column = "NOOF")
-    private int NOOF;
+    public float getFanIn() {
+        return fanIn;
+    }
 
-    @CsvBindByName(column = "NCOP")
-    private int NCOF;
+    public void setFanIn(float fanIn) {
+        this.fanIn = fanIn;
+    }
 
-    public int getNORM() {
+    public float getFanOut() {
+        return fanOut;
+    }
+
+    public void setFanOut(float fanOut) {
+        this.fanOut = fanOut;
+    }
+
+    public float getNORM() {
         return NORM;
     }
 
-    public void setNORM(int NORM) {
+    public void setNORM(float NORM) {
         this.NORM = NORM;
     }
 
-    public int getNSF() {
+    public float getNSF() {
         return NSF;
     }
 
-    public void setNSF(int NSF) {
+    public void setNSF(float NSF) {
         this.NSF = NSF;
     }
 
-    public int getNOM() {
+    public float getNOM() {
         return NOM;
     }
 
-    public void setNOM(int NOM) {
+    public void setNOM(float NOM) {
         this.NOM = NOM;
     }
 
-    public int getNOI() {
+    public float getNOI() {
         return NOI;
     }
 
-    public void setNOI(int NOI) {
+    public void setNOI(float NOI) {
         this.NOI = NOI;
     }
 
-    public int getNOAM() {
+    public float getNOAM() {
         return NOAM;
     }
 
-    public void setNOAM(int NOAM) {
+    public void setNOAM(float NOAM) {
         this.NOAM = NOAM;
     }
 
-    public int getNOPC() {
+    public float getNOPC() {
         return NOPC;
     }
 
-    public void setNOPC(int NOPC) {
+    public void setNOPC(float NOPC) {
         this.NOPC = NOPC;
     }
 
-    public int getNOTC() {
+    public float getNOTC() {
         return NOTC;
     }
 
-    public void setNOTC(int NOTC) {
+    public void setNOTC(float NOTC) {
         this.NOTC = NOTC;
     }
 
-    public int getNOOF() {
+    public float getNOOF() {
         return NOOF;
     }
 
-    public void setNOOF(int NOOF) {
+    public void setNOOF(float NOOF) {
         this.NOOF = NOOF;
     }
 
-    public int getNCOF() {
+    public float getNCOF() {
         return NCOF;
     }
 
-    public void setNCOF(int NCOF) {
+    public void setNCOF(float NCOF) {
         this.NCOF = NCOF;
     }
 
@@ -177,18 +214,15 @@ public class MetricEvaluationResult {
         this.project = project;
     }
 
-    public int getNOF() {
+    public float getNOF() {
         return NOF;
     }
 
-    public void setNOF(int NOF) {
+    public void setNOF(float NOF) {
         this.NOF = NOF;
     }
 
-    public MetricEvaluationResult() {
-    }
-
-    public static class ParsedEntityInformation {
+    public static class Builder {
         private final String role;
         private final String roleKind;
         private final String entity;
@@ -196,9 +230,9 @@ public class MetricEvaluationResult {
         private final String microArchitecture;
         private final String project;
 
-        private final Map<String, Integer> metricResults;
+        private final Map<String, Float> metricResults;
 
-        public ParsedEntityInformation(RoleEntry roleEntry, String microArchitecture, String designPattern, String project) {
+        public Builder(RoleEntry roleEntry, String microArchitecture, String designPattern, String project) {
             role = roleEntry.role();
             roleKind = roleEntry.roleKind();
             entity = roleEntry.entity();
@@ -209,11 +243,11 @@ public class MetricEvaluationResult {
             this.metricResults = new HashMap<>();
         }
 
-        public void addMetric(String metricName, int value) {
+        public void addMetric(String metricName, float value) {
             this.metricResults.put(metricName, value);
         }
 
-        public MetricEvaluationResult toMetricEvaluationResult() {
+        public MetricEvaluationResult toMetricEvaluationResult(boolean includeCKMetrics) {
             var result = new MetricEvaluationResult();
             result.setRole(this.role);
             result.setRoleKind(this.roleKind);
@@ -222,17 +256,24 @@ public class MetricEvaluationResult {
             result.setDesignPattern(this.designPattern);
             result.setProject(this.project);
 
-            result.setNOF(metricResults.getOrDefault("NOF", 0));
-            result.setNSF(metricResults.getOrDefault("NSF", 0));
-            result.setNOM(metricResults.getOrDefault("NOM", 0));
-            result.setNSM(metricResults.getOrDefault("NSM", 0));
-            result.setNOI(metricResults.getOrDefault("NOI", 0));
-            result.setNOAM(metricResults.getOrDefault("NOAM", 0));
-            result.setNORM(metricResults.getOrDefault("NORM", 0));
-            result.setNOPC(metricResults.getOrDefault("NOPC", 0));
-            result.setNOTC(metricResults.getOrDefault("NOTC", 0));
-            result.setNOOF(metricResults.getOrDefault("NOOF", 0));
-            result.setNCOF(metricResults.getOrDefault("NOF", 0));
+            result.setNOF(metricResults.getOrDefault("NOF", 0f));
+            result.setNSF(metricResults.getOrDefault("NSF", 0f));
+            result.setNOM(metricResults.getOrDefault("NOM", 0f));
+            result.setNSM(metricResults.getOrDefault("NSM", 0f));
+            result.setNOI(metricResults.getOrDefault("NOI", 0f));
+            result.setNOAM(metricResults.getOrDefault("NOAM", 0f));
+            result.setNORM(metricResults.getOrDefault("NORM", 0f));
+            result.setNOPC(metricResults.getOrDefault("NOPC", 0f));
+            result.setNOTC(metricResults.getOrDefault("NOTC", 0f));
+            result.setNOOF(metricResults.getOrDefault("NOOF", 0f));
+            result.setNCOF(metricResults.getOrDefault("NOF", 0f));
+
+            if (!includeCKMetrics)
+                return result;
+            result.setCBO(metricResults.getOrDefault("CBO", 0f));
+            result.setWBO(metricResults.getOrDefault("WBO", 0f));
+            result.setFanIn(metricResults.getOrDefault("FAN_IN", 0f));
+            result.setFanOut(metricResults.getOrDefault("FAN_OUT", 0f));
             return result;
         }
     }

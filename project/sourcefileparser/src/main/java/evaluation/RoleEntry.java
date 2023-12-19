@@ -6,11 +6,11 @@ import java.util.Objects;
 
 public final class RoleEntry {
     @CsvBindByName
-    private  String role;
+    private String role;
     @CsvBindByName(column = "role_kind")
-    private  String roleKind;
+    private String roleKind;
     @CsvBindByName
-    private  String entity;
+    private String entity;
 
     public RoleEntry(String role, String roleKind, String entity) {
         this.role = role;

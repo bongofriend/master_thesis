@@ -1,23 +1,27 @@
 import com.opencsv.exceptions.CsvException;
-import evaluation.MetricGatherer;
-import org.apache.commons.cli.*;
+import evaluation.CliArguments;
+import evaluation.Parser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.nio.file.Paths;
 
 public class Main {
-    public static void main(String[] args) throws IOException, CsvException {
+    public static void main(String[] args)  {
+        CliArguments arguments = null;
         try {
-            var options = parseCmdArguments(args);
-            var gatherer = new MetricGatherer(options[0], options[1]);
-            gatherer.parseDataset();
+            arguments = parseCmdArguments(args);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
+        var gatherer = new Parser(arguments);
+        gatherer.parseDataset();
     }
 
-    private static String[] parseCmdArguments(String[] args) throws ParseException {
+    private static CliArguments parseCmdArguments(String[] args) throws ParseException {
         var options = new Options();
         var sourceFilesDirOption = Option.builder("s")
                 .longOpt("sourceFilesDir")
@@ -34,16 +38,24 @@ public class Main {
                 .hasArg()
                 .desc("Path of CSV file where results are written")
                 .build();
+        var includeCKMetricsOption = Option.builder("ck")
+                .longOpt("includeCKMetrics")
+                .required()
+                .desc("Set to include CK metrics")
+                .hasArg()
+                .type(Boolean.class)
+                .build();
+
         options.addOption(sourceFilesDirOption);
         options.addOption(csvOutputPathOption);
+        options.addOption(includeCKMetricsOption);
+
         var parser = new DefaultParser();
         var cli = parser.parse(options, args);
-        if(!cli.hasOption(sourceFilesDirOption)) {
-            return new String[]{};
-        }
-        return new String[]{
-                cli.getOptionValue(sourceFilesDirOption),
-                cli.getOptionValue(csvOutputPathOption)
-        };
+        return new CliArguments(
+                Paths.get(cli.getOptionValue(sourceFilesDirOption)).toString(),
+                Paths.get(cli.getOptionValue(csvOutputPathOption)).toString(),
+                Boolean.parseBoolean(cli.getOptionValue(includeCKMetricsOption))
+        );
     }
 }
