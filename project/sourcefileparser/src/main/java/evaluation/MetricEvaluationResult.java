@@ -40,16 +40,16 @@ public class MetricEvaluationResult {
     private float NOTC;
     @CsvBindByName(column = "NOOF")
     private float NOOF;
-    @CsvBindByName(column = "NCOP")
+    @CsvBindByName(column = "NCOF")
     private float NCOF;
     @CsvBindByName(column = "CBO")
     private float CBO;
     @CsvBindByName(column = "WBO")
     private float WBO;
     @CsvBindByName(column = "FAN_IN")
-    private float fanIn;
+    private float FAN_IN;
     @CsvBindByName(column = "FAN_OUT")
-    private float fanOut;
+    private float FAN_OUT;
 
     public MetricEvaluationResult() {
     }
@@ -78,20 +78,20 @@ public class MetricEvaluationResult {
         this.WBO = WBO;
     }
 
-    public float getFanIn() {
-        return fanIn;
+    public float getFAN_IN() {
+        return FAN_IN;
     }
 
-    public void setFanIn(float fanIn) {
-        this.fanIn = fanIn;
+    public void setFAN_IN(float FAN_IN) {
+        this.FAN_IN = FAN_IN;
     }
 
-    public float getFanOut() {
-        return fanOut;
+    public float getFAN_OUT() {
+        return FAN_OUT;
     }
 
-    public void setFanOut(float fanOut) {
-        this.fanOut = fanOut;
+    public void setFAN_OUT(float FAN_OUT) {
+        this.FAN_OUT = FAN_OUT;
     }
 
     public float getNORM() {
@@ -266,14 +266,14 @@ public class MetricEvaluationResult {
             result.setNOPC(metricResults.getOrDefault("NOPC", 0f));
             result.setNOTC(metricResults.getOrDefault("NOTC", 0f));
             result.setNOOF(metricResults.getOrDefault("NOOF", 0f));
-            result.setNCOF(metricResults.getOrDefault("NOF", 0f));
+            result.setNCOF(metricResults.getOrDefault("NCOF", 0f));
 
             if (!includeCKMetrics)
                 return result;
             result.setCBO(metricResults.getOrDefault("CBO", 0f));
             result.setWBO(metricResults.getOrDefault("WBO", 0f));
-            result.setFanIn(metricResults.getOrDefault("FAN_IN", 0f));
-            result.setFanOut(metricResults.getOrDefault("FAN_OUT", 0f));
+            result.setFAN_IN(metricResults.getOrDefault("FAN_IN", 0f));
+            result.setFAN_OUT(metricResults.getOrDefault("FAN_OUT", 0f));
             return result;
         }
     }

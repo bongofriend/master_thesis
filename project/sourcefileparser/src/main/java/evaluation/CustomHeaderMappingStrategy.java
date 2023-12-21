@@ -22,7 +22,7 @@ public class CustomHeaderMappingStrategy<T> extends HeaderColumnNameMappingStrat
         var header = super.generateHeader(bean);
         return Arrays.stream(header)
                 .map(s -> {
-                    if (headersToExclude.contains(s)) {
+                    if (headersToExclude.contains(s.toLowerCase())) {
                         return s.toLowerCase();
                     }
                     return s.toUpperCase();

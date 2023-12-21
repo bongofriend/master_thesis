@@ -53,8 +53,8 @@ public class Main {
         var parser = new DefaultParser();
         var cli = parser.parse(options, args);
         return new CliArguments(
-                Paths.get(cli.getOptionValue(sourceFilesDirOption)).toString(),
-                Paths.get(cli.getOptionValue(csvOutputPathOption)).toString(),
+                Paths.get(cli.getOptionValue(sourceFilesDirOption)).toAbsolutePath().normalize().toString(),
+                Paths.get(cli.getOptionValue(csvOutputPathOption)).toAbsolutePath().normalize().toString(),
                 Boolean.parseBoolean(cli.getOptionValue(includeCKMetricsOption))
         );
     }
