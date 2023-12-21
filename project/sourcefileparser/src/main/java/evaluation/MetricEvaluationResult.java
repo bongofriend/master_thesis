@@ -20,34 +20,51 @@ public class MetricEvaluationResult {
     @CsvBindByName(column = "project")
     private String project;
 
+    //Number of Fields
     @CsvBindByName(column = "NOF")
     private float NOF;
+
+    //Number of static Fields
     @CsvBindByName(column = "NSF")
     private float NSF;
+    //Number of Methods
     @CsvBindByName(column = "NOM")
     private float NOM;
-    @CsvBindByName(column = "NOI")
-    private float NOI;
+
+    //Number of Static Methods
     @CsvBindByName(column = "NSM")
     private float NSM;
+
+    //Number of Abstract Methods
     @CsvBindByName(column = "NOAM")
     private float NOAM;
+
+    //Number of Private Constructors
     @CsvBindByName(column = "NOPC")
     private float NOPC;
+
+    //Number of Overridden Methods
     @CsvBindByName(column = "NORM")
     private float NORM;
-    @CsvBindByName(column = "NOTC")
-    private float NOTC;
+
+    //Number of Object Fields
     @CsvBindByName(column = "NOOF")
     private float NOOF;
+
+    //Number of Other Classes With Field Of Own Type
+    //TODO: Same as FAN_OUT?
     @CsvBindByName(column = "NCOF")
     private float NCOF;
+
+    //Coupling between objects
     @CsvBindByName(column = "CBO")
     private float CBO;
-    @CsvBindByName(column = "WBO")
-    private float WBO;
+
+    //Number of Input Dependencies
     @CsvBindByName(column = "FAN_IN")
     private float FAN_IN;
+
+    //Number of Output Dependencies
     @CsvBindByName(column = "FAN_OUT")
     private float FAN_OUT;
 
@@ -68,14 +85,6 @@ public class MetricEvaluationResult {
 
     public void setCBO(float CBO) {
         this.CBO = CBO;
-    }
-
-    public float getWBO() {
-        return WBO;
-    }
-
-    public void setWBO(float WBO) {
-        this.WBO = WBO;
     }
 
     public float getFAN_IN() {
@@ -118,14 +127,6 @@ public class MetricEvaluationResult {
         this.NOM = NOM;
     }
 
-    public float getNOI() {
-        return NOI;
-    }
-
-    public void setNOI(float NOI) {
-        this.NOI = NOI;
-    }
-
     public float getNOAM() {
         return NOAM;
     }
@@ -140,14 +141,6 @@ public class MetricEvaluationResult {
 
     public void setNOPC(float NOPC) {
         this.NOPC = NOPC;
-    }
-
-    public float getNOTC() {
-        return NOTC;
-    }
-
-    public void setNOTC(float NOTC) {
-        this.NOTC = NOTC;
     }
 
     public float getNOOF() {
@@ -260,18 +253,15 @@ public class MetricEvaluationResult {
             result.setNSF(metricResults.getOrDefault("NSF", 0f));
             result.setNOM(metricResults.getOrDefault("NOM", 0f));
             result.setNSM(metricResults.getOrDefault("NSM", 0f));
-            result.setNOI(metricResults.getOrDefault("NOI", 0f));
             result.setNOAM(metricResults.getOrDefault("NOAM", 0f));
             result.setNORM(metricResults.getOrDefault("NORM", 0f));
             result.setNOPC(metricResults.getOrDefault("NOPC", 0f));
-            result.setNOTC(metricResults.getOrDefault("NOTC", 0f));
             result.setNOOF(metricResults.getOrDefault("NOOF", 0f));
             result.setNCOF(metricResults.getOrDefault("NCOF", 0f));
 
             if (!includeCKMetrics)
                 return result;
             result.setCBO(metricResults.getOrDefault("CBO", 0f));
-            result.setWBO(metricResults.getOrDefault("WBO", 0f));
             result.setFAN_IN(metricResults.getOrDefault("FAN_IN", 0f));
             result.setFAN_OUT(metricResults.getOrDefault("FAN_OUT", 0f));
             return result;

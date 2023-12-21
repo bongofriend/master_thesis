@@ -24,7 +24,7 @@ public class CKAnalyzer {
         return listener.toMetrics();
     }
 
-    public record CKMetrics(float cbo, float wbo, float fanIn, float fanOut) {
+    public record CKMetrics(float cbo, float fanIn, float fanOut) {
     }
 
     private class ResultNotificationHandler implements CKNotifier {
@@ -51,7 +51,7 @@ public class CKAnalyzer {
             var resultMap = new HashMap<String, CKMetrics>();
             for (var entry : results.entrySet()) {
                 var result = entry.getValue();
-                resultMap.put(entry.getKey(), new CKMetrics(result.getCbo(), result.getWmc(), result.getFanin(), result.getFanout()));
+                resultMap.put(entry.getKey(), new CKMetrics(result.getCbo(), result.getFanin(), result.getFanout()));
             }
             return resultMap;
         }

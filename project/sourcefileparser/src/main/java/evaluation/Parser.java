@@ -32,9 +32,7 @@ public class Parser {
     public Parser(CliArguments arguments) {
         this.metricEvaluations = new MetricEvaluation[]{
                 new NumberOfAbstractMethodsEvaluation(),
-                new NumberOfConstructorsWithObjectTypeArgumentEvaluation(),
                 new NumberOfFieldsMetricEvaluation(),
-                new NumberOfInterfacesEvaluation(),
                 new NumberOfMethodsEvaluation(),
                 new NumberOfObjectFieldsEvaluation(),
                 new NumberOfOtherClassesWithFieldOfOwnTypeEvaluation(),
@@ -132,7 +130,6 @@ public class Parser {
                 var builder = results.get(name);
                 if(builder == null)
                     continue;
-                builder.addMetric("WBO", ckMetric.wbo());
                 builder.addMetric("CBO", ckMetric.cbo());
                 builder.addMetric("FAN_IN", ckMetric.fanIn());
                 builder.addMetric("FAN_OUT", ckMetric.fanOut());
@@ -146,7 +143,7 @@ public class Parser {
     }
 
     private List<ClassOrInterfaceDeclaration> extractClass(Path p, Set<String> entityNames) throws FileNotFoundException {
-        ParseResult<CompilationUnit> compilationUnitParseResult = null;
+        ParseResult<CompilationUnit> compilationUnitParseResult;
         List<ClassOrInterfaceDeclaration> classesToParse = new ArrayList<>();
         var reader = new FileReader(p.toFile());
         compilationUnitParseResult = parser.parse(reader);
@@ -172,7 +169,7 @@ public class Parser {
         return classDeclarationPool.get(name);
     }
 
-    private List<Path> getSourceFilePaths(Path microArchPath) throws IOException {
+    private List<Path> getSourceFilePaths(Path microArchPath) {
         try (var stream = Files.list(microArchPath)) {
             return stream
                     .filter(Files::isRegularFile)

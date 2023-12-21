@@ -15,7 +15,6 @@ public class NumberOfOverriddenMethodsEvaluation implements MetricEvaluation {
         return "NORM";
     }
 
-    //TODO
     @Override
     public int evaluate(ClassOrInterfaceDeclaration unit, Parser metricGatherer, Set<String> microArchitectureParticipants) {
         var implementedOrExtended = new LinkedList<>(unit.getExtendedTypes());

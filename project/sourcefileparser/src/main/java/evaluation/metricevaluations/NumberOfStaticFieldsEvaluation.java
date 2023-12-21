@@ -9,7 +9,7 @@ import java.util.Set;
 public class NumberOfStaticFieldsEvaluation implements MetricEvaluation {
     @Override
     public String getMetricName() {
-        return "NOF";
+        return "NSF";
     }
 
     @Override
