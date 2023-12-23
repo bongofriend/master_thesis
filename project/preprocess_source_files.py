@@ -17,8 +17,9 @@ class Config:
     dataset_dir: str
     __tmpDir: tempfile.TemporaryDirectory
     source_dir: str
+    include_java: bool
 
-    def __init__(self, source_files_archive_dir: str, dataset_dir: str):
+    def __init__(self, source_files_archive_dir: str, dataset_dir: str, include_java: bool):
         current_location = path.dirname(path.realpath(sys.argv[0]))
         self.source_files_archive_dir = path.realpath(
             path.join(current_location, source_files_archive_dir))
@@ -27,6 +28,7 @@ class Config:
 
         self.__tmpDir = tempfile.TemporaryDirectory()
         self.source_dir = path.join(self.get_tmp_dir(), 'sources')
+        self.include_java = include_java
 
     def get_tmp_dir(self) -> str:
         return self.__tmpDir.name
@@ -36,7 +38,7 @@ class Config:
 
     @staticmethod
     def default() -> "Config":
-        return Config('./source_files.zip', './dataset')
+        return Config('./source_files.zip', './dataset', False)
 
 
 def parse_args() -> Config:
@@ -47,9 +49,9 @@ def parse_args() -> Config:
                         dest='archive_dir', required=True)
     parser.add_argument('--datasetDir', type=str, help='Directory to where dataset files are to be located',
                         dest='dataset_dir', required=True)
-    # parser.add_argument('--sourceDir', type=str, help='Directory where unpr')
+    parser.add_argument('--includeBuiltInJavaImports', type=bool, help='Set if native Java class should be inclided', dest='include_java', required=True, default=True)
     args = parser.parse_args()
-    return Config(args.archive_dir, args.dataset_dir)
+    return Config(args.archive_dir, args.dataset_dir, args.include_java)
 
 
 def unzip_source_files(config: Config):
@@ -116,7 +118,7 @@ def extract_metadata_from_source(config: Config):
 
 def resolve_source_file_path(config: Config, role: RoleEntry, project_name) -> (str, str):
     first_seg = role.entity.split('.')[0]
-    if 'java' in first_seg:
+    if config.include_java and 'java' in first_seg:
         base_path = path.join(config.get_tmp_dir(), 'sources',
                               'Extra - JDK7', 'src', 'share', 'classes')
     else:

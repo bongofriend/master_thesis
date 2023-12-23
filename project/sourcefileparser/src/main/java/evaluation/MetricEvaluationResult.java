@@ -1,6 +1,7 @@
 package evaluation;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +69,55 @@ public class MetricEvaluationResult {
     @CsvBindByName(column = "FAN_OUT")
     private float FAN_OUT;
 
+    //Number of Children
+    @CsvBindByName(column = "NOC")
+    private float NOC;
+
+    //Response for a class
+    @CsvBindByName(column = "RFC")
+    private float RFC;
+
+    //Tight Class Cohesion
+    @CsvBindByName(column = "TCC")
+    private float TCC;
+
+    //Loose Class Cohesion
+    @CsvBindByName(column = "LCC")
+    private float LCC;
+
     public MetricEvaluationResult() {
+    }
+
+    public float getNOC() {
+        return NOC;
+    }
+
+    public void setNOC(float NOC) {
+        this.NOC = NOC;
+    }
+
+    public float getRFC() {
+        return RFC;
+    }
+
+    public void setRFC(float RFC) {
+        this.RFC = RFC;
+    }
+
+    public float getTCC() {
+        return TCC;
+    }
+
+    public void setTCC(float TCC) {
+        this.TCC = TCC;
+    }
+
+    public float getLCC() {
+        return LCC;
+    }
+
+    public void setLCC(float LCC) {
+        this.LCC = LCC;
     }
 
     public float getNSM() {
@@ -264,6 +313,10 @@ public class MetricEvaluationResult {
             result.setCBO(metricResults.getOrDefault("CBO", 0f));
             result.setFAN_IN(metricResults.getOrDefault("FAN_IN", 0f));
             result.setFAN_OUT(metricResults.getOrDefault("FAN_OUT", 0f));
+            result.setNOC(metricResults.getOrDefault("NOC", 0f));
+            result.setRFC(metricResults.getOrDefault("RFC", 0f));
+            result.setTCC(metricResults.getOrDefault("TCC", 0f));
+            result.setLCC(metricResults.getOrDefault("LCC", 0f));
             return result;
         }
     }

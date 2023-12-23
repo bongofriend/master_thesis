@@ -133,6 +133,10 @@ public class Parser {
                 builder.addMetric("CBO", ckMetric.cbo());
                 builder.addMetric("FAN_IN", ckMetric.fanIn());
                 builder.addMetric("FAN_OUT", ckMetric.fanOut());
+                builder.addMetric("NOC", ckMetric.noc());
+                builder.addMetric("RFC", ckMetric.rfc());
+                builder.addMetric("TCC", ckMetric.tcc());
+                builder.addMetric("LCC", ckMetric.lcc());
             }
         }
         return results
