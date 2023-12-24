@@ -334,3 +334,4 @@ project/sources/**
 project/dataset/*
 project/__pycache__/*
 project/*.csv
+project/code2vec_models/*
