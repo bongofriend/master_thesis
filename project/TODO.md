@@ -7,4 +7,3 @@
 - [ ] Update usage docs
 - [x] Evaluate RFC, TCC, LCC methods [(from here)](https://github.com/mauricioaniche/ck)
 - [ ] Add shell scripts for running tools in docker container
-- [ ] Make new 

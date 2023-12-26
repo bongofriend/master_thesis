@@ -17,4 +17,4 @@ WORKDIR ${CODE2VEC_HOME}/code2vec
 RUN pip3 install -r requirements.txt
 COPY ./dataset ${CODE2VEC_HOME}/code2vec/dataset
 COPY ./docker/code2vec/helper.py ${CODE2VEC_HOME}/code2vec/helper.py
-ENTRYPOINT python3 helper.py --maxIterations ${MAX_ITER}
+#ENTRYPOINT python3 helper.py --maxIterations ${MAX_ITER}
