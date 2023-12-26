@@ -7,6 +7,5 @@ import java.util.Set;
 
 public interface MetricEvaluation {
     String getMetricName();
-
     int evaluate(ClassOrInterfaceDeclaration unit, Parser metricGatherer, Set<String> microArchitectureParticipants);
 }

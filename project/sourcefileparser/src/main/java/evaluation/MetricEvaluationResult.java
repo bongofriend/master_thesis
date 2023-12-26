@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MetricEvaluationResult {
+
     @CsvBindByName(column = "role")
     public String role;
     @CsvBindByName(column = "role_kind")
@@ -85,7 +86,17 @@ public class MetricEvaluationResult {
     @CsvBindByName(column = "LCC")
     private float LCC;
 
+    @CsvBindByName(column = "embedding")
+    private float embedding;
     public MetricEvaluationResult() {
+    }
+
+    public float getEmbedding() {
+        return embedding;
+    }
+
+    public void setEmbedding(float embedding) {
+        this.embedding = embedding;
     }
 
     public float getNOC() {
@@ -298,25 +309,26 @@ public class MetricEvaluationResult {
             result.setDesignPattern(this.designPattern);
             result.setProject(this.project);
 
-            result.setNOF(metricResults.getOrDefault("NOF", 0f));
-            result.setNSF(metricResults.getOrDefault("NSF", 0f));
-            result.setNOM(metricResults.getOrDefault("NOM", 0f));
-            result.setNSM(metricResults.getOrDefault("NSM", 0f));
-            result.setNOAM(metricResults.getOrDefault("NOAM", 0f));
-            result.setNORM(metricResults.getOrDefault("NORM", 0f));
-            result.setNOPC(metricResults.getOrDefault("NOPC", 0f));
-            result.setNOOF(metricResults.getOrDefault("NOOF", 0f));
-            result.setNCOF(metricResults.getOrDefault("NCOF", 0f));
+            result.setNOF(metricResults.getOrDefault(MetricEvaluationResultConstants.NOF, 0f));
+            result.setNSF(metricResults.getOrDefault(MetricEvaluationResultConstants.NSF, 0f));
+            result.setNOM(metricResults.getOrDefault(MetricEvaluationResultConstants.NOM, 0f));
+            result.setNSM(metricResults.getOrDefault(MetricEvaluationResultConstants.NSM, 0f));
+            result.setNOAM(metricResults.getOrDefault(MetricEvaluationResultConstants.NOAM, 0f));
+            result.setNORM(metricResults.getOrDefault(MetricEvaluationResultConstants.NORM, 0f));
+            result.setNOPC(metricResults.getOrDefault(MetricEvaluationResultConstants.NOPC, 0f));
+            result.setNOOF(metricResults.getOrDefault(MetricEvaluationResultConstants.NOOF, 0f));
+            result.setNCOF(metricResults.getOrDefault(MetricEvaluationResultConstants.NCOF, 0f));
+            result.setEmbedding(metricResults.getOrDefault(MetricEvaluationResultConstants.EMBEDDING, 0f));
 
             if (!includeCKMetrics)
                 return result;
-            result.setCBO(metricResults.getOrDefault("CBO", 0f));
-            result.setFAN_IN(metricResults.getOrDefault("FAN_IN", 0f));
-            result.setFAN_OUT(metricResults.getOrDefault("FAN_OUT", 0f));
-            result.setNOC(metricResults.getOrDefault("NOC", 0f));
-            result.setRFC(metricResults.getOrDefault("RFC", 0f));
-            result.setTCC(metricResults.getOrDefault("TCC", 0f));
-            result.setLCC(metricResults.getOrDefault("LCC", 0f));
+            result.setCBO(metricResults.getOrDefault(MetricEvaluationResultConstants.CBO, 0f));
+            result.setFAN_IN(metricResults.getOrDefault(MetricEvaluationResultConstants.FAN_IN, 0f));
+            result.setFAN_OUT(metricResults.getOrDefault(MetricEvaluationResultConstants.FAN_OUT, 0f));
+            result.setNOC(metricResults.getOrDefault(MetricEvaluationResultConstants.NOC, 0f));
+            result.setRFC(metricResults.getOrDefault(MetricEvaluationResultConstants.RFC, 0f));
+            result.setTCC(metricResults.getOrDefault(MetricEvaluationResultConstants.TCC, 0f));
+            result.setLCC(metricResults.getOrDefault(MetricEvaluationResultConstants.LCC, 0f));
             return result;
         }
     }

@@ -26,8 +26,9 @@ public class Parser {
     private final Logger logger;
     private final CKAnalyzer analyzer;
     private final JavaParser parser;
-
     private final CliArguments arguments;
+
+    private final CodeEmbeddingGenerator codeEmbeddingGenerator;
 
     public Parser(CliArguments arguments) {
         this.metricEvaluations = new MetricEvaluation[]{
@@ -47,6 +48,7 @@ public class Parser {
         this.parser = new JavaParser();
         this.parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_6);
         this.analyzer = new CKAnalyzer();
+        this.codeEmbeddingGenerator = new CodeEmbeddingGenerator(arguments.modelPath());
     }
 
 
@@ -120,6 +122,7 @@ public class Parser {
             for (var e : metricEvaluations) {
                 builder.addMetric(e.getMetricName(), e.evaluate(c, this, roleEntityMap.keySet()));
             }
+            builder.addMetric(MetricEvaluationResultConstants.EMBEDDING, codeEmbeddingGenerator.createEmbedding(c));
             results.put(name.get(), builder);
         }
         if (arguments.includeCKMetrics()) {
@@ -130,13 +133,13 @@ public class Parser {
                 var builder = results.get(name);
                 if(builder == null)
                     continue;
-                builder.addMetric("CBO", ckMetric.cbo());
-                builder.addMetric("FAN_IN", ckMetric.fanIn());
-                builder.addMetric("FAN_OUT", ckMetric.fanOut());
-                builder.addMetric("NOC", ckMetric.noc());
-                builder.addMetric("RFC", ckMetric.rfc());
-                builder.addMetric("TCC", ckMetric.tcc());
-                builder.addMetric("LCC", ckMetric.lcc());
+                builder.addMetric(MetricEvaluationResultConstants.CBO, ckMetric.cbo());
+                builder.addMetric(MetricEvaluationResultConstants.FAN_IN, ckMetric.fanIn());
+                builder.addMetric(MetricEvaluationResultConstants.FAN_OUT, ckMetric.fanOut());
+                builder.addMetric(MetricEvaluationResultConstants.NOC, ckMetric.noc());
+                builder.addMetric(MetricEvaluationResultConstants.RFC, ckMetric.rfc());
+                builder.addMetric(MetricEvaluationResultConstants.TCC, ckMetric.tcc());
+                builder.addMetric(MetricEvaluationResultConstants.LCC, ckMetric.lcc());
             }
         }
         return results

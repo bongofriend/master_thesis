@@ -38,6 +38,7 @@ public class Main {
                 .hasArg()
                 .desc("Path of CSV file where results are written")
                 .build();
+
         var includeCKMetricsOption = Option.builder("ck")
                 .longOpt("includeCKMetrics")
                 .required()
@@ -45,17 +46,25 @@ public class Main {
                 .hasArg()
                 .type(Boolean.class)
                 .build();
+        var modelPathOption = Option.builder("m")
+                .longOpt("modelPath")
+                .required()
+                .hasArg()
+                .type(String.class)
+                .build();
 
         options.addOption(sourceFilesDirOption);
         options.addOption(csvOutputPathOption);
         options.addOption(includeCKMetricsOption);
+        options.addOption(modelPathOption);
 
         var parser = new DefaultParser();
         var cli = parser.parse(options, args);
         return new CliArguments(
                 Paths.get(cli.getOptionValue(sourceFilesDirOption)).toAbsolutePath().normalize().toString(),
                 Paths.get(cli.getOptionValue(csvOutputPathOption)).toAbsolutePath().normalize().toString(),
-                Boolean.parseBoolean(cli.getOptionValue(includeCKMetricsOption))
+                Boolean.parseBoolean(cli.getOptionValue(includeCKMetricsOption)),
+                Paths.get(cli.getOptionValue(modelPathOption)).toAbsolutePath().normalize().toString()
         );
     }
 }

@@ -11,6 +11,7 @@ import random
 import shutil
 from typing import List
 import logging
+from gensim.models import KeyedVectors as word2vec
 
 @dataclass
 class Args():
@@ -80,8 +81,12 @@ def export_model(args: Args):
     model_path = pathlib.Path(f"volume/models/my_dataset/saved_model_iter{args.export_model_iteration}").absolute()
     subprocess.call(['python3', 'code2vec.py', '--load', model_path, '--release'])
     release_mode_path = pathlib.Path(f"{model_path}.release").absolute()
-    subprocess.call(["python3", "code2vec.py", "--load", release_mode_path, "--save_w2v", pathlib.Path("volume/models/token.txt")])
-    subprocess.call(["python3", "code2vec.py", "--load", release_mode_path, "--save_t2v", pathlib.Path("volume/models/target.txt")])
+    token_path = pathlib.Path("volume/models/token.txt")
+    subprocess.call(["python3", "code2vec.py", "--load", release_mode_path, "--save_w2v", token_path])
+    #subprocess.call(["python3", "code2vec.py", "--load", release_mode_path, "--save_t2v", pathlib.Path("volume/models/target.txt")])
+    saved_model_path = pathlib.Path('volume/models/model.bin')
+    model = word2vec.load_word2vec_format(token_path, binary=False)
+    model.save_word2vec_format(saved_model_path, binary=True)
 
 if __name__ == '__main__':
     logging.basicConfig(level='INFO')

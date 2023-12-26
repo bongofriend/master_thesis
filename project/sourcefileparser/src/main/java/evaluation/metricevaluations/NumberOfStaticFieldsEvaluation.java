@@ -2,6 +2,7 @@ package evaluation.metricevaluations;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import evaluation.MetricEvaluationResultConstants;
 import evaluation.Parser;
 
 import java.util.Set;
@@ -9,7 +10,7 @@ import java.util.Set;
 public class NumberOfStaticFieldsEvaluation implements MetricEvaluation {
     @Override
     public String getMetricName() {
-        return "NSF";
+        return MetricEvaluationResultConstants.NSF;
     }
 
     @Override

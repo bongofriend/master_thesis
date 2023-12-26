@@ -1,6 +1,7 @@
 package evaluation.metricevaluations;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import evaluation.MetricEvaluationResultConstants;
 import evaluation.Parser;
 
 import java.util.Set;
@@ -8,7 +9,7 @@ import java.util.Set;
 public class NumberOfOtherClassesWithFieldOfOwnTypeEvaluation implements MetricEvaluation {
     @Override
     public String getMetricName() {
-        return "NCOF";
+        return MetricEvaluationResultConstants.NCOF;
     }
 
     @Override
