@@ -6,4 +6,7 @@
 - [x] Package new metric generator in a docker image for easier execution
 - [ ] Update usage docs
 - [x] Evaluate RFC, TCC, LCC methods [(from here)](https://github.com/mauricioaniche/ck)
-- [ ] Add shell scripts for running tools in docker container
+- [x] Add shell scripts for running tools in docker container
+- [ ] Use mean embeddings as feature in classification
+- [ ] Evaluate current state
+- [ ] Consider adding code2seq instead of code2vec for generating numerical representation of source code semantics
