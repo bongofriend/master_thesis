@@ -9,4 +9,4 @@
 - [x] Add shell scripts for running tools in docker container
 - [ ] Use mean embeddings as feature in classification
 - [ ] Evaluate current state
-- [ ] Consider adding code2seq instead of code2vec for generating numerical representation of source code semantics
+- [x] ~~Consider adding code2seq instead of code2vec for generating numerical representation of source code semantics~~ Not suitable for this use case 

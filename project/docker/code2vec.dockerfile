@@ -18,4 +18,4 @@ RUN pip3 install -r requirements.txt
 RUN pip3 install gensim
 COPY ./dataset ${CODE2VEC_HOME}/code2vec/dataset
 COPY ./docker/code2vec/helper.py ${CODE2VEC_HOME}/code2vec/helper.py
-ENTRYPOINT  python3 helper.py --split_dataset && python3 helper.py --preprocess_dataset  && python3 helper.py --train_model "${MAX_ITER}" && python3 helper.py --export "${MAX_ITER}"
+ENTRYPOINT  python3 helper.py --split_dataset && python3 helper.py --preprocess_dataset  && python3 helper.py --train_model "${MAX_ITER}" && python3 helper.py --export

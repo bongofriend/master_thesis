@@ -11,6 +11,6 @@ ENV DATASET_PATH ""
 ENV OUTPUT_CSV ""
 ENV INCLUDE_CK_METRICS "true"
 COPY  --from=builder ${SOURCE_FILE_PARSER_HOME}/sourcefileparser/target/sourcefileparser-1.0-SNAPSHOT-jar-with-dependencies.jar ${SOURCE_FILE_PARSER_HOME}/sourcefileparser.jar
-COPY ./code2vec_models/models/model.bin ${SOURCE_FILE_PARSER_HOME}/sourcefileparser/model.bin
+#COPY ./code2vec_models/models/model.bin ${SOURCE_FILE_PARSER_HOME}/sourcefileparser/model.bin
 WORKDIR ${SOURCE_FILE_PARSER_HOME}
-ENTRYPOINT java -jar sourcefileparser.jar -s ./volume/${DATASET_PATH} -o ./volume/${OUTPUT_CSV} -ck ${INCLUDE_CK_METRICS} -m ${SOURCE_FILE_PARSER_HOME}/sourcefileparser/model.bin
+ENTRYPOINT java -jar sourcefileparser.jar -s ./volume/${DATASET_PATH} -o ./volume/${OUTPUT_CSV} -ck ${INCLUDE_CK_METRICS} -m ./volume/code2vec_models/models/model.bin
