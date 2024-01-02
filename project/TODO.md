@@ -7,6 +7,8 @@
 - [ ] Update usage docs
 - [x] Evaluate RFC, TCC, LCC methods [(from here)](https://github.com/mauricioaniche/ck)
 - [x] Add shell scripts for running tools in docker container
-- [ ] Use mean embeddings as feature in classification
+- [x] Use mean embeddings as feature in classification
 - [ ] Evaluate current state
-- [x] ~~Consider adding code2seq instead of code2vec for generating numerical representation of source code semantics~~ Not suitable for this use case 
+- [x] ~~Consider adding code2seq instead of code2vec for generating numerical representation of source code semantics~~ Not suitable for this use case
+- [ ] Adjust DataFrame to represent mean average vector for embeddings
+- [ ] Consider applying PCA to reduce the dimensionality of embedding vector 

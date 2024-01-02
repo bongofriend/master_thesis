@@ -14,7 +14,13 @@ public class CustomHeaderMappingStrategy<T> extends HeaderColumnNameMappingStrat
 
     //role,role_kind,entity,design_pattern,micro_architecture,project,
     public CustomHeaderMappingStrategy() {
-        headersToExclude = new HashSet<>(List.of("design_pattern", "micro_architecture", "role", "role_kind", "entity", "project"));
+        this.headersToExclude = new HashSet<>(List.of(
+            MetricEvaluationResultConstants.DESIGN_PATTERN,
+            MetricEvaluationResultConstants.MICRO_ARCHITECTURE,
+            MetricEvaluationResultConstants.ROLE_KIND,
+            MetricEvaluationResultConstants.ENTITY,
+            MetricEvaluationResultConstants.PROJECT
+        ));
     }
 
     @Override

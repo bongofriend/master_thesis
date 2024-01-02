@@ -2,100 +2,98 @@ package evaluation;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MetricEvaluationResult {
 
-    @CsvBindByName(column = "role")
+    @CsvBindByName(column = MetricEvaluationResultConstants.ROLE)
     public String role;
-    @CsvBindByName(column = "role_kind")
+    @CsvBindByName(column = MetricEvaluationResultConstants.ROLE_KIND)
     private String roleKind;
-    @CsvBindByName(column = "entity")
+    @CsvBindByName(column = MetricEvaluationResultConstants.ENTITY)
     private String entity;
-    @CsvBindByName(column = "design_pattern")
+    @CsvBindByName(column = MetricEvaluationResultConstants.DESIGN_PATTERN)
     private String designPattern;
-    @CsvBindByName(column = "micro_architecture")
+    @CsvBindByName(column = MetricEvaluationResultConstants.MICRO_ARCHITECTURE)
     private String microArchitecture;
-
-    @CsvBindByName(column = "project")
+    @CsvBindByName(column = MetricEvaluationResultConstants.PROJECT)
     private String project;
 
     //Number of Fields
-    @CsvBindByName(column = "NOF")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NOF)
     private float NOF;
 
     //Number of static Fields
-    @CsvBindByName(column = "NSF")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NSF)
     private float NSF;
     //Number of Methods
-    @CsvBindByName(column = "NOM")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NOM)
     private float NOM;
 
     //Number of Static Methods
-    @CsvBindByName(column = "NSM")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NSM)
     private float NSM;
 
     //Number of Abstract Methods
-    @CsvBindByName(column = "NOAM")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NOAM)
     private float NOAM;
 
     //Number of Private Constructors
-    @CsvBindByName(column = "NOPC")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NOPC)
     private float NOPC;
 
     //Number of Overridden Methods
-    @CsvBindByName(column = "NORM")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NORM)
     private float NORM;
 
     //Number of Object Fields
-    @CsvBindByName(column = "NOOF")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NOOF)
     private float NOOF;
 
     //Number of Other Classes With Field Of Own Type
     //TODO: Same as FAN_OUT?
-    @CsvBindByName(column = "NCOF")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NCOF)
     private float NCOF;
 
     //Coupling between objects
-    @CsvBindByName(column = "CBO")
+    @CsvBindByName(column = MetricEvaluationResultConstants.CBO)
     private float CBO;
 
     //Number of Input Dependencies
-    @CsvBindByName(column = "FAN_IN")
+    @CsvBindByName(column = MetricEvaluationResultConstants.FAN_IN)
     private float FAN_IN;
 
     //Number of Output Dependencies
-    @CsvBindByName(column = "FAN_OUT")
+    @CsvBindByName(column = MetricEvaluationResultConstants.FAN_OUT)
     private float FAN_OUT;
 
     //Number of Children
-    @CsvBindByName(column = "NOC")
+    @CsvBindByName(column = MetricEvaluationResultConstants.NOC)
     private float NOC;
 
     //Response for a class
-    @CsvBindByName(column = "RFC")
+    @CsvBindByName(column = MetricEvaluationResultConstants.RFC)
     private float RFC;
 
     //Tight Class Cohesion
-    @CsvBindByName(column = "TCC")
+    @CsvBindByName(column = MetricEvaluationResultConstants.TCC)
     private float TCC;
 
     //Loose Class Cohesion
-    @CsvBindByName(column = "LCC")
+    @CsvBindByName(column = MetricEvaluationResultConstants.LCC)
     private float LCC;
 
-    @CsvBindByName(column = "embedding")
-    private float embedding;
+    @CsvBindByName(column = MetricEvaluationResultConstants.EMBEDDING)
+    private String embedding;
     public MetricEvaluationResult() {
     }
 
-    public float getEmbedding() {
-        return embedding;
-    }
-
-    public void setEmbedding(float embedding) {
+    public void setEmbedding(String embedding) {
         this.embedding = embedding;
     }
 
@@ -275,6 +273,8 @@ public class MetricEvaluationResult {
         this.NOF = NOF;
     }
 
+
+
     public static class Builder {
         private final String role;
         private final String roleKind;
@@ -282,6 +282,7 @@ public class MetricEvaluationResult {
         private final String designPattern;
         private final String microArchitecture;
         private final String project;
+        private String embedding;
 
         private final Map<String, Float> metricResults;
 
@@ -294,6 +295,13 @@ public class MetricEvaluationResult {
             this.microArchitecture = microArchitecture;
             this.project = project;
             this.metricResults = new HashMap<>();
+        }
+
+        public void setEmbedding(INDArray embedding) {
+            var values = Arrays.stream(embedding.toDoubleVector())
+                    .mapToObj(Double::toString)
+                    .collect(Collectors.joining(","));
+            this.embedding = "[" + values + "]";
         }
 
         public void addMetric(String metricName, float value) {
@@ -316,9 +324,8 @@ public class MetricEvaluationResult {
             result.setNOAM(metricResults.getOrDefault(MetricEvaluationResultConstants.NOAM, 0f));
             result.setNORM(metricResults.getOrDefault(MetricEvaluationResultConstants.NORM, 0f));
             result.setNOPC(metricResults.getOrDefault(MetricEvaluationResultConstants.NOPC, 0f));
-            result.setNOOF(metricResults.getOrDefault(MetricEvaluationResultConstants.NOOF, 0f));
+            result.setNOOF(metricResults.getOrDefault( MetricEvaluationResultConstants.NOOF, 0f));
             result.setNCOF(metricResults.getOrDefault(MetricEvaluationResultConstants.NCOF, 0f));
-            result.setEmbedding(metricResults.getOrDefault(MetricEvaluationResultConstants.EMBEDDING, 0f));
 
             if (!includeCKMetrics)
                 return result;
@@ -329,6 +336,9 @@ public class MetricEvaluationResult {
             result.setRFC(metricResults.getOrDefault(MetricEvaluationResultConstants.RFC, 0f));
             result.setTCC(metricResults.getOrDefault(MetricEvaluationResultConstants.TCC, 0f));
             result.setLCC(metricResults.getOrDefault(MetricEvaluationResultConstants.LCC, 0f));
+
+
+            result.setEmbedding(this.embedding);
             return result;
         }
     }

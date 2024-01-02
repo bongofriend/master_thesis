@@ -122,7 +122,7 @@ public class Parser {
             for (var e : metricEvaluations) {
                 builder.addMetric(e.getMetricName(), e.evaluate(c, this, roleEntityMap.keySet()));
             }
-            builder.addMetric(MetricEvaluationResultConstants.EMBEDDING, codeEmbeddingGenerator.createEmbedding(c));
+            builder.setEmbedding(codeEmbeddingGenerator.createEmbedding(c));
             results.put(name.get(), builder);
         }
         if (arguments.includeCKMetrics()) {

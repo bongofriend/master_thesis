@@ -20,5 +20,11 @@ public class MetricEvaluationResultConstants {
      public static final String TCC = "TCC";
      public static final String LCC = "LCC";
      public static final String EMBEDDING = "embedding";
+     public static final String ROLE = "role";
+     public static final String ROLE_KIND = "role_kind";
+     public static final String ENTITY = "entity";
+     public static final String DESIGN_PATTERN = "design_pattern";
+     public static final String MICRO_ARCHITECTURE = "micro_architecture";
+     public static final String PROJECT = "project";
 
 }

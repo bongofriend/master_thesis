@@ -25,10 +25,10 @@ public class CodeEmbeddingGenerator {
        this.model = WordVectorSerializer.readWord2VecModel(modelPath);
    }
 
-    public float createEmbedding(ClassOrInterfaceDeclaration declaration) {
+    public INDArray createEmbedding(ClassOrInterfaceDeclaration declaration) {
        var tokenRange = declaration.getTokenRange();
        if(tokenRange.isEmpty()) {
-           return 0f;
+           return null;
        }
        var sourceCodeTokens = StreamSupport.stream(tokenRange.get().spliterator(), false)
                .filter(t -> !t.getCategory().isWhitespaceOrComment())
@@ -39,13 +39,12 @@ public class CodeEmbeddingGenerator {
        return reduceEmbeddingDimensionality(sourceCodeTokens);
     }
 
-    private float reduceEmbeddingDimensionality(List<INDArray> embeddings) {
-        if(embeddings.isEmpty()) {
-            return 0f;
+    private INDArray reduceEmbeddingDimensionality(List<INDArray> embeddings) {
+        var vectorLength = embeddings.get(0).length();
+        var sumVector = Nd4j.zeros(vectorLength);
+        for(var v: embeddings) {
+            sumVector.addi(v);
         }
-        var t = embeddings.toArray(new INDArray[0]);
-        var matrix = Nd4j.vstack(t);
-        var meanEmbedding = matrix.mean(0);
-        return meanEmbedding.getFloat(0);
+        return sumVector.divi(vectorLength);
     }
 }
