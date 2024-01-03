@@ -19,7 +19,8 @@ public class CustomHeaderMappingStrategy<T> extends HeaderColumnNameMappingStrat
             MetricEvaluationResultConstants.MICRO_ARCHITECTURE,
             MetricEvaluationResultConstants.ROLE_KIND,
             MetricEvaluationResultConstants.ENTITY,
-            MetricEvaluationResultConstants.PROJECT
+            MetricEvaluationResultConstants.PROJECT,
+            MetricEvaluationResultConstants.ROLE
         ));
     }
 

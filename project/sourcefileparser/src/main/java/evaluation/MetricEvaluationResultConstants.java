@@ -19,7 +19,9 @@ public class MetricEvaluationResultConstants {
      public static final String RFC = "RFC";
      public static final String TCC = "TCC";
      public static final String LCC = "LCC";
-     public static final String EMBEDDING = "embedding";
+     public static final String MEAN_VECTOR = "MEAN_VECTOR";
+
+     public static final String COMPONENT_MEAN = "COMPONENT_MEAN";
      public static final String ROLE = "role";
      public static final String ROLE_KIND = "role_kind";
      public static final String ENTITY = "entity";

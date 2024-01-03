@@ -10,5 +10,6 @@
 - [x] Use mean embeddings as feature in classification
 - [ ] Evaluate current state
 - [x] ~~Consider adding code2seq instead of code2vec for generating numerical representation of source code semantics~~ Not suitable for this use case
-- [ ] Adjust DataFrame to represent mean average vector for embeddings
-- [ ] Consider applying PCA to reduce the dimensionality of embedding vector 
+- [x] Adjust DataFrame to represent mean average vector for embeddings
+- [x] Consider applying PCA to reduce the dimensionality of embedding vector
+- [ ] Consider using the Mean Of a Embedding components as input 

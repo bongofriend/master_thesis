@@ -19,13 +19,15 @@ import java.util.stream.StreamSupport;
 
 public class CodeEmbeddingGenerator {
 
+    public record Result(INDArray meanVector, float meanOfAllComponents) {}
+
     private final Word2Vec model;
 
    public CodeEmbeddingGenerator(String modelPath)  {
        this.model = WordVectorSerializer.readWord2VecModel(modelPath);
    }
 
-    public INDArray createEmbedding(ClassOrInterfaceDeclaration declaration) {
+    public Result createEmbedding(ClassOrInterfaceDeclaration declaration) {
        var tokenRange = declaration.getTokenRange();
        if(tokenRange.isEmpty()) {
            return null;
@@ -36,15 +38,22 @@ public class CodeEmbeddingGenerator {
                .map(model::getWordVectorMatrix)
                .filter(Objects::nonNull)
                .toList();
-       return reduceEmbeddingDimensionality(sourceCodeTokens);
+       return new Result(createMeanVector(sourceCodeTokens), getMeanOfVectorComponents(sourceCodeTokens));
     }
 
-    private INDArray reduceEmbeddingDimensionality(List<INDArray> embeddings) {
+    private INDArray createMeanVector(List<INDArray> embeddings) {
         var vectorLength = embeddings.get(0).length();
         var sumVector = Nd4j.zeros(vectorLength);
         for(var v: embeddings) {
             sumVector.addi(v);
         }
         return sumVector.divi(vectorLength);
+    }
+
+    private float getMeanOfVectorComponents(List<INDArray> embeddings) {
+        var t = embeddings.toArray(new INDArray[0]);
+        var matrix = Nd4j.vstack(t);
+        var meanEmbedding = matrix.mean(0);
+        return meanEmbedding.getFloat(0);
     }
 }

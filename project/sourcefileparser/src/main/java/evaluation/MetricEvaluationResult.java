@@ -88,14 +88,32 @@ public class MetricEvaluationResult {
     @CsvBindByName(column = MetricEvaluationResultConstants.LCC)
     private float LCC;
 
-    @CsvBindByName(column = MetricEvaluationResultConstants.EMBEDDING)
-    private String embedding;
+    public String getMeanVector() {
+        return meanVector;
+    }
+
+    public void setMeanVector(String meanVector) {
+        this.meanVector = meanVector;
+    }
+
+    public float getComponentMean() {
+        return componentMean;
+    }
+
+    public void setComponentMean(float componentMean) {
+        this.componentMean = componentMean;
+    }
+
+    @CsvBindByName(column = MetricEvaluationResultConstants.MEAN_VECTOR)
+    private String meanVector;
+
+    @CsvBindByName(column = MetricEvaluationResultConstants.COMPONENT_MEAN)
+    private float componentMean;
+
+
     public MetricEvaluationResult() {
     }
 
-    public void setEmbedding(String embedding) {
-        this.embedding = embedding;
-    }
 
     public float getNOC() {
         return NOC;
@@ -282,7 +300,8 @@ public class MetricEvaluationResult {
         private final String designPattern;
         private final String microArchitecture;
         private final String project;
-        private String embedding;
+        private String meanVector;
+        private float componentMean;
 
         private final Map<String, Float> metricResults;
 
@@ -297,11 +316,12 @@ public class MetricEvaluationResult {
             this.metricResults = new HashMap<>();
         }
 
-        public void setEmbedding(INDArray embedding) {
-            var values = Arrays.stream(embedding.toDoubleVector())
+        public void setEmbedding(CodeEmbeddingGenerator.Result embedding) {
+            var values = Arrays.stream(embedding.meanVector().toDoubleVector())
                     .mapToObj(Double::toString)
                     .collect(Collectors.joining(","));
-            this.embedding = "[" + values + "]";
+            this.meanVector = "[" + values + "]";
+            this.componentMean = embedding.meanOfAllComponents();
         }
 
         public void addMetric(String metricName, float value) {
@@ -338,7 +358,8 @@ public class MetricEvaluationResult {
             result.setLCC(metricResults.getOrDefault(MetricEvaluationResultConstants.LCC, 0f));
 
 
-            result.setEmbedding(this.embedding);
+            result.setMeanVector(this.meanVector);
+            result.setComponentMean(this.componentMean);
             return result;
         }
     }
