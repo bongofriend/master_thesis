@@ -10,8 +10,6 @@ public class ClassMetricVectorConstants {
      public static final String EXTENDS_ENTITY = "extends_entity";
      public static final String COUNT_OF_INTERFACES = "count_of_interfaces";
      public static final String IS_CLASS = "is_class";
-
-     //TODO: Add remaining feature extractors
      public static final String EXTENDS_ENTITY_IN_MICRO_ARCHITECTURE = "extends_entity_in_micro_architecture";
 
      //Field level
@@ -30,8 +28,7 @@ public class ClassMetricVectorConstants {
      public static final String COUNT_OF_REFERENCE_AS_METHOD_PARAMETER = "count_of_reference_as_method_parameter";
      public static final String COUNT_OF_REFERENCE_AS_VARIABLE = "count_of_reference_as_variable";
      public static final String COUNT_OF_REFERENCE_AS_METHOD_INVOCATION = "count_of_reference_as_method_invocation";
-
-
+     public static final String COUNT_OF_ABSTRACT_METHODS = "count_of_abstract_methods";
 
 
 

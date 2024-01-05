@@ -86,6 +86,9 @@ public class ClassMetricVector {
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_RETURN_TYPE)
     private int countReferenceAsReturnType;
 
+    @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_ABSTRACT_METHODS)
+    private int countOfAbstractMethods;
+
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_METHOD_PARAMETER)
     private int countReferenceAsMethodParameter;
 
@@ -94,6 +97,7 @@ public class ClassMetricVector {
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_METHOD_INVOCATION)
     private int countReferenceAsMethodInvocation;
+
 
     public void addMetric(String metricColumnName, int value) {
         this.metrics.put(metricColumnName, value);
@@ -121,6 +125,7 @@ public class ClassMetricVector {
         //Set method level metrics
         this.countStaticMethods = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_STATIC_METHODS, 0);
         this.countPrivateMethods = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_PRIVATE_METHODS, 0);
+        this.countOfAbstractMethods = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_ABSTRACT_METHODS, 0);
         this.countReferenceAsReturnType = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_RETURN_TYPE, 0);
         this.countReferenceAsMethodParameter = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_METHOD_PARAMETER, 0);
         this.countReferenceAsVariable = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_VARIABLE, 0);
@@ -282,6 +287,14 @@ public class ClassMetricVector {
 
     public int getCountPrivateMethods() {
         return countPrivateMethods;
+    }
+
+    public int getCountOfAbstractMethods() {
+        return countOfAbstractMethods;
+    }
+
+    public void setCountOfAbstractMethods(int countOfAbstractMethods) {
+        this.countOfAbstractMethods = countOfAbstractMethods;
     }
 
     public void setCountPrivateMethods(int countPrivateMethods) {

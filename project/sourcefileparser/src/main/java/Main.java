@@ -1,6 +1,6 @@
 import evaluation.ClassMetricVectorWriter;
 import evaluation.CliArguments;
-import evaluation.FeatureManagerExtractor;
+import evaluation.FeatureExtractorManager;
 import evaluation.SourceFileStreamer;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
@@ -9,7 +9,6 @@ import org.apache.commons.cli.ParseException;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args)  {
@@ -18,7 +17,7 @@ public class Main {
             arguments = parseCmdArguments(args);
             var sourceFileStreamer = new SourceFileStreamer(arguments);
             var classMetricVectorWriter = new ClassMetricVectorWriter(arguments);
-            var featureExtractor = new FeatureManagerExtractor();
+            var featureExtractor = new FeatureExtractorManager();
             var vectors = sourceFileStreamer
                     .streamMicroArchitectures()
                     .map(featureExtractor::extractFeatures)
