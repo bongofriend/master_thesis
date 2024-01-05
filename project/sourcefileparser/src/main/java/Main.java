@@ -1,24 +1,33 @@
-import com.opencsv.exceptions.CsvException;
+import evaluation.ClassMetricVectorWriter;
 import evaluation.CliArguments;
-import evaluation.Parser;
+import evaluation.FeatureManagerExtractor;
+import evaluation.SourceFileStreamer;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args)  {
         CliArguments arguments = null;
         try {
             arguments = parseCmdArguments(args);
+            var sourceFileStreamer = new SourceFileStreamer(arguments);
+            var classMetricVectorWriter = new ClassMetricVectorWriter(arguments);
+            var featureExtractor = new FeatureManagerExtractor();
+            var vectors = sourceFileStreamer
+                    .streamMicroArchitectures()
+                    .map(featureExtractor::extractFeatures)
+                    .flatMap(Arrays::stream)
+                    .toList();
+            classMetricVectorWriter.writeClassMetricVectors(vectors);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        var gatherer = new Parser(arguments);
-        gatherer.parseDataset();
     }
 
     private static CliArguments parseCmdArguments(String[] args) throws ParseException {
