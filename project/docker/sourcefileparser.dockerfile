@@ -5,12 +5,14 @@ WORKDIR ${SOURCE_FILE_PARSER_HOME}/sourcefileparser
 RUN mvn dependency:go-offline -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 RUN mvn clean package -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
+
 FROM eclipse-temurin:21-jre
+
 ENV SOURCE_FILE_PARSER_HOME /home/app
-ENV DATASET_PATH ""
-ENV OUTPUT_CSV ""
-ENV INCLUDE_CK_METRICS "true"
+ENV PROJECTS_DIR ""
+ENV CSV_OUTPUT_PATH ""
+ENV ROLES_CSV_PATH ""
+
 COPY  --from=builder ${SOURCE_FILE_PARSER_HOME}/sourcefileparser/target/sourcefileparser-1.0-SNAPSHOT-jar-with-dependencies.jar ${SOURCE_FILE_PARSER_HOME}/sourcefileparser.jar
-#COPY ./code2vec_models/models/model.bin ${SOURCE_FILE_PARSER_HOME}/sourcefileparser/model.bin
 WORKDIR ${SOURCE_FILE_PARSER_HOME}
-ENTRYPOINT java -jar sourcefileparser.jar -s ./volume/${DATASET_PATH} -o ./volume/${OUTPUT_CSV} -ck ${INCLUDE_CK_METRICS} -m ./volume/code2vec_models/models/model.bin
+ENTRYPOINT java -jar sourcefileparser.jar -p ./volume/${PROJECTS_DIR} -o ./volume/${CSV_OUTPUT_PATH}  -r ./volume/${ROLES_CSV_PATH}

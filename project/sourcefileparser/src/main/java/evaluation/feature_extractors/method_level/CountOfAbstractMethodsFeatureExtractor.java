@@ -15,11 +15,12 @@ public class CountOfAbstractMethodsFeatureExtractor extends BaseFeatureExtractor
     }
 
     @Override
-    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors) {
-        return (int) currentClassOrInterface
+    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors, Map<String, ClassOrInterfaceDeclaration> allClassDeclarations) {
+        var count = currentClassOrInterface
                 .getMethods()
                 .stream()
                 .filter(MethodDeclaration::isAbstract)
                 .count();
+        return (int) count;
     }
 }

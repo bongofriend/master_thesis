@@ -4,7 +4,6 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import evaluation.ClassMetricVector;
 import evaluation.ClassMetricVectorConstants;
 import evaluation.feature_extractors.BaseFeatureExtractor;
-import evaluation.feature_extractors.FeatureExtractor;
 
 import java.util.Map;
 
@@ -15,7 +14,7 @@ public class ExtendsEntityFeatureExtractor extends BaseFeatureExtractor {
     }
 
     @Override
-    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors) {
+    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors, Map<String, ClassOrInterfaceDeclaration> allClassDeclarations) {
         return currentClassOrInterface.getExtendedTypes().size();
     }
 }

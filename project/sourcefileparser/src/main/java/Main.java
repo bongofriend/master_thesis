@@ -7,6 +7,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
@@ -17,62 +18,53 @@ public class Main {
             arguments = parseCmdArguments(args);
             var sourceFileStreamer = new SourceFileStreamer(arguments);
             var classMetricVectorWriter = new ClassMetricVectorWriter(arguments);
-            var featureExtractor = new FeatureExtractorManager();
-            var vectors = sourceFileStreamer
-                    .streamMicroArchitectures()
-                    .map(featureExtractor::extractFeatures)
-                    .flatMap(Arrays::stream)
-                    .toList();
-            classMetricVectorWriter.writeClassMetricVectors(vectors);
-        } catch (ParseException e) {
+            var featureExtractor = new FeatureExtractorManager(sourceFileStreamer.getEntityToDeclaration());
+            var sourceFiles = sourceFileStreamer.streamMicroArchitectures();
+            classMetricVectorWriter.write(featureExtractor
+                    .extractFeatures(sourceFiles));
+        } catch (ParseException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private static CliArguments parseCmdArguments(String[] args) throws ParseException {
+        //-projectsPath /home/memi/Dokumente/master_thesis/project/source_files -o /home/memi/Dokumente/master_thesis/project/metrics.csv -r -o /home/memi/Dokumente/master_thesis/project/roles.csv
         var options = new Options();
-        var sourceFilesDirOption = Option.builder("s")
-                .longOpt("sourceFilesDir")
+        var projectsPath = Option.builder("p")
+                .longOpt("projectsPath")
                 .required(true)
                 .type(String.class)
                 .hasArg()
-                .desc("Path of Directory for source files to parse")
+                .desc("Path to unzipped project source files")
                 .build();
 
-        var csvOutputPathOption = Option.builder("o")
-                .longOpt("csvOutputPathOption")
+        var outputCSVPath = Option.builder("o")
+                .longOpt("outputCSVPath")
                 .required(true)
                 .type(String.class)
                 .hasArg()
                 .desc("Path of CSV file where results are written")
                 .build();
 
-        var includeCKMetricsOption = Option.builder("ck")
-                .longOpt("includeCKMetrics")
-                .required()
-                .desc("Set to include CK metrics")
-                .hasArg()
-                .type(Boolean.class)
-                .build();
-        var modelPathOption = Option.builder("m")
-                .longOpt("modelPath")
-                .required()
+        var rolesCSVPath = Option.builder("r")
+                .longOpt("rolesCSVPath")
+                .required(true)
                 .hasArg()
                 .type(String.class)
+                .desc("Path of extracted roles")
                 .build();
 
-        options.addOption(sourceFilesDirOption);
-        options.addOption(csvOutputPathOption);
-        options.addOption(includeCKMetricsOption);
-        options.addOption(modelPathOption);
+
+        options.addOption(projectsPath);
+        options.addOption(outputCSVPath);
+        options.addOption(rolesCSVPath);
 
         var parser = new DefaultParser();
         var cli = parser.parse(options, args);
         return new CliArguments(
-                Paths.get(cli.getOptionValue(sourceFilesDirOption)).toAbsolutePath().normalize().toString(),
-                Paths.get(cli.getOptionValue(csvOutputPathOption)).toAbsolutePath().normalize().toString(),
-                Boolean.parseBoolean(cli.getOptionValue(includeCKMetricsOption)),
-                Paths.get(cli.getOptionValue(modelPathOption)).toAbsolutePath().normalize().toString()
+                Paths.get(cli.getOptionValue(rolesCSVPath)).toAbsolutePath().normalize().toString(),
+                Paths.get(cli.getOptionValue(projectsPath)).toAbsolutePath().normalize().toString(),
+                Paths.get(cli.getOptionValue(outputCSVPath)).toAbsolutePath().normalize().toString()
         );
     }
 }

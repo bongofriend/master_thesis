@@ -1,13 +1,10 @@
 package evaluation;
 
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvCustomBindByName;
 import com.opencsv.bean.CsvIgnore;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ClassMetricVector {
 
@@ -40,40 +37,59 @@ public class ClassMetricVector {
 
     //Class Level Metrics
     @CsvBindByName(column = ClassMetricVectorConstants.IS_PUBLIC)
+    @CsvIgnore
     private int isPublic;
 
     @CsvBindByName(column = ClassMetricVectorConstants.IS_ABSTRACT)
+    @CsvIgnore
     private int isAbstract;
 
     @CsvBindByName(column = ClassMetricVectorConstants.IS_STATIC)
+    @CsvIgnore
     private int isStatic;
 
     @CsvBindByName(column = ClassMetricVectorConstants.EXTENDS_ENTITY)
+    @CsvIgnore
     private int extendsEntity;
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_INTERFACES)
+    @CsvIgnore
     private int countInterfaces;
 
     @CsvBindByName(column = ClassMetricVectorConstants.EXTENDS_ENTITY_IN_MICRO_ARCHITECTURE)
+    @CsvIgnore
     private int extendsEntityInMicroArchitecture;
 
     @CsvBindByName(column = ClassMetricVectorConstants.IS_CLASS)
+    @CsvIgnore
     private int isClass;
+
+    //Field Level Metrics
+    @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_IN_FIELDS)
+    @CsvIgnore
+    private int countReferenceInFields;
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_STATIC_FIELDS)
     private int countStaticFields;
 
+    @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_FIELDS)
+    private int countFields;
+
+    @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_OBJECT_FIELDS)
+    public int countObjectFields;
+    @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_OTHER_CLASSES_WITH_FIELD_OF_OWN_TYPE)
+    private int countOtherClassesWithFieldOfOwnType;
+
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_PRIVATE_FIELDS)
+    @CsvIgnore
     private int countPrivateFields;
 
-    //Field Level Metrics
-    @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_IN_FIELDS)
-    private int countReferenceInFields;
-
+    //Constructor Level Metrics
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_PRIVATE_CONSTRUCTORS)
     private int countPrivateConstructors;
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_CONSTRUCTOR_PARAMETER)
+    @CsvIgnore
     private int countReferenceAsConstructorParameter;
 
     //Method Level Metrics
@@ -81,22 +97,33 @@ public class ClassMetricVector {
     private int countStaticMethods;
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_PRIVATE_METHODS)
+    @CsvIgnore
     private int countPrivateMethods;
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_RETURN_TYPE)
+    @CsvIgnore
     private int countReferenceAsReturnType;
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_ABSTRACT_METHODS)
-    private int countOfAbstractMethods;
+    private int countAbstractMethods;
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_METHOD_PARAMETER)
+    @CsvIgnore
     private int countReferenceAsMethodParameter;
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_VARIABLE)
+    @CsvIgnore
     private int countReferenceAsVariable;
 
     @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_METHOD_INVOCATION)
+    @CsvIgnore
     private int countReferenceAsMethodInvocation;
+
+    @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_METHODS)
+    private int countMethods;
+
+    @CsvBindByName(column = ClassMetricVectorConstants.COUNT_OF_OVERRIDDEN_METHODS)
+    private int countOverriddenMethods;
 
 
     public void addMetric(String metricColumnName, int value) {
@@ -117,6 +144,9 @@ public class ClassMetricVector {
         this.countStaticFields = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_STATIC_FIELDS, 0);
         this.countPrivateFields = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_PRIVATE_FIELDS, 0);
         this.countReferenceInFields = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_REFERENCE_IN_FIELDS, 0);
+        this.countFields = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_FIELDS, 0);
+        this.countObjectFields = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_OBJECT_FIELDS, 0);
+        this.countOtherClassesWithFieldOfOwnType = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_OTHER_CLASSES_WITH_FIELD_OF_OWN_TYPE, 0);
 
         //Set constructor level metrics
         this.countPrivateConstructors = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_PRIVATE_CONSTRUCTORS, 0);
@@ -125,11 +155,13 @@ public class ClassMetricVector {
         //Set method level metrics
         this.countStaticMethods = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_STATIC_METHODS, 0);
         this.countPrivateMethods = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_PRIVATE_METHODS, 0);
-        this.countOfAbstractMethods = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_ABSTRACT_METHODS, 0);
+        this.countAbstractMethods = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_ABSTRACT_METHODS, 0);
         this.countReferenceAsReturnType = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_RETURN_TYPE, 0);
         this.countReferenceAsMethodParameter = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_METHOD_PARAMETER, 0);
         this.countReferenceAsVariable = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_VARIABLE, 0);
         this.countReferenceAsMethodInvocation = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_METHOD_INVOCATION, 0);
+        this.countMethods = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_METHODS, 0);
+        this.countOverriddenMethods = metrics.getOrDefault(ClassMetricVectorConstants.COUNT_OF_OVERRIDDEN_METHODS, 0);
 
     }
 
@@ -289,12 +321,12 @@ public class ClassMetricVector {
         return countPrivateMethods;
     }
 
-    public int getCountOfAbstractMethods() {
-        return countOfAbstractMethods;
+    public int getCountAbstractMethods() {
+        return countAbstractMethods;
     }
 
-    public void setCountOfAbstractMethods(int countOfAbstractMethods) {
-        this.countOfAbstractMethods = countOfAbstractMethods;
+    public void setCountAbstractMethods(int countAbstractMethods) {
+        this.countAbstractMethods = countAbstractMethods;
     }
 
     public void setCountPrivateMethods(int countPrivateMethods) {
@@ -331,5 +363,45 @@ public class ClassMetricVector {
 
     public void setCountReferenceAsMethodInvocation(int countReferenceAsMethodInvocation) {
         this.countReferenceAsMethodInvocation = countReferenceAsMethodInvocation;
+    }
+
+    public int getCountFields() {
+        return countFields;
+    }
+
+    public void setCountFields(int countFields) {
+        this.countFields = countFields;
+    }
+
+    public int getCountObjectFields() {
+        return countObjectFields;
+    }
+
+    public void setCountObjectFields(int countObjectFields) {
+        this.countObjectFields = countObjectFields;
+    }
+
+    public int getCountOtherClassesWithFieldOfOwnType() {
+        return countOtherClassesWithFieldOfOwnType;
+    }
+
+    public void setCountOtherClassesWithFieldOfOwnType(int countOtherClassesWithFieldOfOwnType) {
+        this.countOtherClassesWithFieldOfOwnType = countOtherClassesWithFieldOfOwnType;
+    }
+
+    public int getCountMethods() {
+        return countMethods;
+    }
+
+    public void setCountMethods(int countMethods) {
+        this.countMethods = countMethods;
+    }
+
+    public int getCountOverriddenMethods() {
+        return countOverriddenMethods;
+    }
+
+    public void setCountOverriddenMethods(int countOverriddenMethods) {
+        this.countOverriddenMethods = countOverriddenMethods;
     }
 }

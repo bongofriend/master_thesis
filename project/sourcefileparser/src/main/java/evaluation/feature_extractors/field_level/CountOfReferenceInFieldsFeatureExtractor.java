@@ -1,8 +1,6 @@
 package evaluation.feature_extractors.field_level;
 
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import evaluation.ClassMetricVector;
 import evaluation.ClassMetricVectorConstants;
@@ -17,7 +15,7 @@ public class CountOfReferenceInFieldsFeatureExtractor extends BaseFeatureExtract
     }
 
     @Override
-    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors) {
+    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors, Map<String, ClassOrInterfaceDeclaration> allClassDeclarations) {
         var entityName = currentClassOrInterface.getNameAsString();
         for(var k: participants.keySet()) {
             var d = participants.get(k).getFields();

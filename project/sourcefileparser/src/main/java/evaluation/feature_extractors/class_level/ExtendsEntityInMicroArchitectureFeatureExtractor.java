@@ -14,19 +14,22 @@ public class ExtendsEntityInMicroArchitectureFeatureExtractor extends BaseFeatur
     }
 
     @Override
-    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassMetricVectors) {
+    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassMetricVectors, Map<String, ClassOrInterfaceDeclaration> allClassDeclarations) {
         var extendedTypes = currentClassOrInterface.getExtendedTypes();
         if(extendedTypes.isEmpty()) {
             return 0;
         }
         for(var v: foundClassMetricVectors) {
+            if(currentClassOrInterface.getFullyQualifiedName().isEmpty()) {
+                continue;
+            }
             if(v.getEntity().contentEquals(currentClassOrInterface.getFullyQualifiedName().get())) {
                 continue;
             }
             var entityName = getEntityName(v);
             for(var e: extendedTypes) {
                 var name = e.getNameAsString();
-                if(name.contentEquals(entityName)) {
+                if(entityName.isPresent() && name.contentEquals(entityName.get())) {
                     return 1;
                 }
             }

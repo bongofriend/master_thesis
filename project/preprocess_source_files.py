@@ -1,111 +1,135 @@
 import argparse
-from os import path, mkdir, listdir
+import csv
+from dataclasses import asdict, dataclass, fields
 import logging
-import tempfile
+import os
+import pathlib
 import shutil
-import zipfile
-import sys
 from xml.dom.minidom import Element, parse
 from typing import List
-from source_file_models import RoleEntry, RoleDescriptor
-from pathlib import Path
-import os
+import zipfile
+
+class RoleEntry:
+    role: str
+    role_kind: str
+    entity: str
+
+    def __init__(self, role: str, role_kind: str, entity: str):
+        self.role = role.strip()
+        self.role_kind = role_kind.strip()
+        self.entity = entity.strip()
+
+    @classmethod
+    def from_xml(cls, el: Element) -> 'RoleEntry':
+        role = el.tagName
+        role_kind = el.getAttribute('rolekind') if el.hasAttribute(
+            'rolekind') else el.getAttribute('roleKind')
+        entity_value = ''
+        entities = el.getElementsByTagName('entity')
+        if len(entities) > 0 and entities[0].firstChild != None:
+            entity_value = entities[0].firstChild.nodeValue
+        entity = entity_value
+        return cls(role, role_kind, entity)
+
+    def to_csv(self, writer) -> str:
+        return writer.writerow([self.role, self.role_kind, self.entity])
 
 
-class Config:
-    source_files_archive_dir: str
-    dataset_dir: str
-    __tmpDir: tempfile.TemporaryDirectory
-    source_dir: str
-    include_java: bool
+class RoleDescriptor:
+    roleEntries: List[RoleEntry]
 
-    def __init__(self, source_files_archive_dir: str, dataset_dir: str, include_java: bool):
-        current_location = path.dirname(path.realpath(sys.argv[0]))
-        self.source_files_archive_dir = path.realpath(
-            path.join(current_location, source_files_archive_dir))
-        self.dataset_dir = path.realpath(
-            path.join(current_location, dataset_dir))
-
-        self.__tmpDir = tempfile.TemporaryDirectory()
-        self.source_dir = path.join(self.get_tmp_dir(), 'sources')
-        self.include_java = include_java
-
-    def get_tmp_dir(self) -> str:
-        return self.__tmpDir.name
-
-    def clean_up(self):
-        self.__tmpDir.cleanup()
+    def __init__(self, roles: List[RoleEntry]) -> None:
+        self.roleEntries = roles
 
     @staticmethod
-    def default() -> "Config":
-        return Config('./source_files.zip', './dataset', False)
+    def from_xml(el: Element):
+        role_nodes: List[Element] = []
+        role_entries = []
+        for e in el.getElementsByTagName('roles'):
+            role_nodes.append(e)
+        for e in el.getElementsByTagName('actors'):
+            role_nodes.append(e)
+        for r in role_nodes[0].childNodes:
+            if not r.hasChildNodes():
+                continue
+            for c in r.childNodes:
+                if not c.hasChildNodes():
+                    continue
+                role_entries.append(RoleEntry.from_xml(c))
+        return RoleDescriptor(role_entries)
 
 
-def parse_args() -> Config:
-    parser = argparse.ArgumentParser(
-        prog='Unzip and extract files for dataset'
+@dataclass
+class Args:
+    psmart_xml_path: pathlib.Path
+    output_csv_path: pathlib.Path
+    projects_zipfile_path: pathlib.Path
+
+    @staticmethod
+    def default() -> "Args":
+        return Args(
+            pathlib.Path('/home/memi/Dokumente/master_thesis/project/psmart.xml').absolute(),
+            pathlib.Path('/home/memi/Dokumente/master_thesis/project/roles.csv').absolute(),
+            pathlib.Path('/home/memi/Dokumente/master_thesis/project/source_files.zip').absolute()
+        )
+
+
+@dataclass
+class MicroArchNode:
+    project: str
+    micro_arch: str
+    design_pattern: str
+
+    role: str
+    role_kind: str
+    entity: str
+
+
+def parse_args() -> Args:
+    arg_parser = argparse.ArgumentParser()
+    
+    arg_parser.add_argument('--psmartXMLPath', '-p', type=str, dest='psmart_xml_path', required=True)
+    arg_parser.add_argument('--outputCSVPath', '-o', type=str, dest='output_csv_path', required=True)
+
+    args = arg_parser.parse_args()
+    return Args(
+        pathlib.Path(args.psmart_xml_path).absolute(), 
+        pathlib.Path(args.output_csv_path).absolute()
     )
-    parser.add_argument('--sourceFilesArchive', type=str, help='Location of archive with source files',
-                        dest='archive_dir', required=True)
-    parser.add_argument('--datasetDir', type=str, help='Directory to where dataset files are to be located',
-                        dest='dataset_dir', required=True)
-    parser.add_argument('--includeBuiltInJavaImports', type=bool, help='Set if native Java class should be inclided', dest='include_java', required=True, default=True)
-    args = parser.parse_args()
-    return Config(args.archive_dir, args.dataset_dir, args.include_java)
 
 
-def unzip_source_files(config: Config):
-    logging.info('Extracting source files...')
-    with zipfile.ZipFile(config.source_files_archive_dir, mode='r') as zip:
-        zip.extractall(config.get_tmp_dir())
-
-    for d in listdir(config.get_tmp_dir()):
-        p = path.join(config.get_tmp_dir(), d)
-        if p.endswith('psmart.xml'):
-            if not path.exists(config.dataset_dir):
-                mkdir(config.dataset_dir)
-            shutil.copyfile(p, path.join(config.dataset_dir, 'psmart.xml'))
-            continue
-        if not zipfile.is_zipfile(p):
-            continue
-        with zipfile.ZipFile(p, mode='r') as zip:
-            logging.info(f'Extracting {p}...')
-            zip.extractall(config.source_dir)
-
-
-def parse_micro_arch(micro_arch_node: Element, pattern_path: str, project_name: str):
+def parse_micro_arch_node(micro_arch_node: Element, project_name: str, pattern_name: str):
     arch_number = micro_arch_node.getAttribute('number')
     micro_arch_name = f'micro_arch_{arch_number}'
-    micro_arch_path = path.join(pattern_path, micro_arch_name)
-    if path.exists(micro_arch_path):
-        logging.info(f'Duplicate micro architecture for {micro_arch_name}')
-        return
-    else:
-        mkdir(micro_arch_path)
-    role_descriptor = RoleDescriptor.from_xml(micro_arch_node)
-    if len(role_descriptor.roleEntries) == 0:
-        return
-    role_descriptor.to_csv(path.join(micro_arch_path, 'roles.csv'))
-    with open(path.join(micro_arch_path, 'project.txt'), mode='w') as f:
-        f.write(project_name)
+    roles = RoleDescriptor.from_xml(micro_arch_node).roleEntries
+
+    for role in roles:
+      if not role:
+          continue
+      yield MicroArchNode(
+            project_name,
+            micro_arch_name,
+            pattern_name,
+            role.role,
+            role.role_kind,
+            role.entity
+        )
 
 
-def parse_pattern_node(config: Config, project_name: str, pattern_node: Element):
+
+def parse_pattern_node(project_name: str, pattern_node: Element):
     pattern_name = pattern_node.getAttribute('name')
     logging.info(f'Extracting {pattern_name} from {project_name}')
-    pattern_path = path.join(
-        config.dataset_dir, pattern_name.lower().replace(' ', '_'))
-    if not path.exists(pattern_path):
-        mkdir(pattern_path)
     for micro_arch_node in pattern_node.getElementsByTagName('microArchitecture'):
-        parse_micro_arch(micro_arch_node, pattern_path, project_name)
+        if not micro_arch_node:
+            continue
+        return parse_micro_arch_node(micro_arch_node, project_name, pattern_name)
 
 
-def extract_metadata_from_source(config: Config):
-    xml_config_path = path.join(config.dataset_dir, 'psmart.xml')
-    if not path.exists(xml_config_path):
+def parse_micro_architectures(xmlPath: pathlib.Path):
+     if not xmlPath.exists():
         raise FileNotFoundError()
-    with open(xml_config_path, mode='r') as xml_content:
+     with open(xmlPath, mode='r') as xml_content:
         document = parse(xml_content)
         for programNode in document.getElementsByTagName('program'):
             project_name = programNode.getElementsByTagName(
@@ -113,60 +137,36 @@ def extract_metadata_from_source(config: Config):
             logging.info(
                 f'Extracting design patterns and roles for {project_name}')
             for pattern_node in programNode.getElementsByTagName('designPattern'):
-                parse_pattern_node(config, project_name, pattern_node)
-
-
-def resolve_source_file_path(config: Config, role: RoleEntry, project_name) -> (str, str):
-    first_seg = role.entity.split('.')[0]
-    if config.include_java and 'java' in first_seg:
-        base_path = path.join(config.get_tmp_dir(), 'sources',
-                              'Extra - JDK7', 'src', 'share', 'classes')
-    else:
-        base_path = path.join(config.get_tmp_dir(), 'sources', project_name)
-    parsed_path_segments = []
-    for seg in role.entity.split('.'):
-        parsed_path_segments.append(seg)
-        if len(seg) == 0 or seg[0].islower():
-            continue
-        possible_paths = [
-            f"{path.join(base_path, 'src', os.sep.join(parsed_path_segments))}.java",
-            f"{path.join(base_path, os.sep.join(parsed_path_segments))}.java"
-        ]
-        for p in possible_paths:
-            if path.exists(p) and path.isfile(p):
-                return p, seg
-    return None
-
-
-def move_source_files(config: Config):
-    missing_files = 0
-    total_files = 0
-    for dp in filter(lambda s: path.isdir(path.join(config.dataset_dir, s)), listdir(path.join(config.dataset_dir))):
-        for micro_arch in listdir(path.join(config.dataset_dir, dp)):
-            micro_arch_dir = path.join(config.dataset_dir, dp, micro_arch)
-            role_desc = RoleDescriptor.from_csv(micro_arch_dir)
-            project_name = Path(
-                path.join(micro_arch_dir, 'project.txt')).read_text()
-            for r in role_desc.roleEntries:
-                source_file_path = resolve_source_file_path(
-                    config, r, project_name)
-                total_files += 1
-                if not source_file_path:
-                    missing_files += 1
+               if not (n := parse_pattern_node(project_name, pattern_node)):
                     continue
-                shutil.copyfile(
-                    source_file_path[0], f"{path.join(micro_arch_dir, source_file_path[1])}.java")
-    print(f"Missing {missing_files} out of {total_files}")
+               yield from n
+         
+
+def parse_psmart_xml(args: Args):
+    with open(args.output_csv_path, mode='w') as f:
+        header = [f.name for f in fields(MicroArchNode)]
+        csv_writer = csv.DictWriter(f, header)
+        csv_writer.writeheader()
+        for micro_arch_dict in parse_micro_architectures(args.psmart_xml_path):
+            csv_writer.writerow(asdict(micro_arch_dict))
+
+
+
+def unzip_source_files(args: Args):
+    logging.info('Extracting source files...')
+    source_file_path = pathlib.Path(os.path.dirname(os.path.abspath(__file__))).joinpath('source_files')
+    if source_file_path.exists() and source_file_path.is_dir():
+        shutil.rmtree(source_file_path)
+
+    with zipfile.ZipFile(args.projects_zipfile_path, mode='r') as zip:
+        zip.extractall(source_file_path)
 
 
 if __name__ == '__main__':
-    config = Config.default()
+    args = Args.default()
     try:
         logging.basicConfig(level='INFO')
-        unzip_source_files(config)
-        extract_metadata_from_source(config)
-        move_source_files(config)
+        unzip_source_files(args)
+        parse_psmart_xml(args)
     except Exception as e:
         logging.error(e)
-    finally:
-        config.clean_up()

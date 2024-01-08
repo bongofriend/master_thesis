@@ -18,9 +18,9 @@ public class CountOfReferenceAsMethodParameterFeatureExtractor  extends BaseFeat
     }
 
     @Override
-    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors) {
+    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors, Map<String, ClassOrInterfaceDeclaration> allClassDeclarations) {
         var entityName = currentClassOrInterface.getNameAsString();
-        return (int) participants.values()
+        var count = participants.values()
                 .stream()
                 .map(ClassOrInterfaceDeclaration::getMethods)
                 .flatMap(List::stream)
@@ -31,5 +31,6 @@ public class CountOfReferenceAsMethodParameterFeatureExtractor  extends BaseFeat
                 .map(Type::asString)
                 .filter(entityName::contentEquals)
                 .count();
+        return (int) count;
     }
 }

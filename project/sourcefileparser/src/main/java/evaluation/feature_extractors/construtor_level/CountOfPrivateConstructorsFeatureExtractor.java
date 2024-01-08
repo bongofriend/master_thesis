@@ -15,7 +15,7 @@ public class CountOfPrivateConstructorsFeatureExtractor extends BaseFeatureExtra
     }
 
     @Override
-    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors) {
+    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors, Map<String, ClassOrInterfaceDeclaration> allClassDeclarations) {
         return (int)currentClassOrInterface
                 .getConstructors()
                 .stream()

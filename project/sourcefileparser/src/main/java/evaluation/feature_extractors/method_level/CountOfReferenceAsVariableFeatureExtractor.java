@@ -1,7 +1,6 @@
 package evaluation.feature_extractors.method_level;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
 import evaluation.ClassMetricVector;
@@ -18,9 +17,9 @@ public class CountOfReferenceAsVariableFeatureExtractor extends BaseFeatureExtra
     }
 
     @Override
-    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors) {
+    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors, Map<String, ClassOrInterfaceDeclaration> allClassDeclarations) {
         var entityName = currentClassOrInterface.getNameAsString();
-        return (int) participants.values()
+        var count = participants.values()
                 .stream()
                 .map(ClassOrInterfaceDeclaration::getMethods)
                 .flatMap(List::stream)
@@ -31,5 +30,6 @@ public class CountOfReferenceAsVariableFeatureExtractor extends BaseFeatureExtra
                 .map(Type::asString)
                 .filter(entityName::contentEquals)
                 .count();
+        return (int) count;
     }
 }

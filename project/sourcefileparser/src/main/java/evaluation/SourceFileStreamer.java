@@ -5,7 +5,11 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.utils.SourceRoot;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.BufferedReader;
@@ -16,113 +20,110 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class SourceFileStreamer {
-    public record Element(ClassMetricVector[] vector, Map<String, ClassOrInterfaceDeclaration> classOrInterfaceDeclaration) {}
+    private final String rolesCSVPath;
 
-    private final String datasetPath;
+    public record Element(ClassMetricVector[] vector, Map<String, ClassOrInterfaceDeclaration> classOrInterfaceDeclaration) { }
+
+    private final String projectsPath;
     private final Logger logger;
-    private final JavaParser parser;
+    private final Map<String, List<ClassMetricVector>> microArchToClassMetricVectors;
+
+    public Map<String, ClassOrInterfaceDeclaration> getEntityToDeclaration() {
+        return entityToDeclaration;
+    }
+
+    private final Map<String, ClassOrInterfaceDeclaration> entityToDeclaration;
+
+
 
     public SourceFileStreamer(CliArguments args) {
-        this.datasetPath = args.dataPath();
+        this.projectsPath = args.projectsPath();
+        this.rolesCSVPath = args.rolesCSVPath();
         this.logger = Logger.getLogger(SourceFileStreamer.class.getSimpleName());
-        this.parser = new JavaParser();
-        this.parser
-                .getParserConfiguration()
-                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_6);
+        this.microArchToClassMetricVectors = new HashMap<>();
+        this.entityToDeclaration = new HashMap<>();
     }
 
-    public Stream<Element> streamMicroArchitectures() {
+    public Stream<Element> streamMicroArchitectures() throws IOException {
         logger.info("Start parsing micro architectures");
-        Stream.Builder<Element> builder = Stream.builder();
-        try(var microArchStream = Files.walk(Paths.get(datasetPath), 3, FileVisitOption.FOLLOW_LINKS)) {
-            microArchStream
-                    .filter(Files::isDirectory)
-                    .filter(p -> p.toString().contains("micro_arch"))
-                    .forEach(p -> {
-                        try {
-                            builder.add(parseMicroArch(p));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-            return builder.build();
-        } catch (Exception ex) {
-            logger.severe(ex.getMessage());
-            return Stream.empty();
-        }
-    }
-
-    private Element parseMicroArch(Path microArchPath) throws IOException{
-        var designPattern = microArchPath.getParent().toFile().getName();
-        var microArchName = microArchPath.toFile().getName();
-        var projectName = Files.readString(microArchPath.resolve("project.txt"));
-        var classMetricVectors = prefillClassMetricVectors(designPattern, microArchName, projectName, microArchPath);
-        var classes = extractClassesInMicroArchPath(microArchPath);
-        return new Element(classMetricVectors, classes);
-
-    }
-
-    private ClassMetricVector[] prefillClassMetricVectors(String designPattern, String microArchName, String projectName, Path microArchPath) throws FileNotFoundException {
-        var rolesFile = microArchPath.resolve("roles.csv");
-        var reader = new BufferedReader(new FileReader(rolesFile.toFile()));
-        var roles = new CsvToBeanBuilder<RoleEntry>(reader)
-                .withType(RoleEntry.class)
-                .withSeparator('|')
-                .build()
-                .parse();
-        return roles
+        parseRolesFile();
+        loadProjects();
+        return microArchToClassMetricVectors.keySet()
                 .stream()
-                .map(r -> new ClassMetricVector(
-                        r.role(),
-                        r.roleKind(),
-                        r.entity(),
-                        designPattern,
-                        microArchName,
-                        projectName
-                ))
-                .toArray(ClassMetricVector[]::new);
-    }
-
-    private Map<String, ClassOrInterfaceDeclaration> extractClassesInMicroArchPath(Path microArchPath) throws IOException {
-        var classes = new HashMap<String, ClassOrInterfaceDeclaration>();
-        try(var stream = Files.list(microArchPath)) {
-            stream
-                    .filter(Files::isRegularFile)
-                    .filter(f -> f.toString().endsWith(".java"))
-                    .forEach(p -> {
-                        try {
-                            extractClassesFromSourceFile(p, classes);
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
+                .map(microArchToClassMetricVectors::get)
+                .map(vectors -> {
+                    var declarationsMap = new HashMap<String, ClassOrInterfaceDeclaration>();
+                    for(var v: vectors) {
+                        var key = getEntityKey(v.getProject(), v.getEntity());
+                        if(!entityToDeclaration.containsKey(key)) {
+                            continue;
                         }
-                    });
-        }
-        return classes;
-    }
-
-    private void extractClassesFromSourceFile(Path p, Map<String, ClassOrInterfaceDeclaration> classes) throws FileNotFoundException {
-        ParseResult<CompilationUnit> result;
-        var file = new FileReader(p.toFile());
-        result = parser.parse(file);
-
-        if(result.getResult().isEmpty()) {
-            return;
-        }
-        var compilationUnit = result.getResult().get();
-        compilationUnit
-                .findAll(ClassOrInterfaceDeclaration.class)
-                .stream()
-                .filter(c -> c.getFullyQualifiedName().isPresent())
-                .forEach(c -> {
-                    classes.put(c.getFullyQualifiedName().get(), c);
+                        declarationsMap.put(v.getEntity(), entityToDeclaration.get(key));
+                    }
+                    return new SourceFileStreamer.Element(vectors.toArray(ClassMetricVector[]::new), declarationsMap);
                 });
+
+    }
+
+    private void parseRolesFile() throws FileNotFoundException {
+        var csvReader = new BufferedReader(new FileReader(rolesCSVPath));
+        new CsvToBeanBuilder<SourceFile>(csvReader)
+                .withType(SourceFile.class)
+                .withSeparator(',')
+                .build()
+                .parse()
+                .forEach(s -> {
+                    microArchToClassMetricVectors.putIfAbsent(s.getMicroArchitecture(), new LinkedList<>());
+                    microArchToClassMetricVectors.get(s.getMicroArchitecture()).add(
+                            new ClassMetricVector(
+                                    s.getRole(),
+                                    s.getRole(),
+                                    s.getEntity(),
+                                    s.getDesignPattern(),
+                                    s.getMicroArchitecture(),
+                                    s.getProject()
+                            )
+                    );
+                });
+
+    }
+
+    private void loadProjects() {
+        var projects = Paths.get(projectsPath);
+       try(var projectDirs = Files.list(projects)) {
+           for (var p: projectDirs.toList()) {
+               Stream.of(p)
+                       .filter(Files::isDirectory)
+                       .map(path -> {
+                           var parserConfig = new ParserConfiguration()
+                                   .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_6)
+                                   .setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(path)));
+                           var sourceRoot = new SourceRoot(path.toAbsolutePath(), parserConfig);
+                           sourceRoot.tryToParseParallelized();
+                           return sourceRoot.getCompilationUnits();
+                       })
+                       .flatMap(List::stream)
+                       .map(cu -> cu.findAll(ClassOrInterfaceDeclaration.class))
+                       .flatMap(List::stream)
+                       .filter(cls -> cls.getFullyQualifiedName().isPresent())
+                       .forEach(cls -> {
+                           var projectName = p.getFileName().toString();
+                           var entityName = cls.getFullyQualifiedName().get();
+                           entityToDeclaration.put(getEntityKey(projectName, entityName), cls);
+                       });
+           }
+       } catch (IOException ex) {
+           logger.severe(ex.getMessage());
+       }
+
+    }
+
+    private String getEntityKey(String project, String entity) {
+        return String.format("%s-%s", project, entity);
     }
 }

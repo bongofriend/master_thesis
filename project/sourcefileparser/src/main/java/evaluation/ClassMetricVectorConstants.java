@@ -30,7 +30,15 @@ public class ClassMetricVectorConstants {
      public static final String COUNT_OF_REFERENCE_AS_METHOD_INVOCATION = "count_of_reference_as_method_invocation";
      public static final String COUNT_OF_ABSTRACT_METHODS = "count_of_abstract_methods";
 
+    public static final String COUNT_OF_FIELDS = "count_of_fields";
 
+    public static final String COUNT_OF_METHODS = "count_of_methods";
+
+    public static final String COUNT_OF_OBJECT_FIELDS = "count_of_object_fields";
+
+    public static final String COUNT_OF_OTHER_CLASSES_WITH_FIELD_OF_OWN_TYPE ="count_of_other_classes_with_field_of_own_type";
+
+    public static final String COUNT_OF_OVERRIDDEN_METHODS = "count_of_overridden_methods";
 
 
      public static final String ROLE = "role";

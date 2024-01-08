@@ -6,7 +6,6 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import evaluation.ClassMetricVector;
 import evaluation.ClassMetricVectorConstants;
 import evaluation.feature_extractors.BaseFeatureExtractor;
-import evaluation.feature_extractors.FeatureExtractor;
 
 import java.util.Map;
 
@@ -17,11 +16,11 @@ public class CountOfReferenceAsConstructorParameter extends BaseFeatureExtractor
     }
 
     @Override
-    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors) {
+    public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors, Map<String, ClassOrInterfaceDeclaration> allClassDeclarations) {
         var entityName = currentClassOrInterface.getNameAsString();
         for(var k: participants.keySet()) {
             var simpleName = getEntityName(k);
-            if (simpleName.contentEquals(entityName)) {
+            if (simpleName.isPresent() && simpleName.get().contentEquals(entityName)) {
                 continue;
             }
             var d = participants.get(k).getConstructors();

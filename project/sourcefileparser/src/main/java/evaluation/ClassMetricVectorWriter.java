@@ -10,12 +10,14 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class ClassMetricVectorWriter {
 
@@ -51,7 +53,7 @@ public class ClassMetricVectorWriter {
     private final String csvPath;
 
     public ClassMetricVectorWriter(CliArguments args) {
-        this.csvPath = args.csvOutPutPath();
+        this.csvPath = args.outputCSVPath();
     }
 
     public void writeClassMetricVectors(List<ClassMetricVector> vectors) {
@@ -72,5 +74,35 @@ public class ClassMetricVectorWriter {
         } catch (CsvRequiredFieldEmptyException | CsvDataTypeMismatchException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    private StatefulBeanToCsv<ClassMetricVector> buildCsvWriter(Writer writer) {
+        var strategy = new CustomHeaderMappingStrategy<ClassMetricVector>();
+        strategy.setType(ClassMetricVector.class);
+
+        return new StatefulBeanToCsvBuilder<ClassMetricVector>(writer)
+                .withMappingStrategy(strategy)
+                .withSeparator(',')
+                .withQuotechar(CSVWriter.DEFAULT_QUOTE_CHARACTER)
+                .build();
+    }
+
+    public void write(Stream<ClassMetricVector> classMetricVectorStream) {
+        try(var bufferedWriter = new BufferedWriter(new FileWriter(csvPath))) {
+            var csvWriter = buildCsvWriter(bufferedWriter);
+            classMetricVectorStream
+                    .forEach(bean -> {
+                        try {
+                            csvWriter.write(bean);
+                        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+           bufferedWriter.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

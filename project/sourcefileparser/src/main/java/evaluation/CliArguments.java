@@ -1,4 +1,4 @@
 package evaluation;
 
-public record CliArguments(String dataPath, String csvOutPutPath, boolean includeCKMetrics, String modelPath) {
+public record CliArguments(String rolesCSVPath, String projectsPath, String outputCSVPath) {
 }

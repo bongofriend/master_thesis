@@ -1,8 +1,6 @@
-package evaluation.feature_extractors.method_level;
+package evaluation.feature_extractors.field_level;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.type.Type;
 import evaluation.ClassMetricVector;
 import evaluation.ClassMetricVectorConstants;
 import evaluation.feature_extractors.BaseFeatureExtractor;
@@ -10,23 +8,20 @@ import evaluation.feature_extractors.BaseFeatureExtractor;
 import java.util.List;
 import java.util.Map;
 
-public class CountOfReferenceAsReturnTypeFeatureExtractor extends BaseFeatureExtractor {
+public class CountOfOtherClassesWithOwnFieldTypeFeatureExtractor extends BaseFeatureExtractor {
     @Override
     public String getFeatureName() {
-        return ClassMetricVectorConstants.COUNT_OF_REFERENCE_AS_RETURN_TYPE;
+        return ClassMetricVectorConstants.COUNT_OF_OTHER_CLASSES_WITH_FIELD_OF_OWN_TYPE;
     }
 
     @Override
     public int extract(ClassOrInterfaceDeclaration currentClassOrInterface, Map<String, ClassOrInterfaceDeclaration> participants, ClassMetricVector[] foundClassVectors, Map<String, ClassOrInterfaceDeclaration> allClassDeclarations) {
-        var entityName = currentClassOrInterface.getNameAsString();
-        var count = participants.values()
+        var ownName = currentClassOrInterface.getNameAsString();
+        return (int) participants.values()
                 .stream()
-                .map(ClassOrInterfaceDeclaration::getMethods)
+                .map(ClassOrInterfaceDeclaration::getFields)
                 .flatMap(List::stream)
-                .map(MethodDeclaration::getType)
-                .map(Type::asString)
-                .filter(entityName::contentEquals)
+                .filter(f -> f.getCommonType().asString().contentEquals(ownName))
                 .count();
-        return (int) count;
     }
 }
