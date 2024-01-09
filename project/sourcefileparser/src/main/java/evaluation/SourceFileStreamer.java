@@ -104,7 +104,11 @@ public class SourceFileStreamer {
                                    .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_6)
                                    .setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(path)));
                            var sourceRoot = new SourceRoot(path.toAbsolutePath(), parserConfig);
-                           sourceRoot.tryToParseParallelized();
+                           try {
+                               sourceRoot.tryToParse();
+                           } catch (IOException e) {
+                               throw new RuntimeException(e);
+                           }
                            return sourceRoot.getCompilationUnits();
                        })
                        .flatMap(List::stream)
@@ -124,6 +128,9 @@ public class SourceFileStreamer {
     }
 
     private String getEntityKey(String project, String entity) {
+        if(entity.startsWith("java") || entity.startsWith("javax")) {
+            project = "java";
+        }
         return String.format("%s-%s", project, entity);
     }
 }

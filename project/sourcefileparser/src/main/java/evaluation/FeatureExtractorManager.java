@@ -17,8 +17,10 @@ public class FeatureExtractorManager {
     private final FeatureExtractor[] featureExtractors;
     private final Map<String, ClassOrInterfaceDeclaration> allDeclarations;
 
-    public FeatureExtractorManager(Map<String, ClassOrInterfaceDeclaration> allDeclarations) {
+    private final String projectsPath;
+    public FeatureExtractorManager(CliArguments args, Map<String, ClassOrInterfaceDeclaration> allDeclarations) {
         this.allDeclarations = allDeclarations;
+        this.projectsPath = args.projectsPath();
         this.featureExtractors = new FeatureExtractor[]{
                 //Class Level Metrics
                 new IsPublicFeatureExtractor(),
@@ -42,7 +44,6 @@ public class FeatureExtractorManager {
                 new CountOfReferenceAsConstructorParameter(),
                 new CountOfPrivateConstructorsFeatureExtractor(),
 
-                //TODO: Test Feature Extractors from here on
                 //Method Level Metrics
                 new CountOfAbstractMethodsFeatureExtractor(),
                 new CountOfPrivateMethodsFeatureExtractor(),
@@ -58,7 +59,7 @@ public class FeatureExtractorManager {
     }
 
     private ClassMetricVector[] extract(SourceFileStreamer.Element el) {
-        var finishedVectors = new LinkedList<ClassMetricVector>();
+        var processedVectors = new LinkedList<ClassMetricVector>();
         for (var vector : el.vector()) {
             if (!el.classOrInterfaceDeclaration().containsKey(vector.getEntity())) {
                 vector.prepare();
@@ -70,9 +71,12 @@ public class FeatureExtractorManager {
                 vector.addMetric(f.getFeatureName(), feature);
             }
             vector.prepare();
-            finishedVectors.add(vector);
+            processedVectors.add(vector);
         }
-        return finishedVectors.toArray(ClassMetricVector[]::new);
+
+        var finishedVectors = processedVectors.toArray(ClassMetricVector[]::new);
+        finishedVectors = new CkFeatureExtractor(projectsPath).calculateMetrics(finishedVectors);
+        return finishedVectors;
     }
 
     public Stream<ClassMetricVector> extractFeatures(Stream<SourceFileStreamer.Element> elementStream) {

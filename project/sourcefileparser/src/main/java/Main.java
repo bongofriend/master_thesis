@@ -18,7 +18,7 @@ public class Main {
             arguments = parseCmdArguments(args);
             var sourceFileStreamer = new SourceFileStreamer(arguments);
             var classMetricVectorWriter = new ClassMetricVectorWriter(arguments);
-            var featureExtractor = new FeatureExtractorManager(sourceFileStreamer.getEntityToDeclaration());
+            var featureExtractor = new FeatureExtractorManager(arguments, sourceFileStreamer.getEntityToDeclaration());
             var sourceFiles = sourceFileStreamer.streamMicroArchitectures();
             classMetricVectorWriter.write(featureExtractor
                     .extractFeatures(sourceFiles));
@@ -28,7 +28,6 @@ public class Main {
     }
 
     private static CliArguments parseCmdArguments(String[] args) throws ParseException {
-        //-projectsPath /home/memi/Dokumente/master_thesis/project/source_files -o /home/memi/Dokumente/master_thesis/project/metrics.csv -r -o /home/memi/Dokumente/master_thesis/project/roles.csv
         var options = new Options();
         var projectsPath = Option.builder("p")
                 .longOpt("projectsPath")

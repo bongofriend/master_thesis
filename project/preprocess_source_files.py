@@ -77,7 +77,7 @@ class Args:
 @dataclass
 class MicroArchNode:
     project: str
-    micro_arch: str
+    micro_architecture: str
     design_pattern: str
 
     role: str
