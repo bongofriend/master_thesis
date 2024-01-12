@@ -1,0 +1,89 @@
+package evaluation;
+
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.HeaderColumnNameMappingStrategy;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
+
+public class ClassMetricVectorWriter {
+
+    private final String csvPath;
+    private final Logger logger;
+
+    public ClassMetricVectorWriter(CliArguments args) {
+        this.csvPath = args.outputCSVPath();
+        this.logger = Logger.getLogger(ClassMetricVectorWriter.class.getSimpleName());
+    }
+
+    private StatefulBeanToCsv<ClassMetricVector> buildCsvWriter(Writer writer) {
+        var strategy = new CustomHeaderMappingStrategy<ClassMetricVector>();
+        strategy.setType(ClassMetricVector.class);
+
+        return new StatefulBeanToCsvBuilder<ClassMetricVector>(writer)
+                .withMappingStrategy(strategy)
+                .withSeparator(',')
+                .withQuotechar(CSVWriter.DEFAULT_QUOTE_CHARACTER)
+                .build();
+    }
+
+    public void write(Stream<ClassMetricVector> classMetricVectorStream) {
+        logger.info(String.format("Writing result to '%s'", csvPath));
+        try (var bufferedWriter = new BufferedWriter(new FileWriter(csvPath))) {
+            var csvWriter = buildCsvWriter(bufferedWriter);
+            classMetricVectorStream
+                    .forEach(bean -> {
+                        try {
+                            csvWriter.write(bean);
+                        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+        }
+
+    }
+
+    private static class CustomHeaderMappingStrategy<T> extends HeaderColumnNameMappingStrategy<T> {
+
+        private final Set<String> headersToExclude;
+
+        public CustomHeaderMappingStrategy() {
+            this.headersToExclude = new HashSet<>(List.of(
+                    ClassMetricVectorConstants.DESIGN_PATTERN,
+                    ClassMetricVectorConstants.MICRO_ARCHITECTURE,
+                    ClassMetricVectorConstants.ROLE_KIND,
+                    ClassMetricVectorConstants.ENTITY,
+                    ClassMetricVectorConstants.PROJECT,
+                    ClassMetricVectorConstants.ROLE
+            ));
+        }
+
+        @Override
+        public String[] generateHeader(T bean) throws CsvRequiredFieldEmptyException {
+            var header = super.generateHeader(bean);
+            return Arrays.stream(header)
+                    .map(s -> {
+                        if (headersToExclude.contains(s.toLowerCase())) {
+                            return s.toLowerCase();
+                        }
+                        return s.toUpperCase();
+                    })
+                    .toArray(String[]::new);
+        }
+    }
+}
