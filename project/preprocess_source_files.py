@@ -1,6 +1,6 @@
 import argparse
 import csv
-from dataclasses import asdict, dataclass, fields
+from dataclasses import asdict, dataclass, fields, field
 import logging
 import os
 import pathlib
@@ -64,6 +64,7 @@ class Args:
     psmart_xml_path: pathlib.Path
     output_csv_path: pathlib.Path
     projects_zipfile_path: pathlib.Path
+    micro_arch_threshold: int = field(default=5)
 
     @staticmethod
     def default() -> "Args":

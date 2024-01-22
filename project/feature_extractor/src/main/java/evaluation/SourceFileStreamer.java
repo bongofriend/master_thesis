@@ -56,7 +56,8 @@ public class SourceFileStreamer {
                         declarationsMap.put(v.getEntity(), entityToDeclaration.get(key));
                     }
                     return new Value(vectors.toArray(ClassMetricVector[]::new), declarationsMap);
-                });
+                })
+                .filter(v -> !v.classOrInterfaceDeclaration().isEmpty());
 
     }
 
