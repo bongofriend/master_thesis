@@ -1,0 +1,2 @@
+{"rule":"DE_AGREEMENT","sentence":"^\\QWelche Design Patterns werden berücksichtigt?\\E$"}
+{"rule":"GERMAN_SPELLER_RULE","sentence":"^\\QDie Kategorie der Creational Design Patterns beschäftigen sich mit der Abstraktion des Prozesses der Initialisierung\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}

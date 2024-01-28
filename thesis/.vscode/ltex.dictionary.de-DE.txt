@@ -1,0 +1,4 @@
+Klasszifierung
+Creational
+Structural
+Behavioral
