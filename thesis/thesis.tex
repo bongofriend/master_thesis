@@ -38,7 +38,7 @@
 \usepackage[ngerman]{babel}
 \usepackage{ellipsis}  % Korrigiert den Weißraum um Auslassungspunkte
 \usepackage{microtype}  % optischer Randausgleich etc.
-
+\usepackage{enumitem}
 \usepackage{xcolor}         % z.B. für schattierte Boxen
 \usepackage{framed}			% shaded Umgebung
 \definecolor{shadecolor}{gray}{.85}%
@@ -69,6 +69,10 @@
 \makeindex
 
 \newcommand{\real}{\mathord{\mathrm{I\!R}}}
+
+\newlist{questions}{enumerate}{2}
+\setlist[questions,1]{label=RQ\arabic*.,ref=RQ\arabic*}
+\setlist[questions,2]{label=(\alph*),ref=\thequestionsi(\alph*)}
 
 \begin{document}
 \selectlanguage{ngerman}

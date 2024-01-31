@@ -12,17 +12,22 @@ Implementierungen von Entwurfsmustern aus einem Software-System zu extrahieren u
 Durch solch einen Prozess können durch die Erkennung von eingesetzten Entwurfsmustern auf konkrete und verlorenen gegangene Design-Entscheidungen zurückgeschlossen werden, welche zukünftige Design-Entscheidungen für das Software-System beeinflussen können. 
 Der Fokus dieser Arbeit besteht daran, solch ein Prozess zu etablieren, welches für ein gegebenes Set von Quellcode-Dateien mithilfe von Maschine Learning einem potenziellen Entwurfsmuster zuzuteilen.  
 
+\newpage
 
 \section{Untersuchungsfragen}
 
 Das Ziel dieser Arbeit besteht aus der Etablierung eines Prozesses, womit durch Einsatz von Maschine Learning für ein Set von Quellcode-Dateien ein Design Pattern zuzuordnen.
+Hierfür dienen eine Menge an Quelldateien als Eingabe für den Prozess und durch phasenweiser Transformationen und Bearbeitungen sollen ein möglichst passendes aus dem in Kontext dieser Arbeit betrachteten Entwurfsmusters zugeordnet werden.
 Um solch ein Prozess zu entwickeln, werden in Kontext dieser Arbeit folgende Fragen beantwortet:
 
-\begin{enumerate}
+\begin{questions}
     \item Welche Design Patterns werden berücksichtigt?
     \item Was für ein Datensatz eignet sich für solch ein Prozess?
     \item Wonach wird exakt klassifiziert?
-    \item Welche Merkmale, die aus Quellcode-Dateien extrahierbar sind, eignen sich für Klasszifierung Maschine Learning Modelle?  
+    \item Welche Merkmale, die aus Quellcode-Dateien extrahierbar sind, eignen sich für Klasszifierung durch Maschine Learning Modelle?  
     \item Welche Klassifizierer eignen sich?
     \item Wie ist das Endresultat zu beurteilen?
-\end{enumerate}
+\end{questions}
+
+\section{Übersicht des Prozesses}
+
