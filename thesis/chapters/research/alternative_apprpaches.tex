@@ -187,12 +187,40 @@ Die resultierenden Vektoren dienen als Eingabe für einen Random Forest Classifi
 Für das Training der Modelle und Evaluierung von DPD\textsubscript{F} wird ein eigener Korpus angelegt, bestehend aus Quelldateien aus \textit{Github Java Corpus}. Durch Crowd-Sourcing wurden zwölf Entwurfsmuster mit je 100 Instanzen identifiziert~\cite[S. 4]{Nazar2020}.
 Für die Evaluierung wird für jedes betrachtete Design Pattern im Korpus der \textit{F1}-, \textit{Precision}- und \textit{Recall}-Wert ermittelt. Nach eigener Evaluierung von Nazar et al. mit dem selbsterstellten Korpus, erreicht ihre Methode im Durchschnitt einen \textit{Precision}-Wert von über 80\% und einem \textit{Recall}-Wert von 79\%~\cite[S. 8]{Nazar2020}.   
 
-%%TODO: Start with this Research on Design Pattern Detection Method Based on UML Model with Extended Image Information and Deep Learning
 
+\subsection{Query Ansätze}
 
-\subsection{Similarity-Scoring Ansätze}
+Ein weitere Möglichkeit, um Design Patterns in Quellcode zu erfragen, ist diese durch Anfragen an das Software-System zu identifizieren.
+Die Antwort auf die gestellte Anfrage ist dabei solch eine, die die in der Anfrage formulierten Bedingungen bestmöglichst befriedigt.
+Solch einen Anzatz verfolgen Mäder et al. in ihrer Methodik. Dabei liegt der Fokus in ihrer Methode durch Annoatationen im Quellcode,
+die Aufschlüsse auf mögliche Entwurfsmuster geben. In ihrere Arbeit definieren Mäder et al. Annotation als Teil des Quellcodes, die keine direkte Einwirkung
+auf Programsematik haben~\cite[S. 521]{Ghula-2010} und bieten zusätliche Informationen für statische Analyse durch Software-Werkzeuge und Verständnis des Software-Systems.
+Inital wird ein Katalog von Annotation definiert, welche manuell von Software-Entwickler in Quellcode des Software-Software aufgenommen wird~\cite[S. 521]{Ghula-2010}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{figures/annotations.png}
+    \caption{Ausschnitt an Annoation von Guhlam et al.}
+    \label{fig:annotations}
+\end{figure}
+
+Abbildung \ref{fig:annotations} zeigt einen Ausschnitt des Annotationskatalog, welche im Kontext der Arbeit definiert wird. Dabei sind diese Annotation so bestimmt, das diese Informationen über die Struktur und Verhalten des Software-Artifakts widerspeigeln.
+Der annotatierte Quellcode wird im weiteren Verlauf durch das Software-Werkzeug Enterprise Architekt prozessiert. Dieses Werkzeug generiert für das Quellcode-Model und inkludiert mit den Beziehnungen zwischen Software-Artefakten~\cite[S. 521]{Ghula-2010}. Information über Aggregation, Delgation und Freundschaften sind nicht Teil dieses Modells~\cite[S. 521]{Ghula-2010}.
+Um die Existenz von Entwurfsmustern zu erkennen, wird ein Katalog an Regeln definiert, die verschiedene Aspekte von Design Patterns durch Mitberücksichtigung der Annotationen widerspiegelt~\cite[S. 523]{Ghula-2010}. Diese Regeln werden in SQL-Anfragen und reguläre Ausdrücke transoformiert und in Sets von Regeln aufgeteilt, die die Existenz des zugewiesenen Design Patterns übeprüfen~\cite[S. 523]{Ghula-2010}.  
+Zu der Evaluierng ihrer Methodde vergleichen Mäder et al. ihrer Methode mit zwei anderen Verfahren. Dabei wird verglichen, welche Entwurfsmuster diese erkennen~\cite[S. 525]{Ghula-2010}
+Konkrete Metriken sind zu dem Zeitpunkt des Verfassens ihrer Arbeit nicht verfügbar~\cite[S. 525]{Ghula-2010}.
+
+\pagebreak
+
+Anstatt die Modellierng an ein professionales Software-Werkzeug zu delegieren, entwerfen Stencel et al. ein eigenes Metamodell, wonach Entiäten aus dem Quellcode und ihre Relationen zueinander modelliert werden~\cite[S. 27]{stencel-2008}.
+Dabei bestetht das Metamodell aus Kernelementen wie types, attributes operations und instances und strukturellen und verhaltensbezognen Relation zwischen diesen Kernelementen. Sowohl die Kernelemente und als auch die Relationen in diesem Metamodell sind möglichst ähnlich der aus derobjekt-orientierten Programmierung bekannten Verständnis definiert~\cite[S. 27]{stencel-2008}.
+Jedes des im Kontext dieser Arbeit betrachteten Design Patterns wird von Stencel et al. vorgeschlagenen Metamodell enkodiert~\cite[S.28 - 29]{stencel-2008}. Diese dienen als Referenz für die Erkennung des jewiligen Entwurfsmusters im Quellcode und werden Grundlage für SQL-Anfragen genutzt~\cite[S. 29]{stencel-2008}.
+In der Implemetinierung wird durch Strukturanalyse, Analyse des Datenflusses und der Methodenaufrufe werden die Artefakte in das Metamodell transformiert und in einer relationallen Datenbank abgelegt.
+Durch die SQL-Abfragen wird in der Datenbank nach Instanzen in der Datenbank abgefragt, die die von der Referenzdefinition bereitgestellten Bedingungen erfüllen.
+Zu Evaluierng vergleichen Stencel et al. ihre Methode mit zwei anderen und überprüfen anhand von Software-Systemen, welche Entwurfsmuster erkannt werden~\cite[S. 30]{stencel-2008}.
+Als Resultat erkennt das hier erläuterte Modell mehr Instanzen an als die anderen Methoden~\cite[S. 29]{stencel-2008}.
 
 \subsection{Diverse Ansätze}
 
-
+%%TODO: Explain 2-4 other misc approaches; I AM SO FUCKING DONE
 
