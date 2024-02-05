@@ -223,4 +223,18 @@ Als Resultat erkennt das hier erläuterte Modell mehr Instanzen an als die ander
 \subsection{Diverse Ansätze}
 
 %%TODO: Explain 2-4 other misc approaches; I AM SO FUCKING DONE
+In ihrer Arbeit präsentieren Kramer et al. eine der fühesten Verfahren, um Entwurfsmuster in Quellcode zu erkennen.
+Mit der Absicht, die Wartbarkeit von Software-Systemen zu verbessern, nutzen die Kramer et al. die Prgoammiersprache PROLOG, um 
+die zu erkennden Design Pattern als einzelne Regeln zu repräsentieren~\cite[S. 2]{Krammer-1996}. Diese dienen als Referenz im weiteren Verlauf der Methode.
+Inital wird der zu verarbeitende Quellcode durch ein Software-Werkzeug in ein Object-Modelling Technique transformiert n eine Diagramm transformiert und im nächsten Schritt erstellte Diagramm in Prolog repräsentiert.
+Die als Referenz genutzten Definition der Entwurfsmuster dienen als Anfrage, die auf den transformierten Quellcode nach Instanzen des jeweiligen Design Patterns suchen~\cite[S. 2]{Krammer-1996}.
+Zu Evaluierung werden von Kramer et al. die Definitionen für die Design Patterns Adapter, Bridge, Decorater und Proxy angeleget und die Methode an vier C++ Bibliotheken angewendetet.
+Nach eigener Evaluierung von Kramer et al. erzielt die Methode einen \textit{Precision}-Wert zwoschen 14\% und 50\%~\cite[S. 7]{Krammer-1996}.
+
+Anstatt ein Verfahren von Grund aus neu entwerfen, bedienen sich Binun et al. in ihrer Methode auf bereits etablierte Software-Werkzeuge und Methoden.
+Sie erläutern, dass unterschiedliche Verfahren die einzelnen betrachteten Entwurfsmuster unterschiedlich präzise erkennen~\cite[S.15 - 17]{binun2009}.
+In ihrer Methode wird die Ausgabe von 5 Verfahren zu einem finalen Wert zusammengefasst, der angibt, mit welcher Wahrscheinlichtkeit es sich um das determinierte Design Pattern handelt.
+Falls die einzelnen Methoden die Eingabe unterschiedlich klassifizieren, wird durch die Identifikation einzelner Rollen durch die Methoden das Entwurfsmuster zu rekonstruieren und dadurch die Eingabe einem Entwurfsmuster zuzuordnen~\cite[S. 15 - 16]{binun2009}.
+Zur Evaluierng dienen zwölf Software-Systeme als Eingabe für die Methode, in diesen Instanzen von fünf Entwurfsmustern gesucht wird~\cite[S. 9, S. 23]{binun2009}.
+Nach eigener Evaluierng von Binun et al. werden für drei von fünf Entwurfsmustern mit einem \textit{Precision}-Wert von über 70\% erkannt, während für die restlichen zwei mehrheitlich von den Methoden nicht erkannt werden~\cite[S. 22]{binun2009}.
 
