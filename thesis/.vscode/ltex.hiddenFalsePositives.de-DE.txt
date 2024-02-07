@@ -1,3 +1,5 @@
 {"rule":"DE_AGREEMENT","sentence":"^\\QWelche Design Patterns werden berücksichtigt?\\E$"}
 {"rule":"GERMAN_SPELLER_RULE","sentence":"^\\QDie Kategorie der Creational Design Patterns beschäftigen sich mit der Abstraktion des Prozesses der Initialisierung\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
 {"rule":"F_ANSTATT_PH","sentence":"^\\QInnerhalb der Klassendiagramme des Quellcodes, welches als Eingabe dient, wird nach solchen Submustern durch Einsatz von Graphenisomorphie gesucht \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"DE_AGREEMENT","sentence":"^\\QIn Kontext dieser Aussage wird in der Domäne des Maschine Learnings bekannte Metriken aus dem Bereich der Statistik angewendet.\\E$"}
+{"rule":"ZUSAMMENGESETZTE_VERBEN","sentence":"^\\QIm Folgendem wird eine Auswahl an automatisierten Strategien aufgelistet\\E$"}

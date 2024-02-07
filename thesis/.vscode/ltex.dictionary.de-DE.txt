@@ -2,3 +2,7 @@ Klasszifierung
 Creational
 Structural
 Behavioral
+Validierungsphase
+Cross
+Validationsdatensatz
+Hyperparameter
