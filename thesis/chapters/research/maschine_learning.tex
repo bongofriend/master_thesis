@@ -85,26 +85,139 @@ Dies kann entweder manuell durchgeführt oder es werden Methoden eingesetzt, die
     Jede besuchte Zelle dient dabei als Konfiguration für eine neue Instanz des Modells, welches im weiteren Verlauf durch Einsatz von Kreuzvalidierung trainiert und evaluiert wird. Das Ergebnis der Evaluation wird vermerkt.
     Bei Random Search wird zufällig bestimmt, welche Zellen besucht werden, während bei Grid Search alle Zellen besucht werden. Das Ergebnis ist die Konfiguration des Modells mit der besten Evaluierung.
     
-    \item Bayessche Optimierung: Bei Grid bwz. Random Search wird jede Permuation der Hyperparameter-Werte eine Instanz des Modells traniert und evaluiert. Unter Umständen kann der Trainingsprozess je nach Modell und Datensatz rechenintensiv, wodurch es lange dauern, bis diese Methoden ein Resultat liefern.
-    In solch einem Fall kann das Verfahren der Bayesschen Optimierung angewendet, um die Dauer der Evaluierung zu verkürzen. Im Kern wird das Maschine Learning Modell als Black Box Funktion interpretiert, welches als Eingabe eine Permuation an Hyperparameter-Werten akzeptiert und der Wert der Zielmetrik für die jeweilige Permuatation dient als Rückgabewert der Black Box Funktion.
-    Dadurch, dass die Optimierung der Black Box Funktion durchg Ableitungensverfahren nicht möglich, wird dieses eine Ersatzfunktion substituiert, welches die Black Box Funktion approximiert.
-    Bei der Ersatzfunktion handelt es such um ein probabilistisches Modell, welches genutzt wird, um um eine Wahrscheinlichkeitsverteilung über die möglichen Werte der Zielmetrik für verschiedene Kombinationen an Hyperparameter-Werten zu erstellen.
+    \item Bayessche Optimierung: Bei Grid bwz. Random Search wird jede Permutation der Hyperparameter-Werte eine Instanz des Modells trainiert und evaluiert. Unter Umständen kann der Trainingsprozess je nach Modell und Datensatz rechenintensiv, wodurch es lange dauern, bis diese Methoden ein Resultat liefern.
+    In solch einem Fall kann das Verfahren der Bayesschen Optimierung angewendet, um die Dauer der Evaluierung zu verkürzen. Im Kern wird das Maschine-Learning Modell als Black Box Funktion interpretiert, welches als Eingabe eine Permutation an Hyperparameter-Werten akzeptiert und der Wert der Zielmetrik für die jeweilige Permutation dient als Rückgabewert der Black Box Funktion.
+    Dadurch, dass die Optimierung der Black Box Funktion durch Ableitungsverfahren nicht möglich, wird dieses eine Ersatzfunktion substituiert, welches die Black Box Funktion approximiert.
+    Bei der Ersatzfunktion handelt es such um ein probabilistisches Modell, welches genutzt wird, um eine Wahrscheinlichkeitsverteilung über die möglichen Werte der Zielmetrik für verschiedene Kombinationen an Hyperparameter-Werten zu erstellen.
     Die Bayessche Optimierung beginnt typischerweise mit einer zufälligen Auswahl von Hyperparametern, um einige Datenpunkte zu generieren. Diese werden verwendet, um das probabilistische Modell zu initialisieren. Anschließend wird iterativ die Akquisitionsfunktion angewendet, um neue und vielversprechende Hyperparameter-Kombinationen zu identifizieren und zu testen. 
-    Diese Funktion bestimmt, welche Permuation am Hyperparameter-Werten auf Basis des jetzigen Standes des probabilistischen Modells als Nächstes bewertet werden soll. 
+    Diese Funktion bestimmt, welche Permutation am Hyperparameter-Werten auf Basis des jetzigen Standes des probabilistischen Modells als Nächstes bewertet werden soll. 
     Sie balanciert die Exploration unbekannter Bereiche des Hyperparameterraums mit der Exploitation von Bereichen, die voraussichtlich zu besseren Ergebnissen führen.
     Nach jedem Schritt wird das Modell mit den neuen Ergebnissen aktualisiert, was zu einer kontinuierlichen Verbesserung der Schätzungen und Entscheidungen führt. Am Ende der Methode ist die Kombination an Hyperparameter-Werten bekannt, welches für die Zielmetrik das globale Minimum bzw. Maximum als Rückgabewert zurückgibt.
 
-    \item Tree-structured Parzen Estimators (TPE): Bei TPEs handelt es sich um eine speziellen Anwendungsfall der Bayesschen Optimierung. Anstatt eine Wahrscheinlichkeitsverteilung für die Kombination an Hyperparameter-Werten zu verwenden, wird diese in zwei aufgeteilt:
-    eine für Kombinationen, die zu besseren Werten für die Zielmetrik führen ("gute Verteilung") und eine für solche, die zu schlechteren Ergebnissen führen ("schlechte Verteilung"). Wie bei der normalen Bayesschen Optimierung wird eine Aquisefunktion eingesetzt, um zu bestimmen, welche Kombination an Hyperparametern als Nächstes evaluiert werden soll.
+    \item Tree-structured Parzen Estimators (TPE): Bei TPEs handelt es sich um einen speziellen Anwendungsfall der Bayesschen Optimierung. Anstatt eine Wahrscheinlichkeitsverteilung für die Kombination an Hyperparameter-Werten zu verwenden, wird diese in zwei aufgeteilt:
+    eine für Kombinationen, die zu besseren Werten für die Zielmetrik führen ("gute Verteilung") und eine für solche, die zu schlechteren Ergebnissen führen ("schlechte Verteilung"). Wie bei der normalen Bayesschen Optimierung wird eine Aquisefunktion eingesetzt, um zu bestimmen, welche Kombination an Hyperparameter-Werten als Nächstes evaluiert werden soll.
     Hierbei basiert die Akquisitionsfunktion bei TPE auf das Verhältnis der Dichten dieser beiden Verteilungen. Durch den Einsatz von Parzen Estimatoren werden für beide Wahrscheinlichkeitsverteilungen Dichtefunktionen approximiert, wodurch die Dichten in Akquisitionsfunktion bestimmt werden können.
     Sie wählt die nächste zu evaluierende Hyperparameter-Kombination, indem sie Bereiche bevorzugt, in denen das Verhältnis der Dichte der "guten" Verteilung zur Dichte der "schlechten" Verteilung hoch ist.
-    Wie in der normalen Bayesschen Optimierung wird das proballistische Modell iterativ mit neuen Werten aktualisiert, um ein globales Minimum bzw. Maximum der Black Box Funktion zu ermitteln.
+    Wie in der normalen Bayesschen Optimierung wird das probabilistische Modell iterativ mit neuen Werten aktualisiert, um ein globales Minimum bzw. Maximum der Black Box Funktion zu ermitteln.
 
 \end{description}
 
+\pagebreak
 %%TODO: Add references from literature
 
 \subsection{Betrachtete Klassifizierer}
 Für die Bestimmung eines Design Patterns wird eine Menge an Rollen bestimmt, die die Submuster innerhalb des jeweiligen Entwurfsmusters erfüllen.
-Die Bestimmung der Rollen für einzlene Submuster fällt in dem Bereich des Maschine Learnings in der Bereich der Klassifikation. Im Sinne dieser werden im diesem Abschniit der Arbeit eine Auswahl ein Klasszifierern betrachtet und erläutert,
+Die Bestimmung der Rollen für einzelne Submuster fällt in dem Bereich des Maschine-Learnings in den Bereich der Klassifikation. Im Sinne dieser werden in diesem Abschnitt der Arbeit eine Auswahl von Klassifizierern betrachtet und erläutert,
 die im Kontext dieser Arbeit in Anbetracht gezogen werden.
+
+\subsubsection*{Support Vector Maschines}
+
+Support Vector Mashines oder SVMs sind überwachte Maschine-Learning Modelle, die sowohl für Regressions- als auch für Klassifikationsaufgaben einsetzbar ist. Die Datenpunkte werden in einen \textit{n}-dimensionalen Raum abgebildet, wobei \textit{n} die Anzahl der Features der Datenpunkte beschreibt.
+Bei der Klassifizierung trennen SVMs den Raum der Datenpunkte in verschiedene Zonen. Jede Zone entspricht einem Label, zu welchen die Datenpunkte in der jeweiligen Zone zugeordnet werden. Die Grenzen der einzelnen Zonen werden durch Hyperplanes beschrieben. Das Ziel ist, diese Hyperplanes so zu bestimmen,
+sodass die Datenpunkte möglichst distinkt einer Zone zugeordnet werden.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{figures/support_vector_new_point.png}
+    \caption{Grafische Darstellung einer SVM im zwei-dimensionalen Raum}
+    \label{fig:svm_graphic}
+\end{figure}
+
+Abbildung \ref{fig:svm_graphic} grafisch, wie eine SVM funktioniert. Punkte sind die Datenpunkte des Datensatzes und die Farben der Punkte die Klasse, in der die Punkte eingeordnet sind.
+Die Linien beschreiben die mögliche Hyperplanes, womit Grenzen zwischen den Klassen determiniert wird. Das Kreuz zeigt einen neuen Datenpunkt, der zu klassifizieren ist. Mit diesem neuen Datenpunkt stellt sich die Frage, welche der drei möglichen Hyperplanes zu wählen ist, um die Datenpunkte möglichst distinkt einer Klasse zuzuordnen.
+
+\pagebreak
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{figures/support_vector_maschine_margins.png}
+    \caption{Hyperplanes mit Margen}
+    \label{fig:svm_margins}
+\end{figure}
+
+Wie in Abbildung \ref{fig:svm_margins} zu sehen ist, wird für jede Hyperplane die Marge zwischen der Hyperplane und der Datenpunkte und den nächsten Datenpunkten bestimmt.
+Die Hyperplane mit der größten Marge, die mit der größten Distanz zwischen sich und den nächsten Datenpunkten, wird als finale Hyperplane für die Grenzbildung zwischen den Klassen gewählt. Im Falle von Abbildung \ref{fig:svm_margins}
+ist dies mittlere von den drei Kandidaten. Mit jedem neuen Datenpunkt wird währed Trainings wird die ideale Hyperplane neu bestimmt.
+Jedoch stellt sich die Frage, wie mit Datensätzen umzugehen, die nicht durch lineare Hyperplanes in Klassen aufgeteilt werden.
+
+\pagebreak
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{figures/svm_non_linear.png}
+    \caption{Nicht mögliche Einteilung durch lineare Hyperplanes}
+    \label{fig:svm_non_linear}
+\end{figure}
+
+
+Abbildung \ref{fig:svm_non_linear} zeigt einen Datensatz, dessen Datenpunkte nicht distinkt durch lineare Hyperplanes zugeordnet werden können. Um trotzdem lineare Hyerplanes zu bilden,
+wird der bei SVMs Kernel verwendet. Bei dem Kernel Trick handelt es sich um eine Funktion, die den Datensatz in einen Raum mit einer höheren Dimension projektiert.
+Durch die Projektion in einem Raum mit einer höheren Dimension ist es möglich, lineare Hyperplanes zu bestimmen.
+Diese Funktion werden als Kernel bezeichnet und werden bei der Instantiierung des Modells als Hyperparameter mitgegeben.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{figures/svm_kernel_transformation.png}
+    \caption{Transformierter Datensatz aus Abbildung \ref{fig:svm_non_linear} durch RBF}
+    \label{fig:svm_transformed}
+\end{figure}
+
+Abbildung \ref{fig:svm_transformed} zeigt, wie durch Anwendung des Radial-Basis-Function Kernel, das den ursprünglich zwei-dimensionalen Raum auf ein drei-dimensionales projektiert wird.
+Durch die Transformation kann nun eine Hyperplane als Ebene bestimmt werden, wodurch die Klassifikation ermöglicht wird.
+
+\pagebreak
+
+\subsubsection*{k-Nearest Neighbor Classifier}
+
+k-Nearest Neighbors Classifier oder KNN kann wie die SVM für Regressions- als auch für Klassifikationsprobleme eingesetzt werden. Dabei wird bei KNN unter der Annahme agiert, dass ähnliche Datenpunkte in der Nähe zueinander sind.
+Der Hyperparameter k definiert die Anzahl der nächsten Nachbarn, die verwendet werden, um den neu eingefügten Datenpunkt eine Klasse zuzuordnen. Um die k nächsten benachbarten Datenpunkte zu identifizieren, ist ein Maß erforderlich, welches die Distanz zwischen diesen beschreibt. 
+Folgende Größen können als Metrik für die Distanz verwendet werden:
+
+\begin{description}
+    \item Euklidische Distanz ist die Länge des Liniensegmentes zwischen den beiden Punkten im euklidischen Raum.
+    \\
+    \begin{math}
+        d_{euclidean} (P, Q)= \sqrt{(p_1 - q_1)^2 + (p_2 + q_2)^2 + \ldots + (p_n - q_n)^2}
+        \\
+        \\
+        \text{mit}
+        \\
+        \\
+         P = (p_1, p_2, \ldots, p_n)
+         \\
+         Q = (q_1, q_2, \ldots, q_n)
+    \end{math}
+    
+    \item Manhattan Distanz ist die Summe der absoluten Differenz zwischen den Komponenten der Punkte.
+    \\
+    \begin{math}
+        d_{manhatten} (P, Q) = |p_1 - q_1| + |p_2 - q_2| + \ldots + |p_n - q_n|
+        \\
+        \\
+        \text{mit}
+        \\
+        \\
+         P = (p_1, p_2, \ldots, p_n)
+         \\
+         Q = (q_1, q_2, \ldots, q_n) 
+    \end{math}
+    \item Minkowski Distanz ist eine allgemeinere Metrik, um die Distanz zwischen zwei Punkten im n-dimensionalen Raum zu ermitteln.
+    \\
+    \begin{math}
+        d_{minkowski}(P, Q) = (|p_1 - q_1|^p + \ldots + |p_n - q_n|^p)^\frac{1}{p}
+        \\
+        \\
+        \text{mit}
+        \\
+        \\
+         P = (p_1, p_2, \ldots, p_n)
+         \\
+         Q = (q_1, q_2, \ldots, q_n)
+         \\
+         p = \text{Typ der zu kalkulierenden Distanz ($p = 1$ --> Manhatten Distanz, $p = 2$ --> Euklidische Distanz)} 
+    \end{math}
+\end{description}
+Die Klassifizierung des neuen Datenpunktes erfolgt im Kontext der k nächsten benachbarten Datenpunkte. Die Klasse, welche am häufigsten in den k benachbarten Punkten vorkommt, wird dem neuen Datenpunkt zugewiesen.
+
+\subsubsection*{Random Forest Classifier}
+%%TODO

@@ -6,3 +6,4 @@ Validierungsphase
 Cross
 Validationsdatensatz
 Hyperparameter
+Aquisefunktion
