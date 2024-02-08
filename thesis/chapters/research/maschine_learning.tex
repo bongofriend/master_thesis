@@ -170,7 +170,7 @@ Durch die Transformation kann nun eine Hyperplane als Ebene bestimmt werden, wod
 \subsubsection*{k-Nearest Neighbor Classifier}
 
 k-Nearest Neighbors Classifier oder KNN kann wie die SVM für Regressions- als auch für Klassifikationsprobleme eingesetzt werden. Dabei wird bei KNN unter der Annahme agiert, dass ähnliche Datenpunkte in der Nähe zueinander sind.
-Der Hyperparameter k definiert die Anzahl der nächsten Nachbarn, die verwendet werden, um den neu eingefügten Datenpunkt eine Klasse zuzuordnen. Um die k nächsten benachbarten Datenpunkte zu identifizieren, ist ein Maß erforderlich, welches die Distanz zwischen diesen beschreibt. 
+Der Hyperparameter k definiert die Anzahl der nächsten Nachbarn, die verwendet werden, um den neu eingefügten Datenpunkten eine Klasse zuzuordnen. Um die k nächsten benachbarten Datenpunkte zu identifizieren, ist ein Maß erforderlich, welches die Distanz zwischen diesen beschreibt. Dieses wird als Hyperparameter bei des Instantiierung des Modells diesem übergeben.
 Folgende Größen können als Metrik für die Distanz verwendet werden:
 
 \begin{description}
@@ -218,6 +218,8 @@ Folgende Größen können als Metrik für die Distanz verwendet werden:
     \end{math}
 \end{description}
 Die Klassifizierung des neuen Datenpunktes erfolgt im Kontext der k nächsten benachbarten Datenpunkte. Die Klasse, welche am häufigsten in den k benachbarten Punkten vorkommt, wird dem neuen Datenpunkt zugewiesen.
+
+\pagebreak
 
 \subsubsection*{Random Forest Classifier}
 %%TODO
