@@ -222,4 +222,15 @@ Die Klassifizierung des neuen Datenpunktes erfolgt im Kontext der k nächsten be
 \pagebreak
 
 \subsubsection*{Random Forest Classifier}
+Der Random Forest Classifier ist ein mächtiges, ensemble-basiertes Lernverfahren im Bereich des maschinellen Lernens, das für Regressions- und Klassifizierungsaufgaben eingesetzt wird. Es kombiniert die Vorhersagen mehrerer Entscheidungsbäume, um zu einer endgültigen Entscheidung zu kommen, wobei es sich durch hohe Genauigkeit und die Fähigkeit auszeichnet, Overfitting zu vermeiden.
+Overfitting beschreibt dabei das Phänomen, bei dem ein Modell zu stark an die spezifischen Details und das Rauschen des Trainingsdatensatzes angepasst ist, sodass das Erkennen zugrundeliegenden Mustern nicht erfasst wird.
+Das grundliegende Element in einem Random Forest Classifier stellen die Decision Trees oder Entscheidungsbäume, die in Summe den "Wald" des Random Forest Classifiers bilden. Diese werden während des Trainings erzeugt.
+Ein Entscheidungsbaum ist dabei ein Modell, das Entscheidungen und deren mögliche Konsequenzen, einschließlich Zufallsereignissen, Kosten und Nutzen, in Form eines Baumdiagramms darstellt. Ein Entscheidungsbaum besteht aus Knoten, die Testfragen oder -kriterien repräsentieren, und Blättern, die die Endentscheidungen oder Ausgänge darstellen. Die Auswahl eines Pfades von der Wurzel bis zu einem Blatt repräsentiert eine Reihe von Entscheidungen, die zu einem bestimmten Ergebnis führen.
+Die Ergebnisse der einzelnen Entscheidungsbäume werden zu einem Gesamtergebnis aggregiert. Folgende Hauptkonzepte erhöhen dabei dessen Effektivität:
+
+\begin{itemize}
+    \item Bagging (Bootstrap Aggregating): Jedem Entscheidungsbaum im Random Forest Classifier wird aus einer zufälligen Auswahl von Trainingsdaten mit Zurücklegen gebildet. Dieser Prozess führt zu unterschiedlichen Bäumen, die unterschiedliche Aspekte der Daten erfassen.
+    \item  Bei der Aufteilung eines Knotens während der Baumkonstruktion wird eine zufällige Auswahl von Merkmalen betrachtet. Diese Technik trägt zur Diversifizierung der Entscheidungsbäume bei und verringert die Korrelation zwischen den Bäumen, wodurch das Modell robuster gegenüber Overfitting wird.
+\end{itemize}
+
 %%TODO

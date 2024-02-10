@@ -51,20 +51,20 @@ def get_label_column():
 
 def get_metric_columns():
     return [
-        #ClassMetricVectorConstants.COUNT_OF_ABSTRACT_METHODS,
+        ClassMetricVectorConstants.COUNT_OF_ABSTRACT_METHODS,
         ClassMetricVectorConstants.COUNT_OF_FIELDS,
         #ClassMetricVectorConstants.COUNT_OF_INTERFACES,
         ClassMetricVectorConstants.COUNT_OF_METHODS,
         ClassMetricVectorConstants.COUNT_OF_OBJECT_FIELDS,
         #ClassMetricVectorConstants.COUNT_OF_OTHER_CLASSES_WITH_FIELD_OF_OWN_TYPE,
         #ClassMetricVectorConstants.COUNT_OF_OVERRIDDEN_METHODS,
-        #ClassMetricVectorConstants.COUNT_OF_PRIVATE_CONSTRUCTORS,
+        ClassMetricVectorConstants.COUNT_OF_PRIVATE_CONSTRUCTORS,
         ClassMetricVectorConstants.COUNT_OF_PRIVATE_FIELDS,
         #ClassMetricVectorConstants.COUNT_OF_PRIVATE_METHODS,
         ClassMetricVectorConstants.COUNT_OF_STATIC_FIELDS,
         #ClassMetricVectorConstants.COUNT_OF_STATIC_METHODS,
         ClassMetricVectorConstants.COUPLING_BETWEEN_OBJECTS,
-        #ClassMetricVectorConstants.DEPTH_OF_INHERITANCE,
+        ClassMetricVectorConstants.DEPTH_OF_INHERITANCE,
         #ClassMetricVectorConstants.IS_ABSTRACT,
         # ClassMetricVectorConstants.IS_CLASS,
         #ClassMetricVectorConstants.IS_PUBLIC,
