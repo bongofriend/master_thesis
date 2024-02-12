@@ -4,7 +4,7 @@ Der Fokus dieser Arbeit ist die Ermittlung von Design von Quellcode durch die An
 Dieser Teil der Arbeit ist für die Erläuterung von verwendeten Metriken, angewandten Techniken und ausgewählter Klassifizierer gewidmet.
 
 % TODO: \subsection{Terminologie} falls notwendig
-\subsection{Metriken für Evaluierung von Modellen}
+\subsection{Metriken für Evaluierung von Modellen}\label{metrics}
 
 Um die Leistung eines Klassifizierers zu ermitteln, bedarf es einer Menge an Metriken, womit beurteilt werden, ob der Klassifizierer wie erwartet performt.
 In Kontext dieser Aussage wird in der Domäne des Maschine Learnings bekannte Metriken aus dem Bereich der Statistik angewendet.
@@ -73,7 +73,7 @@ für das Training des Modells verwendet. Das Resultat dieser Operation ist abhä
 
 \pagebreak
 
-\subsubsection*{Optimieren von Modellen durch Hyperparameter-Tuning}
+\subsubsection*{Optimieren von Modellen durch Hyperparameter-Tuning}\label{hyper_params}
 Maschine Learning Modelle können mithilfe von Parametern konfiguriert werden. Dabei wird zwischen zwei Arten von Parametern entschieden: Modellparameter und Hyperparameter.
 Modellparameter werden während der Trainingsphase automatisiert direkt durch den Trainingsdatensatz bestimmt und sind nicht von Außen zu manipulieren. Dahingegen bestimmen Hyperparameter unter anderem wie sich das Modell während der Trainingsphase zu verhalten und beeinflussen
 dessen Architektur. Jedes Modell definiert hierbei selbst, welche Hyperparameter verfügbar sind. Hyperparameter werden während der Instantiierung des Modells definiert. Die Ermittelung der bestmöglichen Kombinationen an Hyperparametern-Werten ist hilfreich, falls Leistung des Modells nicht den Erwartungen entspricht und das verwendete Datensatz nicht weiter argumentiert werden kann.
@@ -105,7 +105,7 @@ Dies kann entweder manuell durchgeführt oder es werden Methoden eingesetzt, die
 \pagebreak
 %%TODO: Add references from literature
 
-\subsection{Betrachtete Klassifizierer}
+\subsection{Betrachtete Klassifizierer} \label{classifiers}
 Für die Bestimmung eines Design Patterns wird eine Menge an Rollen bestimmt, die die Submuster innerhalb des jeweiligen Entwurfsmusters erfüllen.
 Die Bestimmung der Rollen für einzelne Submuster fällt in dem Bereich des Maschine-Learnings in den Bereich der Klassifikation. Im Sinne dieser werden in diesem Abschnitt der Arbeit eine Auswahl von Klassifizierern betrachtet und erläutert,
 die im Kontext dieser Arbeit in Anbetracht gezogen werden.

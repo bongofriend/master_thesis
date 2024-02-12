@@ -3,23 +3,23 @@
 Im Kontext dieser Arbeit werden Design Patterns als eine Summe von Substrukturen definiert, zu diesem jeweils eine Rolle zugeordnet wird.
 Im Sinne dieser ist eine Menge an Erkennungsmerkmalen oder Features notwendig, welche Rückschlüsse auf die jeweilige Rolle ermöglicht. 
 Dabei müssen sich die Aspekte für Struktur, Verhalten und Relation zu anderen Komponenten in ausgewählten Features widerspiegeln.
-Die in einer einem vorherigen Abschnitt erläuterten Machine-Learning Verfahren nutzen verschiedene Arten von Features, um diese Aspekte zu encodieren.
-Im Kern läuft darauf hinaus, die Erkennungsmerkmale in eine numerische Repräsentation zu transformieren, sodass ein Klasszifizier mit diesen umgehen kann.
-Aus diesem Grund werden in dieser Arbeit die Merkmale der jeweiligen Instanzen der Rollen als numerische Vektoren dargestellt, die die Aspekte der Struktur, Verhalten und Relation als Metrriken encodieren.
+Die in einer einem vorherigen Abschnitt erläuterten Machine Learning Verfahren nutzen verschiedene Arten von Features, um diese Aspekte zu encodieren.
+Im Kern läuft darauf hinaus, die Erkennungsmerkmale in eine numerische Repräsentation zu transformieren, sodass ein Klasszifizierer mit diesen umgehen kann.
+Aus diesem Grund werden in dieser Arbeit die Merkmale der jeweiligen Instanzen der Rollen als numerische Vektoren dargestellt, die die Aspekte der Struktur, Verhalten und Relation als Metriken encodieren.
 
-Die Entscheidung, Metriken als Features für Rollen zu verwenden, bietet mehrere Vorteile. Zu einem ermöglicht der Einsatz von Metriken, Eigenschaften der Implemtierung der jeweiligen Rollen in einer abstrakten Form darzustellen.
-Dadurch kann die Identifkation der Rollen unabhängig von Programmiersprache und Prokjektstruktur erfolgen. Zudem ist die Ermitellung von Metriken aufgrund möglichen Einsatz durch Software-Werkzeuge skalierbar. Die Ermittelung der jeweiligen Metriken erfolgt über statische Codeanlyse, welches durch Parallität in der Lage,
-einen großen Umfang an Quelldateien in relativ kurzer Zeit zu bearbeiten. Der wohl größte Verteil, die Metriken erbringen, ist Transparenz und Reprodzierbarkeit.
-Bevor ein Wert zu einer Metrik ermitellt werden kann, muss vornehinein definiert werden, was die jeweilige Metrik aussagt und wie diese ermitellt wird. Durch eine automatisierte und strikte Befolgung der Definition der Berechnung kann durch statische Codeanalyse in mehreren Durchläufen der gleiche Wert für die Metrik im Kontext der Rolleninstanz bestimmt werden.
-Dadruch ensteht ebenfalls eine Transparenz, wie die Werte ermitellt werden. Bei den hier erläutern Verfahren, die die Features der Entiäten aus dem Quellcode graphisch oder in natrlicher Sprache enkodiert haben, müssen diese zuätzlich in eine numerische Form gebracht werden.
-Die erfolgt meist durch die Inkludierung eines zusätzlichen Modells. Zu einem erfordert dies zusätzliches Training und Validierung des Modells, welches je nach Modell und Umfang das Datensatzes auch noch Zeit und Rechnenleistung in Anspruch nimmt. Dazu ist die Leistung des Klassfizieres abhängig von der Qualtiät der Resulate des enkodierenden Modells. Mögliche Leistungsdefizite des Enkodierens in numerische Werte propagiert zu der Klassifizierungskapazität des gesamten Verfahrens.
-Zwar ist die Ermittlung von Metriken davon nicht ausgeschlossen, jedoch sind Rückschlüsse möglich wie diese Werte zustande gekommen sind. Dahingegen sind die Modelle, die die Features transformieren, als Black Box zu betrachten. Die Werte innerhalb des Modells, die die Transformation der Eingabedaten beeinflüssen, sind für das Menschenauge meist nur schwer verstehbar und bieten keinen Rückschluss, wie diese berechnet worden.
-Zusammenfassnd ermöglichen Metriken als Feature eine Unabhängigkeit von Programmiersprache und Projektstruktur, Skalierbarkeit, Reproduzierbarkeit und Transparenz, die bei dem weiteren Verfeinern der hier vorgestellten Methodik wünschenswert sind.
+Die Entscheidung, Metriken als Features für Rollen zu verwenden, bietet mehrere Vorteile. Zu einem ermöglicht der Einsatz von Metriken, Eigenschaften der Implementierung der jeweiligen Rollen in einer abstrakten Form darzustellen.
+Dadurch kann die Identifikation der Rollen unabhängig von Programmiersprache und Projektstruktur erfolgen. Zudem ist die Ermittlung von Metriken aufgrund möglichen Einsatz durch Software-Werkzeuge skalierbar. Die Ermittelung der jeweiligen Metriken erfolgt über statische Codeanalyse, welches durch Parallelität in der Lage,
+einen großen Umfang an Quelldateien in relativ kurzer Zeit zu bearbeiten. Der wohl größte Verteil, die Metriken erbringen, ist Transparenz und Reproduzierbarkeit.
+Bevor ein Wert zu einer Metrik ermittelt werden kann, muss vorne herein definiert werden, was die jeweilige Metrik aussagt und wie diese ermittelt wird. Durch eine automatisierte und strikte Befolgung der Definition der Berechnung kann durch statische Codeanalyse in mehreren Durchläufen der gleiche Wert für die Metrik im Kontext der Rolleninstanz bestimmt werden.
+Dadruch entsteht ebenfalls eine Transparenz, wie die Werte ermittelt werden. Bei den hier erläutern Verfahren, die die Features der Entitäten aus dem Quellcode grafisch oder in natürlicher Sprache enkodiert haben, müssen diese zusätzlich in eine numerische Form gebracht werden.
+Die erfolgt meist durch das Inkludieren eines zusätzlichen Modells. Zu einem erfordert dies zusätzliches Training und Validierung des Modells, welches je nach Modell und Umfang des Datensatzes auch noch Zeit und Rechenleistung in Anspruch nimmt. Dazu ist die Leistung des Klassfizieres abhängig von der Qualität der Resultate des enkodierenden Modells. Mögliche Leistungsdefizite des Encodieren in numerische Werte propagiert zu der Klassifizierungskapazität des gesamten Verfahrens.
+Zwar ist die Ermittlung von Metriken davon nicht ausgeschlossen, jedoch sind Rückschlüsse möglich wie diese Werte zustande gekommen sind. Dahingegen sind die Modelle, die die Features transformieren, als Black Box zu betrachten. Die Werte innerhalb des Modells, die die Transformation der Eingabedaten beeinflussen, sind für das Menschenauge meist nur schwer verstehbar und bieten keinen Rückschluss, wie diese berechnet worden.
+Zusammenfassend ermöglichen Metriken als Feature eine Unabhängigkeit von Programmiersprache und Projektstruktur, Skalierbarkeit, Reproduzierbarkeit und Transparenz, die bei dem weiteren Verfeinern der hier vorgestellten Methodik wünschenswert sind.
 
 \pagebreak
 
-Um die Kennmerkmale hier zu ermitelln, erfordert dies ein Katalog an Metriken, die angegeben, wie diese ermitellt werden und was diese aussagen. Hierbei werden Metriken verwendet, die die Aspekte der Struktur, Verhalten und Relation widerspiegeln.
-Dazu werden Metriken verwendet, die bereists in anderen Arbeiten verwendet wurden, die die Struktur repräsentieren und andere Metriken von Chidamber et al., die Einblicke in Verhalten und Relation bieten~\cite{chidamber1994metrics}:
+Um die Kennmerkmale hier zu ermitteln, erfordert dies ein Katalog an Metriken, die angegeben, wie diese ermittelt werden und was diese aussagen. Hierbei werden Metriken verwendet, die die Aspekte der Struktur, Verhalten und Relation widerspiegeln.
+Dazu werden Metriken verwendet, die bereits in anderen Arbeiten verwendet wurden, die die Struktur repräsentieren und andere Metriken von Chidamber et al., die Einblicke in Verhalten und Relation bieten~\cite{chidamber1994metrics}:
 
 
 \begin{table}[H]
@@ -27,7 +27,7 @@ Dazu werden Metriken verwendet, die bereists in anderen Arbeiten verwendet wurde
         \hline
         Kürzel & Langform &Beschreibung & Datentyp\\
         \hline
-        COA & COUNT\_OF\_ABSTRACT\_METHODS & Anzahl de abstrakten Methoden in einer Klasse & int\\
+        COA & COUNT\_OF\_ABSTRACT\_METHODS & Anzahl der abstrakten Methoden in einer Klasse & int\\
         COF & COUNT\_OF\_FIELDS & Anzahl der Felder in einer Klasse & int\\
         COM & COUNT\_OF\_METHODS & Anzahl der Methoden in einer Klasse & int\\
         COF & COUNT\_OF\_OBJECT\_FIELDS &Anzahl der Felder in einer Klasse mit Objekttyp & int\\
@@ -37,9 +37,12 @@ Dazu werden Metriken verwendet, die bereists in anderen Arbeiten verwendet wurde
         CBO & COUPLING\_BETWEEN\_OBJECTS & Anzahl der Abhänigkeiten in der Klasse nach Chidamer et al. & int\\
         DIT & DEPTH\_OF\_INHERITANCE & Anzahl der Elterklassen einer Klasse nach Chidamer et al. & int\\
         RPC & RESPONSE\_FOR\_A\_CLASS & Anzahl der Methoden, die direkt durch Klassenmethoden aufgerufen werden nach Chidamer et al. & int\\
-        WMC & WEIGHTED\_METHOD\_CLASS & Zyklmatische Komplexität nach McCabe~\cite{mccabe1976complexity} & float\\
+        WMC & WEIGHTED\_METHOD\_CLASS & Zyklomatische Komplexität nach McCabe~\cite{mccabe1976complexity} & float\\
         \hline
     \end{tabular}
-    \caption{Ausgewählte Metriken als Features}
+    \caption{ausgewählte Metriken als Features}
+    \label{tab:features}
 \end{table}
+
+Der in Tabelle~\ref{tab:features} Katalog an Metriken dient für die Beantwortung der Unterschungsfrage~\ref{RQ4} und die Identifikation an Rollen im Kontext des jeweilgen Design Patterns der Untersuchungsfrage~\ref{RQ3}.
 

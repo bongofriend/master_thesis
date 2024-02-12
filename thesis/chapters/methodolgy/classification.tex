@@ -1,1 +1,24 @@
-\section{Betrachtete Multi-Klasszifizierer für Rollen}
+\section{Modellauswahl, Training und Validierung}
+Nach dem bestimmen eines passenden Datensatzes und zu extrahierenden Features wird ein Klassifizierer trainiert, welcher mit einem Wahrschenlichkeitswert angibt, welche Rolle am ehesten der Quellcodeentiät zugrodnet werden kann.
+Dazu wird in dieser Sektion diskutiert, welche Modelle betrachtet werden und wie diese traniert und evaluiert werden können. 
+
+
+\subsection*{Auswahl der Klassifizierer}
+Im Zuge dieser Arbeit werden in der Sektion \ref{classifiers} erläuterten Klassifizierer als die bevorzugten Modelle hergenommen. Diese Auswahl der Modelle ist unterschiedliche Gründe zurückzuführen.
+Klassifizierer können je nach Art und Weise, wie sie innerlich funktionieren, in Kategorien untergliedert werden. Dabei dienen diese Modelle als Repräsentant, sodass ein Spektrum von unterschiedlich funktionierenden Modellen getestet werden kann.
+Ohne das Testen des jeweiligen Models ist dessen Leistung für das in dieser Arbeit genutzten Datensatz nicht vorherzusagen. Zudem können Implementierungen der jeweiligen Modelle in verschiedenen Programmiersprachen für verschiedene Plattformen vorgefunden werden.
+Dies ermöglicht die Nutzung in Programmiersprachen wie Python oder R, welche für Maschine Learning bevorzugt werden. Das Software-Framework, welches die Implementierungen für die Modelle zur Verfügung stellt und im Kontext dieser Arbeit verwendet wird, wird im weiteren Verlauf der Arbeit genauer erläutert.
+Der größte Vorteil dieser Klassifizierer ist deren Simplizität und damit resultierende Effizienz in Zeit- und Speicherkomplexität. Da die Klassifizierer im weiteren Verlauf der Methode durch den Einsatz von Hyperparameter-Tuning iterativ optimiert werden, ist dies von besonderer Bedeutung.
+Deshalb werden Modelle mit komplexerer Architektur aufgrund des Mangels verfügbarer Rechenressourcen zu dem Verfassen der Arbeit nicht weiter betrachtet. 
+Die Auswahl der Klasszfizier aus Sektion~\ref{classifiers} beantwortet die Unterschungsfrage~\ref{RQ5}
+
+
+\subsection*{Training der Modelle}
+In dieser Arbeit wird das Trainieren der Modelle mit dem Hyperparameter-Tuning aus Sektion~\ref{hyper_params} gekoppelt. Zuerst wird der Datensatz in ein Trainings- und Validationsdatensatz aufgeteilt. Danach wird für jedes Modell ein Suchraum für die Hyperparameter-Werte, Anzahl der Trainingsiterationen und die Metrik bestimmt, wonach die Leistung des Klassifizierers
+bestimmt wird. In jeder Iteration wird zufällig eines der hier vorgestellten Klassifizierer mit einer vorher bestimmten Hyperparameter-Konfiguration instanziiert, mit dem Trainingsdatensatz trainiert und durch Einsatz des Validationsdatensatz der Wert der Leistungsmetrik bestimmt. Die Hyperparameter-Konfiguration der Instanz mit der besten Leistung aus allen Iterationen wird im weiteren Verlauf der Arbeit verwendet.
+
+\subsection*{Validierung des Modells}
+Dadruch, dass der Datensatz für das Training aufgeteilt wird, wird die beste Hyperparameter-Konfiguration eines der hier vorgestellten Klassifizierer durch Kreuzvalidierung zusätzlich validiert.
+Dabei wird der gesamte verfügbare Datensatz verwendet. Die Evaluierung der Leistung des Klassfikationskapazität erfolgt mit der gleichen Metrik wie in der Trainingsphase und den restlichen in Sektion~\ref{metrics}. Es bestünde die Option, dass man die Kreuzvalidierung direkt in die Trainingsphase integriert. 
+Jedoch ist dabei zu beachten, dass die Kreuzvalidierung selbst iterativ agiert und dies in jeder Iteration des Hyperparameter-Tunings durchgeführt wird. Dies erhöht die Laufzeit der Trainingsphase signifikant.
+
