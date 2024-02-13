@@ -1,1 +1,59 @@
-\section{Präprozessierung des Datensatzes}
+\section{Präprozessierung des Datensatzes}\label{data_preprocessing}
+Wie in Sektion~\ref{dataset} erläutert, wird in dieser Arbeit der Datensatz P-MArt verwendet.
+P-MArt ist ein Katalog von Design Pattern mit Instanzen aus mehreren Software-Systemen. 
+Dabei wird bei jeder Instanz eines Design Pattern die aufkommenden Software-Entitäten wie Klassen oder Schnittstellen mit Rollen nach Gamma et al. annotiert.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.2\linewidth}|p{0.55\linewidth}|p{0,25\linewidth}|}
+        \hline
+        Projekt & Beschreibung & Programmiersprache\\
+        \hline
+        QuickUML 2001 & An Anfänger gerichtetes Werkzeug für die Erstellung UML-Diagrammen & Java\\
+        Lexi v0.1.1 alpha & einfaches Textverarbeitungssystem & Java\\
+        JRefactory v2.6.24 & Software-Werkzeug für das Refactoring für Java & Java\\
+        Netbeans v1.0.x & integrierte Entwicklungsumgebung für Software & Java\\
+        JUnit v3.7 & Test-Framework für Java-Projekte & Java\\
+        JHotDraw v5.1 & Framework für das Erstellen von Editoren & Java\\
+        MapperXML v1.9.7 & Presentation-Framework & Java\\
+        Nutch v0.4 & Open Source Suchmaschine für das Web & Java\\
+        PMD v1.8 & Werkzeug für statische Codeanalyse & Java\\
+        Software architecture design patterns in Java & Kollektion von Implementierung von Design Patterns nach Kuchana~\cite{10.5555/983553} & Java\\
+        DrJava v20020619 & integrierte Entwicklungsumgebung für Java & Java\\
+        DrJava v20020703 & integrierte Entwicklungsumgebung für Java & Java\\
+        DrJava v20020804 & integrierte Entwicklungsumgebung für Java & Java\\
+        DrJava v20030203 & integrierte Entwicklungsumgebung für Java & Java\\
+        \hline
+    \end{tabular}
+    \caption{Software-Systeme in P-MArt}
+    \label{tab:pmart_projects}
+\end{table}
+
+Tabelle~\ref{tab:pmart_projects} listet die Software-Systeme auf, die in P-MArt betrachtet werden. Dabei sind alle Software-Systeme in der Programmiersprache Java verfasst und unterliegen einer Open-Source-Lizenz, wodurch der Quellcode frei zugänglich ist.
+Zudem waren nicht alle Software-Systeme zugänglich. Die verschiedenen Versionen der Entwicklungsumgebung DrJava waren archiviert über die Webplattform SourceForge verfügbar. Das Werk "Software architecture design patterns in Java" von Kuchana ist ein Fachbuch für den Einsatz von Design Pattern in Java. 
+In P-MArt werden die Software-Beispiele inkludiert, die im Kontext des Werkes zur Erläuterung dienen und durch die Webplattform des Verlags zugänglich ist. Die im Werk erwähnte URL für die Bespiele zu dem Zeitpunkt der Verfassung der Arbeit nicht zugänglich.
+Der Quellcode für die restlichen Software-Systeme ist als Archiv über die Webseite der Autoren zugänglich.
+
+P-MArt selbst wird in der Form einer Extensible Markup Language (XML) Datei verfügbar gestellt. Für einfachere Verarbeitung des Datensatzes werden die notwendige Information aus der XML-Datei extrahiert und in einer Comma-Separated Values (CSV) Datei abgelegt.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Spalte & Beschreibung\\
+        \hline
+        project & Name des Software-Systems\\
+        micro\_architecture & Identifikator der Mikroarchitektur in P-MArt\\
+        design\_pattern & Zugeordnetes Entwurfsmuster nach Gamma et al.\\
+        role & Rolle der Entität innerhalb des Design Patterns nach Gamma et al.\\
+        role\_kind & Art der Entität (\textit{Class} für Klasse oder \textit{AbstractClass} für abstrakte Klassen)\\
+        entity & qualifizierender Name der Entität innerhalb des Software-Systems\\
+        \hline
+    \end{tabular}
+    \caption{Spalten der prozessierten CSV-Datei für P-MArt}
+    \label{tab:pmart_roles}
+\end{table}
+
+Die Tabelle~\ref{tab:pmart_roles} zeigt die Spalten der resultierenden CSV-Datei. Für die Erstellung dieser Datei wird die Skriptsprache Python und dessen Standardbibliothek verwendet.
+Neben den in Tabelle~\ref{tab:pmart_roles} aufgeführten Informationen beinhaltet die beschreibende XML-Datei von P-MArt zusätzliche Details wie Kommentare der Autoren über einzelne Mikroarchitekturen.
+Diese werden in der weiteren Verarbeitung der Daten nicht berücksichtigt. Die resultierende CSV-Datei dient zusammen den Quellcode der in P-MArt analysierten Software-Systeme als Eingabe für die Extraktion der Features.

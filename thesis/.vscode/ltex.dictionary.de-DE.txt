@@ -7,3 +7,5 @@ Cross
 Validationsdatensatz
 Hyperparameter
 Aquisefunktion
+P-MArt
+Visitor-Entwurfsmusters

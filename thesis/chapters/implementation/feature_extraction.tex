@@ -1,1 +1,17 @@
-\section{Extraktion von Features aus Quellcode}
+\section{Extraktion von Features aus Quellcode}\label{feature_extraction}
+Die extrahierte CSV-Datei aus Abschnitt~\ref{data_preprocessing} und der Quellcode der betrachteten Software-Systeme in Tabelle~\ref{tab:pmart_projects} dient als Eingabe für die Extraktion der Features,
+die die jeweiligen Rollen charakterisieren. 
+Für die Berechnung der in Tabelle~\ref{tab:features} bedarf einer statischen Codeanalyse. Deshalb wird für diese Arbeit eigens ein Software-Werkzeug featureextractor auf Basis der Programmiersprache Java entwickelt.
+Dabei wird für die Extraktion der Features folgende Schritte befolgt:
+
+\begin{enumerate}
+    \item \textbf{Laden des Quellcodes}: Da sich die Software-Systeme in P-MArt alle in Java verfasst sind, wird die Bibliothek javaparser verwendet. Diese Software-Bibliothek ist in der Lage, gegebenen Java-Quellcode in der Form eines Abstract Syntax Trees (AST) zu transformieren.
+    Ein AST ist eine baumartige Struktur, um Quellcode unabhängig von Programmiersprache zu repräsentieren und ermöglicht das Durchführen von Operationen wie Datenmanipulation oder Anfragen am Quellcode. Die resultierenden ASTs durch javaparser nutzen Projektdefinition als Wurzel. 
+    \item \textbf{Suche nach Klassen und Schnittstellen}: Nach dem Erstellen der ASTs wird eine Suche nach allen Klassen oder Schnittstellen innerhalb aller Software-Systeme durchgeführt. Die gefundenen Definitionen werden für späteren Zugriff in einer Java Hash Map abgelegt.
+    Dabei dient eine Kombination aus Projekt- und Entitätsname als Schlüssel. 
+    \item \textbf{Extraktion der Metriken nach Chidamer et al.}: Für die Ermittelung der Metriken nach Chidamer et al. wird die externe Software-Bibliothek ckmetrics~\cite{aniche-ck} verwendet. Dabei werden alle nach Chidamer et al. definierten Metriken in Tabelle~\ref{tab:features} durch diese berechnet, nachdem die Bibliothek den Quellcode der Software-Systeme prozessiert hat. Die Ergebnisse werden für spätere Zugriff in einer Java Hash Map abgelegt.
+    \item \textbf{Einlesen von P-MArt}: Die in der Sektion~\ref{dataset} prozessierte CSV wird zeilenweise eingelesen. Jede Zeile in dieser CSV-Datei beschreibt eine Quellcodeentität aus eines der Software-Systeme. Falls die jeweilige Entität in der Schritt 2 ermittelten Hash Map vorgefunden wird, wird die AST der Entität weiterverarbeitet. Ansonsten wird diese verworfen und alle Features wird der Wert 0 zugewiesen.
+    \item \textbf{Ermittelung der restlichen Features}: Die Berechnung der restlichen Features aus Tabelle~\ref{tab:features} erfolgt durch den Einsatz selbst entwickelter Extraktoren. Jede dieser Extraktor ermittelt jeweils eine Metrik und nimmt eine AST einer Klasse- oder Schnittstelle als Eingabeparameter entgegen. Der Rückgabewert ist der berechnete Wert der Metrik.
+    \item \textbf{Aggregation der Features}: Nach dem die AST von den Feature Extraktoren verarbeitet wurde, werden die Metriken von ckmetrics zusammen mit diesen zu einem Feature-Vektor kombiniert. Die eingelesenen Daten aus Schritt 3 werden mit dem Feature-Vektor erweitert und in einer neuen CSV-Datei abgespeichert.
+\end{enumerate}
+ 
