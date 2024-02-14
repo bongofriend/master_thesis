@@ -1,1 +1,50 @@
 \section{Bestimmung des Design Patterns}
+
+\begin{algorithm}
+    \caption{Funktion zur Bewertung von Rollenübereinstimmungen}
+    \label{pattern_matching}
+    \begin{algorithmic}[1]
+    \Require $role\_encoder$: Der LabelEncoder für Rollen; 
+    \Require $roles\_df$: Pandas DataFrame mit Rollendaten
+    \Require $model$: Trainiertes Modell zur Vorhersage von Rollen
+    \Require $dps$: Hash Map mit Rollendefinitionen pro Entwurfsmuster
+    
+    \Function{match\_pattern}{$role\_encoder$, $roles\_df$, $model$, $dps$}
+    
+        \State $X \gets$ \Call{get\_feature\_columns}{$roles\_df$}
+        \State $y \gets model.predict(X)$
+        \State $roles \gets role\_encoder.inverse\_transform(y.ravel())$
+        \State $scores \gets$ leere Hash Map
+        \State $predicted\_role\_freq \gets$ leere Hash Map
+        
+        \ForAll{$role$ in $roles$}
+            \State $predicted\_role\_freq[role] \gets predicted\_role\_freq[role] + 1$
+        \EndFor
+        
+        \ForAll{$dp, dp\_roles$ in $dps$}
+            \State $matched\_roles \gets$ leere Hash Map
+            \State $dp\_roles\_dict \gets$ Konvertiere $dp\_roles$ zu Hash Map
+            
+            \ForAll{$role$ in $predicted\_role\_freq$}
+                \If{$role$ in $dp\_roles\_dict$}
+                    \State $dp\_role \gets dp\_roles\_dict[role]$
+                    \If{($dp\_role.mutliple\_occurences$ oder $predicted\_role\_freq[role] = 1$) und $matched\_roles[role] < predicted\_role\_freq[role]$}
+                        \State $matched\_roles[role] \gets matched\_roles[role] + 1$
+                    \EndIf
+                \EndIf
+            \EndFor
+            
+            \State $total\_possible\_matches \gets$ Summe der möglichen Übereinstimmungen
+            \State $score \gets$ Berechne Übereinstimmungswert
+            \State $scores[dp] \gets score$
+        \EndFor
+        
+        \State \Return $scores$
+    \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+    
+Der Pseudocode~\ref{pattern_matching} beschreibt die konkrete Implementierung des in der Sektion~\ref{pattern} erläuterten Algorithmus.
+Dabei wird trainierte Klassifizierer initialisiert, die Metriken aus~\ref{tab:features} für die zu klassifizierenden Entitäten aus der Quellcode ermittelt und als Eingabeparameter für die vorgestellte Funktion verwendet.
+Die Berechnung des Übereinstimmungswertes erfolgt, indem zunächst die Gesamtzahl möglicher Übereinstimmungen bestimmt wird, die sowohl einmalige als auch mehrfache Vorkommen von Rollen berücksichtigt. Der Übereinstimmungswert für jedes Entwurfsmuster wird als das Verhältnis der Anzahl abgeglichener Rollen zur Gesamtzahl möglicher Übereinstimmungen berechnet. 
+Dieser Wert gibt an, wie gut die vorhergesagten Rollen mit den für das Design Pattern definierten Rollen übereinstimmen. Der höchste Übereinstimmungswert wird als bestmögliche Antwort betrachtet.

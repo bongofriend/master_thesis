@@ -1,8 +1,23 @@
-\section{Ermittelung des übereinstimmendes Design Patterns}
+\section{Ermittelung des übereinstimmenden Entwurfsmusters}\label{pattern}
 
-Im in der vorherigen Sektion wird erläutert, wie anhand eines Maschine Learning Modells den Quellcode-Entitäten eine Rolle aus einem Entwurfsmuster zugeteilt wird.
-Das Ergebnis der Klasszifikation besteht aus einem Kollektiv an Rollen, die in einem der betrachteten Design Pattern vorkommen. Diese Kiollktion an Rollen allein, reicht nicht aus, um eine Aussage über die Zugehörigkeit eines Design Patterns zu tätigen.
-Daher wird in diesem Abschnitt der Arbeit ein Algorithmus in Form von Pseudocode vorgestellt, womit ein Wert berechnet werden kann, welcher angint, zu welchem Grad die Kollektionm an ermittelten Rollen am ehesten passt.
-Dieser Abschnitt wird verwendet, um die Unterschungsfrage~\ref{RQ6} zu beantworten.
+Im in der vorherigen Sektion wird erläutert, wie anhand eines Maschine-Learning-Modells den Quellcode-Entitäten eine Rolle aus einem Entwurfsmuster zugeteilt wird.
+Das Ergebnis der Klassifikation besteht aus einem Kollektiv an Rollen, die in einem der betrachteten Design Pattern vorkommen. Diese Kollektion an Rollen allein, reicht nicht aus, um eine Aussage über die Zugehörigkeit eines Design Patterns zu tätigen.
+Daher wird in diesem Abschnitt der Arbeit ein Algorithmus in Form von Pseudocode vorgestellt, womit ein Wert berechnet werden kann, welcher angibt, zu welchem Grad die Kollektion an ermittelten Rollen am ehesten passt.
+Dieser Abschnitt wird verwendet, um die Untersuchungsfrage~\ref{RQ6} zu beantworten. Dabei werden folgende Schritte getätigt:
 
-%TODO List steps in pseudocode
+\begin{enumerate}
+    \item Extrahiere Metriken für Quellcode nach Tabelle~\ref{tab:features}
+    \item Wende Klassifizierer auf Metriken an für Vorhersagen über Rolle
+    \item Definiere jedes klassifizierbare Design Pattern (Singelton, Command, Observer und Adapter) als Menge von Rollen nach Gamma et al. Bestimme, ob Rollen öfters aufkommen dürfen.
+    \item Iteriere über Design Pattern und vergleiche Rollen mit Beachtung folgender Fälle:
+        \subitem Initialisiere eine Hash Map für die Frequenz der aufkommenden vorhergesagten Rollen
+        \subitem Iteriere über vorhergesagte Rollen
+        \begin{enumerate}
+            \item Falls die vorhergesagte Rolle nicht in Referenzentwurfsmuster vorhanden: Überspringe Rolle.
+            \item Vorhergesagte Rolle in Referenzentwurfsmuster; Rolle kam davor nicht vor; Rolle darf exakt ein mal vorkommen: Erhöhe Frequenz um 1.
+            \item Vorhergesagte Rolle in Referenzentwurfsmuster; Rolle kam davor vor; Rolle darf exakt ein mal vorkommen: Überspringe Rolle.
+            \item Vorhergesagte Rolle in Referenzentwurfsmuster; Rolle darf mehrmals vorkommen: Erhöhe Frequenz um 1.
+        \end{enumerate}
+        \subitem Addiere Frequenzen zu einer Summe und teile durch die Anzahl der vorhergesagten Rollen als Scoring-Wert
+     \item Design Pattern mit höchstem Scoring Wert als ehester Kandidat
+\end{enumerate}

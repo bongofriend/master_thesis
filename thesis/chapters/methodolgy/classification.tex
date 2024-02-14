@@ -18,7 +18,7 @@ In dieser Arbeit wird das Trainieren der Modelle mit dem Hyperparameter-Tuning a
 bestimmt wird. In jeder Iteration wird zufällig eines der hier vorgestellten Klassifizierer mit einer vorher bestimmten Hyperparameter-Konfiguration instanziiert, mit dem Trainingsdatensatz trainiert und durch Einsatz des Validationsdatensatz der Wert der Leistungsmetrik bestimmt. Die Hyperparameter-Konfiguration der Instanz mit der besten Leistung aus allen Iterationen wird im weiteren Verlauf der Arbeit verwendet.
 
 \subsection*{Validierung des Modells}
-Dadruch, dass der Datensatz für das Training aufgeteilt wird, wird die beste Hyperparameter-Konfiguration eines der hier vorgestellten Klassifizierer durch Kreuzvalidierung zusätzlich validiert.
+Dadruch, dass der Datensatz für das Training aufgeteilt wird, wird die beste Hyperparameter-Konfiguration eines der hier vorgestellten Klassifizierer durch Kreuzvalidierung zusätzlich validiert. Dies dient zu Evaluation des Modells in der jetzigen Konfigiration.
 Dabei wird der gesamte verfügbare Datensatz verwendet. Die Evaluierung der Leistung des Klassfikationskapazität erfolgt mit der gleichen Metrik wie in der Trainingsphase und den restlichen in Sektion~\ref{metrics}. Es bestünde die Option, dass man die Kreuzvalidierung direkt in die Trainingsphase integriert. 
 Jedoch ist dabei zu beachten, dass die Kreuzvalidierung selbst iterativ agiert und dies in jeder Iteration des Hyperparameter-Tunings durchgeführt wird. Dies erhöht die Laufzeit der Trainingsphase signifikant.
 
