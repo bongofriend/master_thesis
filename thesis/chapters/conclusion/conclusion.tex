@@ -1,1 +1,14 @@
 \section{Fazit}
+
+Zusammenfassend ist das Ergebnis dieser Arbeit als negativ zu beurteilen. Zwar ist der Algorithmus für das Zuweisen der Entwurfsmuster in der Lage, teilweise das korrekte Design Pattern zuzuordnen,
+jedoch ist dessen Aussagekraft von der Leistung des Klassifizierer abhängig. Wie in der Sektion der Evaluation erläutert, ist als mangelhaft zu beurteilen.
+Die Problematik besteht darin, dass es für das Trainieren von Maschine-Learning-Modellen für Klassifikationsaufgaben keine definitiven Prozesse existieren.
+Dies gilt vor allem für die Bestimmung der Features, welches durch den verfügbaren Datensatz und dessen Qualität und Umfang limitiert ist. 
+Wie in Sektion~\ref{dataset_analysis} zu sehen ist, ist das Verhältnis zwischen Datenpunkten und Design Pattern von dem Umfang der einzelnen Implementierungen abhängig. Dadurch, dass die Design Patterns so unbalanciert im Datensatz repräsentiert, kann es vorkommen,
+dass einige Design-Pattern-Rollen überrepräsentiert, während andere unterrepräsentiert sind. Zudem ist Konfiguration der Hyperparameter ebenfalls eine weitere Methode,
+um die Klassifikationsleistung zu verbessern. Zwar stellen automatisiertes Hyperparameter-Tuning und der Einsatz von Kreuzvalidierung eine Option dar, um die Leistung des Klassifizierers zu optimieren und zu validieren,
+jedoch ist das beste Ergebnis dadurch nicht garantiert. Es besteht immer Wahrscheinlichkeit, dass die bestmögliche Konfiguration an Hyperparameter-Werten außerhalb des Suchraumes liegt.
+
+Insgesamt gesehen ist es davon auszugehen, dass verschiedene Aspekte und Optionen existieren, um den hier vorgeschlagene Methode weiter zu verbessern. 
+Entweder kann beispielsweise ein anderer Katalog an Metriken als Features genutzt werden oder es werden andere Klassifizierer verwednet.
+

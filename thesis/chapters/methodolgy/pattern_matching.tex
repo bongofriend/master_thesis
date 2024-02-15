@@ -10,14 +10,16 @@ Dieser Abschnitt wird verwendet, um die Untersuchungsfrage~\ref{RQ6} zu beantwor
     \item Wende Klassifizierer auf Metriken an für Vorhersagen über Rolle
     \item Definiere jedes klassifizierbare Design Pattern (Singelton, Command, Observer und Adapter) als Menge von Rollen nach Gamma et al. Bestimme, ob Rollen öfters aufkommen dürfen.
     \item Iteriere über Design Pattern und vergleiche Rollen mit Beachtung folgender Fälle:
-        \subitem Initialisiere eine Hash Map für die Frequenz der aufkommenden vorhergesagten Rollen
-        \subitem Iteriere über vorhergesagte Rollen
         \begin{enumerate}
-            \item Falls die vorhergesagte Rolle nicht in Referenzentwurfsmuster vorhanden: Überspringe Rolle.
-            \item Vorhergesagte Rolle in Referenzentwurfsmuster; Rolle kam davor nicht vor; Rolle darf exakt ein mal vorkommen: Erhöhe Frequenz um 1.
-            \item Vorhergesagte Rolle in Referenzentwurfsmuster; Rolle kam davor vor; Rolle darf exakt ein mal vorkommen: Überspringe Rolle.
-            \item Vorhergesagte Rolle in Referenzentwurfsmuster; Rolle darf mehrmals vorkommen: Erhöhe Frequenz um 1.
-        \end{enumerate}
-        \subitem Addiere Frequenzen zu einer Summe und teile durch die Anzahl der vorhergesagten Rollen als Scoring-Wert
+            \item Initialisiere eine Hash Map für die Frequenz der aufkommenden vorhergesagten Rollen
+            \item Iteriere über vorhergesagte Rollen
+            \begin{enumerate}
+                \item Falls die vorhergesagte Rolle nicht in Referenzentwurfsmuster vorhanden: Überspringe Rolle.
+                \item Vorhergesagte Rolle in Referenzentwurfsmuster; Rolle kam davor nicht vor; Rolle darf exakt ein mal vorkommen: Erhöhe Frequenz um 1.
+                \item Vorhergesagte Rolle in Referenzentwurfsmuster; Rolle kam davor vor; Rolle darf exakt ein mal vorkommen: Überspringe Rolle.
+                \item Vorhergesagte Rolle in Referenzentwurfsmuster; Rolle darf mehrmals vorkommen: Erhöhe Frequenz um 1.
+            \end{enumerate}
+            \item Addiere Frequenzen zu einer Summe und teile durch die Anzahl der vorhergesagten Rollen als Scoring-Wert 
+        \end{enumerate}    
      \item Design Pattern mit höchstem Scoring Wert als ehester Kandidat
 \end{enumerate}

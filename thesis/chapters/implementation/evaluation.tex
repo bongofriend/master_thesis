@@ -1,4 +1,59 @@
 \section{Evaluation der Ergebnisse}
 
 Für die Evaluierung werden je vier zufällige Instanzen der hier betrachteten Design Pattern aus Trainingsdatensatz gewählt.
-Dabei wird die Leistungskapazität des Klassifizierers beurteilt als des Algorithmus zu der Zuweisung eines Design Patterns anhand dieser Vorhersagen. 
+Dabei wird die Leistungskapazität des Klassifizierers beurteilt als des Algorithmus zu der Zuweisung eines Design Patterns anhand dieser Vorhersagen.
+Für die Evaluation werden zufällig vier Instanzen für jedes Design Patterns aus dem Validationsdatensatz ausgewählt.
+Diese repräsentieren neue Datenpunkte, worauf der Klassifizierer nicht trainiert wurde.
+Den Entitäten aus den Validierungsinstanzen wird durch den Klassifizierer Rollen zugeordnet. Die Rolle ist die, die von dem Klassifizierer am ehesten durch die ermitellten Metriken passt.
+
+
+\begin{table}[H]
+    \centering
+    \caption{Ergebnisse der Evaluation}
+    \label{tab:evaluation}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        Entwurfsmuster & Precision & Recall & f1\\
+        \hline
+        Adapter & 0.67 & 0.5 & 0.57\\
+        Command & 0.12 & 0.25 & 0.17\\
+        Observer & 0.5 & 0.5 & 0.5\\
+        Singleton & 0.0 & 0.0 & 0.0\\ 
+        \hline
+    \end{tabular}
+\end{table}
+
+Die Tabelle~\ref{tab:evaluation} listet die Werte der Metriken, nach dem die in dieser Arbeit vorgestellte Methode beurteilt wird.
+Je höher der Wert der Metriken aus Tabelle~\ref{tab:evaluation}, desto besser ist die Klassifizierungsleistung des Verfahrens zu beurteilen.  
+Dabei werden die Instanzen des Singletion-Entwurfsmusters nicht erkannt. Diese werden in diesem Verfahren als Instanzen des Observer-Entwurfsmusters zugordnet, da den Singleton-Instanzen der Rolle "adapter" aus dem Adapter-Design-Pattern zugewiesen.
+Die wäre damit zu erklären, dass die "singleton"-Rolle aus dem Singelton-Entwurfsmuster und die "adapter"-Rolle ähnliche Metriken ermittelt werden.
+
+\begin{table}[H]
+    \caption{Metriken für Rollen aus Validationsdatensatz}
+    \label{tab:classifier_metrics}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+         Rolle & Precision & Recall & f1\\
+        \hline
+        adaptee & 0.02 & 0.33 & 0.04\\adapter & 0.00 & 0.00 & 0.00\\client & 0.00 & 0.00 & 0.00\\command & 0.00 & 0.00 & 0.00\\concreteCommand & 0.43 & 0.93 & 0.59\\concreteObserver & 0.00 & 0.00 & 0.00\\concreteSubject & 0.00 & 0.00 & 0.00\\invoker & 0.10 & 0.25 & 0.14\\observer & 0.00 & 0.00 & 0.00\\receiver & 0.00 & 0.00 & 0.00\\singleton & 0.00 & 0.00 & 0.00\\subject & 0.00 & 0.00 & 0.00\\target & 0.00 & 0.00 & 0.00\\
+        \hline
+        \end{tabular}
+\end{table}
+
+Die Tabelle~\ref{tab:classifier_metrics} zeigt die Metriken für die einzelnen Rollen. Dabei wird der gesamte Validationsdatensatz verwendet.
+Dabei wird ein Random Forest Classifier verwendet. Wie aus den Werten abzulesen ist, ist der Leistung des Klassifizierers nicht zufriedenstellend. Die meisten Rollen werden nicht korrekt erkannt. 
+Zudem können sich die Werte der Features der einzelnen Quellcodeentiäten in Aspekten von Umfang und Komplexität aufgrund der Varianz an Implementierungsmöglichkeiten unterscheiden. Somit entstehen Outlier-Werte, welches die Klassifikation negativ beeinflussen kann.
+Zusätzlich muss der Fall berücksichtigt werden, dass die Features der Rollen entweder zu ähnlich zueinander sind oder der Umfang des Datensatzes nicht ausreichend ist.
+Zusammenfassend ist die Leistung des Klassifizierers als magelhaft einzustufen und weist zuätzlichen Arbeitsbedarf auf.
+
+
+
+
+
+
+
+
+
+
+
+

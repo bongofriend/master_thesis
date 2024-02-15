@@ -1,0 +1,20 @@
+                  precision    recall  f1-score   support
+
+         adaptee       0.02      0.33      0.04         3
+         adapter       0.00      0.00      0.00         3
+          client       0.00      0.00      0.00        11
+         command       0.00      0.00      0.00         4
+ concreteCommand       0.43      0.93      0.59        14
+concreteObserver       0.00      0.00      0.00        12
+ concreteSubject       0.00      0.00      0.00        12
+         invoker       0.10      0.25      0.14         8
+        observer       0.00      0.00      0.00         8
+        receiver       0.00      0.00      0.00         5
+       singleton       0.00      0.00      0.00         9
+         subject       0.00      0.00      0.00         3
+          target       0.00      0.00      0.00         3
+
+        accuracy                           0.17        95
+       macro avg       0.04      0.12      0.06        95
+    weighted avg       0.07      0.17      0.10        95
+
