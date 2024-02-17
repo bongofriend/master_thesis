@@ -10,3 +10,4 @@ Aquisefunktion
 P-MArt
 Visitor-Entwurfsmusters
 klasszfierbare
+Helferklassen

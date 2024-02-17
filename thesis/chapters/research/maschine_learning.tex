@@ -18,7 +18,7 @@ Für die Ermittelung der Metriken werden folgende Größen definiert:
     \item FN (False Negative): Anzahl falsch negativ Klassifizierungen
 \end{description}
 
-Anhand dieser Größen werden folgende Metriken definiert:
+Anhand dieser Größen werden folgende Metriken definiert~\cite[S. 3]{doi:10.1148/ryai.2021200126}:
 
 \begin{description}
     \item \textit{Accuracy (Genauigkeit)}: Dieser Wert gibt an, wie das Verhältnis zwischen den klassifizierten Beobachtungen zur Gesamtzahl der Beobachtungen ist.
@@ -60,7 +60,7 @@ Jedoch besteht hier der Nachteil, das in der Trainingsphase die Datenpunkte in d
 Um diesen Nachteil zu negieren, kann die Technik der Cross Validation oder Kreuzvalidierung angewendet werden.
 
 Hierbei wird zunächst eine natürliche Zahl \textit{n} bestimmt, die angibt, in wie viele gleich große Teile der Datensatz aufgeteilt wird.
-Die Trainings- und Validierungsphase wird hierbei zu einem Schritt zusammengefasst und das Modell wird iterativ \textit{n}-Mal trainiert und anhand der vorgegebenen Metrik evaluiert.
+Die Trainings- und Validierungsphase wird hierbei zu einem Schritt zusammengefasst und das Modell wird iterativ \textit{n}-Mal trainiert und anhand der vorgegebenen Metrik evaluiert~\cite[S. 387]{10.5555/3133359}.
 
 \begin{figure}[h]
     \centering
@@ -82,11 +82,11 @@ Dies kann entweder manuell durchgeführt oder es werden Methoden eingesetzt, die
 
 \begin{description}
     \item Random Search/Grid Search: In diesen Methoden werden zunächst Wertebereiche für die jeweiligen Hyperparameter bestimmt. In der Regel wird hierbei eine Menge an diskreten Wertem bestimmt, die der jeweilige Hyperparameter annehmen kann. Jede Permutation der Hyperparameter-Konfiguration wird als eine Zelle in einem Gitter erfasst. 
-    Jede besuchte Zelle dient dabei als Konfiguration für eine neue Instanz des Modells, welches im weiteren Verlauf durch Einsatz von Kreuzvalidierung trainiert und evaluiert wird. Das Ergebnis der Evaluation wird vermerkt.
+    Jede besuchte Zelle dient dabei als Konfiguration für eine neue Instanz des Modells, welches im weiteren Verlauf zusätzlich durch Einsatz von Kreuzvalidierung trainiert und evaluiert wird~\cite[S. 3]{DBLP:journals/corr/abs-1912-06059}. Das Ergebnis der Evaluation wird vermerkt.
     Bei Random Search wird zufällig bestimmt, welche Zellen besucht werden, während bei Grid Search alle Zellen besucht werden. Das Ergebnis ist die Konfiguration des Modells mit der besten Evaluierung.
     
     \item Bayessche Optimierung: Bei Grid bwz. Random Search wird jede Permutation der Hyperparameter-Werte eine Instanz des Modells trainiert und evaluiert. Unter Umständen kann der Trainingsprozess je nach Modell und Datensatz rechenintensiv, wodurch es lange dauern, bis diese Methoden ein Resultat liefern.
-    In solch einem Fall kann das Verfahren der Bayesschen Optimierung angewendet, um die Dauer der Evaluierung zu verkürzen. Im Kern wird das Maschine-Learning Modell als Black Box Funktion interpretiert, welches als Eingabe eine Permutation an Hyperparameter-Werten akzeptiert und der Wert der Zielmetrik für die jeweilige Permutation dient als Rückgabewert der Black Box Funktion.
+    In solch einem Fall kann das Verfahren der Bayesschen Optimierung angewendet, um die Dauer der Evaluierung zu verkürzen~\cite[S. 2 - 3]{snoek2012practical}. Im Kern wird das Maschine-Learning Modell als Black Box Funktion interpretiert, welches als Eingabe eine Permutation an Hyperparameter-Werten akzeptiert und der Wert der Zielmetrik für die jeweilige Permutation dient als Rückgabewert der Black Box Funktion.
     Dadurch, dass die Optimierung der Black Box Funktion durch Ableitungsverfahren nicht möglich, wird dieses eine Ersatzfunktion substituiert, welches die Black Box Funktion approximiert.
     Bei der Ersatzfunktion handelt es such um ein probabilistisches Modell, welches genutzt wird, um eine Wahrscheinlichkeitsverteilung über die möglichen Werte der Zielmetrik für verschiedene Kombinationen an Hyperparameter-Werten zu erstellen.
     Die Bayessche Optimierung beginnt typischerweise mit einer zufälligen Auswahl von Hyperparametern, um einige Datenpunkte zu generieren. Diese werden verwendet, um das probabilistische Modell zu initialisieren. Anschließend wird iterativ die Akquisitionsfunktion angewendet, um neue und vielversprechende Hyperparameter-Kombinationen zu identifizieren und zu testen. 
@@ -94,7 +94,7 @@ Dies kann entweder manuell durchgeführt oder es werden Methoden eingesetzt, die
     Sie balanciert die Exploration unbekannter Bereiche des Hyperparameterraums mit der Exploitation von Bereichen, die voraussichtlich zu besseren Ergebnissen führen.
     Nach jedem Schritt wird das Modell mit den neuen Ergebnissen aktualisiert, was zu einer kontinuierlichen Verbesserung der Schätzungen und Entscheidungen führt. Am Ende der Methode ist die Kombination an Hyperparameter-Werten bekannt, welches für die Zielmetrik das globale Minimum bzw. Maximum als Rückgabewert zurückgibt.
 
-    \item Tree-structured Parzen Estimators (TPE): Bei TPEs handelt es sich um einen speziellen Anwendungsfall der Bayesschen Optimierung. Anstatt eine Wahrscheinlichkeitsverteilung für die Kombination an Hyperparameter-Werten zu verwenden, wird diese in zwei aufgeteilt:
+    \item Tree-structured Parzen Estimators (TPE): Bei TPEs handelt es sich um einen speziellen Anwendungsfall der Bayesschen Optimierung~\cite[S. 4 - 5]{bergstra2011algorithms}. Anstatt eine Wahrscheinlichkeitsverteilung für die Kombination an Hyperparameter-Werten zu verwenden, wird diese in zwei aufgeteilt:
     eine für Kombinationen, die zu besseren Werten für die Zielmetrik führen ("gute Verteilung") und eine für solche, die zu schlechteren Ergebnissen führen ("schlechte Verteilung"). Wie bei der normalen Bayesschen Optimierung wird eine Aquisefunktion eingesetzt, um zu bestimmen, welche Kombination an Hyperparameter-Werten als Nächstes evaluiert werden soll.
     Hierbei basiert die Akquisitionsfunktion bei TPE auf das Verhältnis der Dichten dieser beiden Verteilungen. Durch den Einsatz von Parzen Estimatoren werden für beide Wahrscheinlichkeitsverteilungen Dichtefunktionen approximiert, wodurch die Dichten in Akquisitionsfunktion bestimmt werden können.
     Sie wählt die nächste zu evaluierende Hyperparameter-Kombination, indem sie Bereiche bevorzugt, in denen das Verhältnis der Dichte der "guten" Verteilung zur Dichte der "schlechten" Verteilung hoch ist.
@@ -112,8 +112,8 @@ die im Kontext dieser Arbeit in Anbetracht gezogen werden.
 
 \subsubsection*{Support Vector Maschines}
 
-Support Vector Mashines oder SVMs sind überwachte Maschine-Learning Modelle, die sowohl für Regressions- als auch für Klassifikationsaufgaben einsetzbar ist. Die Datenpunkte werden in einen \textit{n}-dimensionalen Raum abgebildet, wobei \textit{n} die Anzahl der Features der Datenpunkte beschreibt.
-Bei der Klassifizierung trennen SVMs den Raum der Datenpunkte in verschiedene Zonen. Jede Zone entspricht einem Label, zu welchen die Datenpunkte in der jeweiligen Zone zugeordnet werden. Die Grenzen der einzelnen Zonen werden durch Hyperplanes beschrieben. Das Ziel ist, diese Hyperplanes so zu bestimmen,
+Support Vector Maschine oder SVM sind Maschine-Learning Modelle, die sowohl für Regressions- als auch für Klassifikationsaufgaben einsetzbar ist. Die Datenpunkte werden in einen \textit{n}-dimensionalen Raum abgebildet, wobei \textit{n} die Anzahl der Features der Datenpunkte beschreibt~\cite[S. 435]{10.5555/3133359}.
+Bei der Klassifizierung trennen SVMs den Raum der Datenpunkte in verschiedene Zonen. Jede Zone entspricht einem Label, zu welchen die Datenpunkte in der jeweiligen Zone zugeordnet werden. Die Grenzen der einzelnen Zonen werden durch Hyperplanes beschrieben. Das Ziel ist, dieses Hyperplanes so zu bestimmen,
 sodass die Datenpunkte möglichst distinkt einer Zone zugeordnet werden.
 
 \begin{figure}[h]
@@ -123,7 +123,7 @@ sodass die Datenpunkte möglichst distinkt einer Zone zugeordnet werden.
     \label{fig:svm_graphic}
 \end{figure}
 
-Abbildung \ref{fig:svm_graphic} grafisch, wie eine SVM funktioniert. Punkte sind die Datenpunkte des Datensatzes und die Farben der Punkte die Klasse, in der die Punkte eingeordnet sind.
+Abbildung \ref{fig:svm_graphic} grafisch, wie eine SVM funktioniert~\cite[S. 437]{10.5555/3133359}. Punkte sind die Datenpunkte des Datensatzes und die Farben der Punkte die Klasse, in der die Punkte eingeordnet sind.
 Die Linien beschreiben die mögliche Hyperplanes, womit Grenzen zwischen den Klassen determiniert wird. Das Kreuz zeigt einen neuen Datenpunkt, der zu klassifizieren ist. Mit diesem neuen Datenpunkt stellt sich die Frage, welche der drei möglichen Hyperplanes zu wählen ist, um die Datenpunkte möglichst distinkt einer Klasse zuzuordnen.
 
 \pagebreak
@@ -135,7 +135,7 @@ Die Linien beschreiben die mögliche Hyperplanes, womit Grenzen zwischen den Kla
     \label{fig:svm_margins}
 \end{figure}
 
-Wie in Abbildung \ref{fig:svm_margins} zu sehen ist, wird für jede Hyperplane die Marge zwischen der Hyperplane und der Datenpunkte und den nächsten Datenpunkten bestimmt.
+Wie in Abbildung \ref{fig:svm_margins} zu sehen ist, wird für jede Hyperplane die Marge zwischen der Hyperplane und der Datenpunkte und den nächsten Datenpunkten bestimmt~\cite[S. 438]{10.5555/3133359}.
 Die Hyperplane mit der größten Marge, die mit der größten Distanz zwischen sich und den nächsten Datenpunkten, wird als finale Hyperplane für die Grenzbildung zwischen den Klassen gewählt. Im Falle von Abbildung \ref{fig:svm_margins}
 ist dies mittlere von den drei Kandidaten. Mit jedem neuen Datenpunkt wird währed Trainings wird die ideale Hyperplane neu bestimmt.
 Jedoch stellt sich die Frage, wie mit Datensätzen umzugehen, die nicht durch lineare Hyperplanes in Klassen aufgeteilt werden.
@@ -150,7 +150,7 @@ Jedoch stellt sich die Frage, wie mit Datensätzen umzugehen, die nicht durch li
 \end{figure}
 
 
-Abbildung \ref{fig:svm_non_linear} zeigt einen Datensatz, dessen Datenpunkte nicht distinkt durch lineare Hyperplanes zugeordnet werden können. Um trotzdem lineare Hyerplanes zu bilden,
+Abbildung \ref{fig:svm_non_linear} zeigt einen Datensatz, dessen Datenpunkte nicht distinkt durch lineare Hyperplanes zugeordnet werden können\cite[S. 441]{10.5555/3133359}. Um trotzdem lineare Hyerplanes zu bilden,
 wird der bei SVMs Kernel verwendet. Bei dem Kernel Trick handelt es sich um eine Funktion, die den Datensatz in einen Raum mit einer höheren Dimension projektiert.
 Durch die Projektion in einem Raum mit einer höheren Dimension ist es möglich, lineare Hyperplanes zu bestimmen.
 Diese Funktion werden als Kernel bezeichnet und werden bei der Instantiierung des Modells als Hyperparameter mitgegeben.
@@ -162,16 +162,16 @@ Diese Funktion werden als Kernel bezeichnet und werden bei der Instantiierung de
     \label{fig:svm_transformed}
 \end{figure}
 
-Abbildung \ref{fig:svm_transformed} zeigt, wie durch Anwendung des Radial-Basis-Function Kernel, das den ursprünglich zwei-dimensionalen Raum auf ein drei-dimensionales projektiert wird.
+Abbildung \ref{fig:svm_transformed} zeigt, wie durch Anwendung des Radial-Basis-Function Kernel, das den ursprünglich zwei-dimensionalen Raum auf ein drei-dimensionales projektiert wird~\cite[S. 442]{10.5555/3133359}.
 Durch die Transformation kann nun eine Hyperplane als Ebene bestimmt werden, wodurch die Klassifikation ermöglicht wird.
 
 \pagebreak
 
 \subsubsection*{k-Nearest Neighbor Classifier}
 
-k-Nearest Neighbors Classifier oder KNN kann wie die SVM für Regressions- als auch für Klassifikationsprobleme eingesetzt werden. Dabei wird bei KNN unter der Annahme agiert, dass ähnliche Datenpunkte in der Nähe zueinander sind.
+k-Nearest Neighbors Classifier oder KNN kann wie die SVM für Regressions- als auch für Klassifikationsprobleme eingesetzt werden. Dabei wird bei KNN unter der Annahme agiert, dass ähnliche Datenpunkte in der Nähe zueinander sind~\cite[S. 216]{10.5555/2904392}.
 Der Hyperparameter k definiert die Anzahl der nächsten Nachbarn, die verwendet werden, um den neu eingefügten Datenpunkten eine Klasse zuzuordnen. Um die k nächsten benachbarten Datenpunkte zu identifizieren, ist ein Maß erforderlich, welches die Distanz zwischen diesen beschreibt. Dieses wird als Hyperparameter bei des Instantiierung des Modells diesem übergeben.
-Folgende Größen können als Metrik für die Distanz verwendet werden:
+Folgende Größen können als Metrik für die Distanz verwendet werden~\cite[S. 6]{doi:10.1089/big.2018.0175}:
 
 \begin{description}
     \item Euklidische Distanz ist die Länge des Liniensegmentes zwischen den beiden Punkten im euklidischen Raum.
@@ -222,15 +222,9 @@ Die Klassifizierung des neuen Datenpunktes erfolgt im Kontext der k nächsten be
 \pagebreak
 
 \subsubsection*{Random Forest Classifier}
-Der Random Forest Classifier ist ein mächtiges, ensemble-basiertes Lernverfahren im Bereich des maschinellen Lernens, das für Regressions- und Klassifizierungsaufgaben eingesetzt wird. Es kombiniert die Vorhersagen mehrerer Entscheidungsbäume, um zu einer endgültigen Entscheidung zu kommen, wobei es sich durch hohe Genauigkeit und die Fähigkeit auszeichnet, Overfitting zu vermeiden.
+Der Random Forest Classifier ist ein ensemble-basiertes Lernverfahren im Bereich des maschinellen Lernens, das für Regressions- und Klassifizierungsaufgaben eingesetzt wird. Es kombiniert die Vorhersagen mehrerer Entscheidungsbäume, um zu einer endgültigen Entscheidung zu kommen~\cite[S. 456]{10.5555/3133359}, wobei es sich durch hohe Genauigkeit und die Fähigkeit auszeichnet, Overfitting zu vermeiden~\cite[S. 455]{10.5555/3133359}.
 Overfitting beschreibt dabei das Phänomen, bei dem ein Modell zu stark an die spezifischen Details und das Rauschen des Trainingsdatensatzes angepasst ist, sodass das Erkennen zugrundeliegenden Mustern nicht erfasst wird.
-Das grundliegende Element in einem Random Forest Classifier stellen die Decision Trees oder Entscheidungsbäume, die in Summe den "Wald" des Random Forest Classifiers bilden. Diese werden während des Trainings erzeugt.
+Das grundliegende Element in einem Random Forest Classifier stellen die Decision Trees oder Entscheidungsbäume dar, die in Summe den "Wald" des Random Forest Classifiers bilden. Diese werden während des Trainings erzeugt.
 Ein Entscheidungsbaum ist dabei ein Modell, das Entscheidungen und deren mögliche Konsequenzen, einschließlich Zufallsereignissen, Kosten und Nutzen, in Form eines Baumdiagramms darstellt. Ein Entscheidungsbaum besteht aus Knoten, die Testfragen oder -kriterien repräsentieren, und Blättern, die die Endentscheidungen oder Ausgänge darstellen. Die Auswahl eines Pfades von der Wurzel bis zu einem Blatt repräsentiert eine Reihe von Entscheidungen, die zu einem bestimmten Ergebnis führen.
-Die Ergebnisse der einzelnen Entscheidungsbäume werden zu einem Gesamtergebnis aggregiert. Folgende Hauptkonzepte erhöhen dabei dessen Effektivität:
-
-\begin{itemize}
-    \item Bagging (Bootstrap Aggregating): Jedem Entscheidungsbaum im Random Forest Classifier wird aus einer zufälligen Auswahl von Trainingsdaten mit Zurücklegen gebildet. Dieser Prozess führt zu unterschiedlichen Bäumen, die unterschiedliche Aspekte der Daten erfassen.
-    \item  Bei der Aufteilung eines Knotens während der Baumkonstruktion wird eine zufällige Auswahl von Merkmalen betrachtet. Diese Technik trägt zur Diversifizierung der Entscheidungsbäume bei und verringert die Korrelation zwischen den Bäumen, wodurch das Modell robuster gegenüber Overfitting wird.
-\end{itemize}
-
+Die Ergebnisse der einzelnen Entscheidungsbäume werden zu einem Gesamtergebnis durch Bagging aggregiert~\cite[S. 456]{10.5555/3133359}. Jedem Entscheidungsbaum im Random Forest Classifier wird aus einer zufälligen Auswahl von Trainingsdaten mit Zurücklegen gebildet. Dieser Prozess führt zu unterschiedlichen Bäumen, die unterschiedliche Aspekte der Daten erfassen.
 %%TODO

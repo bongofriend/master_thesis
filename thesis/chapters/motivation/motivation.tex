@@ -9,10 +9,10 @@ Im weiteren Entwicklungszyklus der Software werden durch neue oder geänderte An
 Währenddessen besteht die Gelegenheit, dass durch mangelnder Dokumentation oder anderer Gründe die Entscheidungen, weshalb Entwurfsmuster so eingesetzt sind wie es eingesetzt worden, verloren gehen.
 Dadurch besteht die Gefahr, dass angewendete Design Patterns im weiteren Verlauf derer Entwicklung nicht mehr wiederzuerkennen sind. Aus diesem Grund ist die Etablierung eines Prozesses von Vorteil, das in der Lage ist,
 Implementierungen von Entwurfsmustern aus einem Software-System zu extrahieren und dieses konkret benennen. Vor allem der Einsatz von Maschine Learning für die Klasszifierung ist hier vorteilhaft, wodurch das Potenzial besteht, vorher nicht gesehene Implementierung von Design Patterns zu erkennen.
-Durch solch einen Prozess können durch die Erkennung von eingesetzten Entwurfsmustern auf konkrete und verlorenen gegangene Design-Entscheidungen zurückgeschlossen werden, welche zukünftige Design-Entscheidungen für das Software-System beeinflussen können. 
+% Durch solch einen Prozess können durch die Erkennung von eingesetzten Entwurfsmustern auf konkrete und verlorenen gegangene Design-Entscheidungen zurückgeschlossen werden, welche zukünftige Design-Entscheidungen für das Software-System beeinflussen können. 
 Der Fokus dieser Arbeit besteht daran, solch ein Prozess zu etablieren, welches für ein gegebenes Set von Quellcode-Dateien mithilfe von Maschine Learning einem potenziellen Entwurfsmuster zuzuteilen.  
 
-\newpage
+\pagebreak
 
 \section{Untersuchungsfragen}
 
@@ -21,7 +21,7 @@ Hierfür dienen eine Menge an Quelldateien als Eingabe für den Prozess und durc
 Um solch ein Prozess zu entwickeln, werden in Kontext dieser Arbeit folgende Fragen beantwortet:
 
 \begin{questions}
-    \item Welche Design Patterns werden berücksichtigt?
+    \item\label{RQ1} Welche Design Patterns werden berücksichtigt?
     \item\label{RQ2} Was für ein Datensatz eignet sich für solch ein Prozess?
     \item\label{RQ3} Wonach wird exakt klassifiziert?
     \item\label{RQ4} Welche Merkmale, die aus Quellcode-Dateien extrahierbar sind, eignen sich für Klasszifierung durch Maschine Learning Modelle?  
@@ -29,5 +29,36 @@ Um solch ein Prozess zu entwickeln, werden in Kontext dieser Arbeit folgende Fra
     \item\label{RQ6} Wie wird eine Instanz eines Entwurfsmusters bestimmt?
 \end{questions}
 
-\section{Übersicht des Prozesses}
+
+\section{Übersicht der Methodik}
+
+In diesem Abschnitt wird erläutert, wie die in dieser Arbeit vorgeschlagene Methodik aufgebaut ist. 
+Diese ist dabei in zwei Teile aufzuteilen.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.45]{figures/training_overview.png}
+    \caption{Prozessabbildung des Trainings des Klassifizierers}
+    \label{fig:training_process}
+\end{figure}
+
+Abbildung~\ref{fig:training_process} stellt die notwendigen Schritte dar, um einen Klassifizierer zu trainieren. Diese hat die Aufgabe,
+Quellcodeentiäten eine Rolle im Kontext eines Entwurfsmusters zuzuordnen, das zu klassifizieren ist. Im ersten Schritt werden die notwendigen Informationen wie zugeordnetes Design Pattern und Rolle extrahiert und in einer CSV-Datei abgelegt. 
+Diese CSV-Datei dient zusammen mit dem eigentlichen Quellcode als Eingabe in der Feature-Extraktion in Form von Codemetriken. Die Einträge aus der CSV-Datei werden dabei mit dem berechneten Codemetriken erweitert.
+Darauffolgend wird eine explorative Datenanalyse durchgeführt, damit sich ein Überblick über die Datenpunkte geschafft wird. Anhand dieser Auswertung wird bestimmt, welche Entwurfsmuster und Rollen zu Klassifikation verfügbar.
+Zum Schluss wird der verarbeitete Datensatz verwendet, um einen Klassifizierer zu trainieren. Der Trainingsschritt beinhaltet unter anderem die Optimierung des Modells durch Hyperparameter-Tuning und dessen Validation durch Kreuzvalidierung.
+Die beste Iteration der Klassifizierers dient dabei als Grundlage bei der Bestimmung eines passenden Design Patterns.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{figures/pattern_matching_overvierw.png}
+    \caption{Prozessabbildung für Zuordnung von Entwurfsmustern}
+    \label{fig:pattern_matching_overview}
+\end{figure}
+
+Die Abbildung~\ref{fig:pattern_matching_overview} beschreibt, wie auf Basis des vorher trainierten Klassifizierers ein Übereinstimmungswert ermittelt wird, der angibt,
+welches Entwurfsmuster am ehesten zu den Quellcodeentiäten zuzuordnen ist. Wie im Trainingsprozess des Klassifizierers werden von den Quellcodeentiäten Codemetriken extrahiert.
+Diese werden als Eingabe für den Klassifizierer verwendet. Durch die Bestimmung der Rollen wird für jedes betrachtete Design Pattern ein Übereinstimmungswert berechnet.
+Das Design Pattern mit dem höchsten Übereinstimmungswert ist das Muster, welches am ehesten zu dem Set an Quellcodeentiäten passt.
 
