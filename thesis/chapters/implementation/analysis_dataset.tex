@@ -2,7 +2,7 @@
 
 In der Sektion~\ref{feature_extraction} wird der Datensatz verarbeitet und mit den in Tabelle~\ref{tab:features} erweitert.
 In diesem Abschnitt wird das Resultat der Sektion~\ref{feature_extraction} analysiert.
-Für den weiteren Verlauf der hier vorgestellten Methode wird die Skriptsprache Python in Kombination mit Jupyter-Notebooks benutzt. Für die Analyse der Daten wird Python-Bibliothek pandas verwendet. Für die Visualisierung durch verschiedene Arten von Diagrammen wird die Python-Bibliothek plotly eingesetzt.
+Für den weiteren Verlauf der hier vorgestellten Methode wird die Skriptsprache Python in Kombination mit Jupyter-Notebooks benutzt. Für die Analyse der Daten wird die Python-Bibliothek pandas verwendet. Für die Visualisierung durch verschiedene Arten von Diagrammen wird die Python-Bibliothek plotly eingesetzt.
 
 
 \begin{table}[h]
@@ -20,8 +20,7 @@ Für den weiteren Verlauf der hier vorgestellten Methode wird die Skriptsprache 
 
 
 Die Tabelle~\ref{tab:dp_dist} zeigt die Verteilung der Instanzen der Design Pattern an. 
-Dabei ist abzulesen, dass die Singelton-, Adapter-, Command- und Observer-Entwurfsmuster die am häufigsten vertretenen Entwurfsmuster sind, während Instanzen der Design Patterns wie Decorator oder Bridge nur einmal vorkommen.
-Dies beantwortet die Untersuchungsfrage~\ref{RQ1}.
+Dabei ist abzulesen, dass die Singleton-, Adapter-, Command- und Observer-Entwurfsmuster die am häufigsten vertretenen Entwurfsmuster sind, während Instanzen der Design Patterns wie Decorator oder Bridge nur einmal vorkommen.
 
 \pagebreak
 
@@ -33,17 +32,17 @@ Dies beantwortet die Untersuchungsfrage~\ref{RQ1}.
 \end{figure}
 
 Abbildung~\ref{fig:role_dist} ermöglicht einen Überblick über die Rollenverteilung.
-Dabei ist zu vermerken, dass die Verteilung der Rollen und die Anzahl der Instanzen der zugehörigen Design Pattern unbalanciert ist. Beispielsweise ist die Rolle \textit{concreteelement} des Visitor-Entwurfsmusters am häufigsten vorzufinden, obwohl in P-MArt vier Instanzen vermerkt sind.
+Dabei ist zu vermerken, dass die Verteilung der Rollen und die Anzahl der Instanzen der zugehörigen Design Pattern unbalanciert sind. Beispielsweise ist die Rolle \textit{concreteelement} des Visitor-Entwurfsmusters am häufigsten vorzufinden, obwohl in P-MArt vier Instanzen zu diesem Design Pattern vermerkt sind.
 Um ein möglichst aussagekräftiges Ergebnis zu erhalten, muss die Menge der zu identifizierenden Entwurfsmuster eingeschränkt werden. Ansonsten ist bei zu vielen identifizierbaren Klassen mit wenigen Datenpunkten eine unzufriedenstellende Leistung der Klassifizierer zu erwarten.
-Deshalb werden im weiteren Verlauf Instanzen der Entwurfsmuster Singelton, Observer, Command und Adapter weiter betrachtet.
-
+Deshalb werden im weiteren Verlauf Instanzen der Entwurfsmuster Singleton, Observer, Command und Adapter weiter betrachtet.
+Dies beantwortet die Untersuchungsfrage~\ref{RQ1}.
 
 \begin{table}[H]
     \begin{tabular}{|c|c|c|}
         \hline
         Entwurfsmuster & Rolle & Anzahl\\
         \hline
-        Singelton & singelton & 15\\
+        Singleton & singleton & 15\\
         \hline
         \multirow{4}{*}{Adapter} & adaptee & 17\\ & adapter & 29\\ & client & 13\\ & target & 10\\
         \hline
@@ -58,7 +57,7 @@ Deshalb werden im weiteren Verlauf Instanzen der Entwurfsmuster Singelton, Obser
     \label{tab:dataset_dist}
 \end{table}
 
-Tabelle~\ref{tab:dataset_dist} zeigt den Datensatz an, der im weiteren Verlauf verwendetet wird. Auf vier Design Pattern aufgeteilt,
+Tabelle~\ref{tab:dataset_dist} zeigt den Datensatz an, der im weiteren Verlauf verwendet wird. Auf vier Design Pattern aufgeteilt,
 beträgt der Umfang des Datensatzes 295 Datenpunkte auf vierzehn Rollen aufgeteilt.
 
 \begin{figure}[h]
@@ -79,10 +78,10 @@ Dabei kann der Koeffizient wie gefolgt interpretiert werden:
     \item Zwischen 0 und 1.0: Ein Koeffizient in diesem Wertebereich wird als positive Korrelation benannt. Je größer der eine Wert, desto größer wird der andere. Je größer der Koeffizient, desto größer der Einfluss.
 \end{itemize}
 
-Bei der Datenanalyse von Features kann eine Koeffizienten-Heatmap dazu verwendet, um gegebenenfalls Features aus dem Featurevektor, um dessen Dimensionalität zu reduzieren. Die Dimensionalität beschreibt in diesem Kontext Anzahl der Komponenten im Featurevektor.
+Bei der Datenanalyse von Features wird eine Koeffizienten-Heatmap dazu verwendet, um gegebenenfalls Komponenten aus dem Feature-Vektor zu entfernen, um dessen Dimensionalität zu reduzieren. Die Dimensionalität beschreibt in diesem Kontext die Anzahl der Komponenten im Feature-Vektor.
 Je höher die Dimensionalität, desto mehr Möglichkeiten müssen berücksichtigt werden, um im Falle der Klassifikation eine möglichst passende Klasse zuzuordnen. Je kleiner die Dimensionalität, desto präziser kann klassifiziert werden.
-Features mit einer besonders geringen oder hohen Koeffizient der Korrelation zu einer anderen encodieren ähnliche oder gleiche Informationen über die Entität, weshalb diese unter Umständen nicht mehr als Eingabe für Klassifizierer berücksichtigt werden.
-Im Falle der Heatmap aus Abbildung~\ref{fig:coeff_heat_map} sind besonders hohe Koeffizienten der Korrelation vorzufinden. Jedoch werden unter Berücksichtigung des Domainwissens die alle Features für die Klassifikation verwendet
+Features mit einem besonders geringen oder hohen Koeffizient der Korrelation zu einer anderen encodieren ähnliche oder gleiche Informationen über die Entität, weshalb diese unter Umständen nicht mehr als Eingabe für Klassifizierer berücksichtigt werden.
+Im Falle der Heatmap aus Abbildung~\ref{fig:coeff_heat_map} sind besonders hohe Koeffizienten der Korrelation vorzufinden. Jedoch werden unter Berücksichtigung des Domainwissens alle Features für die Klassifikation verwendet.
   
 
 

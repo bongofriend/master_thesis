@@ -1,13 +1,12 @@
-\section{Maschine Learning}
+\section{Machine Learning}
 
-Der Fokus dieser Arbeit ist die Ermittlung von Design von Quellcode durch die Anwendung von Maschine Learning.
-Dieser Teil der Arbeit ist für die Erläuterung von verwendeten Metriken, angewandten Techniken und ausgewählter Klassifizierer gewidmet.
+Der Fokus dieser Arbeit ist die Ermittlung von Design Patterns in Quellcode durch die Anwendung von Machine Learning.
+Dieser Teil der Arbeit ist für die Erläuterung von verwendeten Metriken, angewandten Techniken und ausgewählten Klassifizierern gewidmet.
 
-% TODO: \subsection{Terminologie} falls notwendig
 \subsection{Metriken für Evaluierung von Modellen}\label{metrics}
 
-Um die Leistung eines Klassifizierers zu ermitteln, bedarf es einer Menge an Metriken, womit beurteilt werden, ob der Klassifizierer wie erwartet performt.
-In Kontext dieser Aussage wird in der Domäne des Maschine Learnings bekannte Metriken aus dem Bereich der Statistik angewendet.
+Um die Leistung eines Klassifizierers zu ermitteln, bedarf es einer Menge an Metriken, womit beurteilt werden kann, ob der Klassifizierer wie erwartet performt.
+Im Kontext dieser Aussage werden in der Domäne des Machine Learnings bekannte Metriken aus dem Bereich der Statistik angewendet.
 In diesem Abschnitt wird eine Auswahl von solchen Metriken erläutert, die in der Literaturrecherche als auch in den Sektionen der Methodik und Implementierung erwähnt werden.
 Für die Ermittelung der Metriken werden folgende Größen definiert:
 
@@ -18,7 +17,7 @@ Für die Ermittelung der Metriken werden folgende Größen definiert:
     \item FN (False Negative): Anzahl falsch negativ Klassifizierungen
 \end{description}
 
-Anhand dieser Größen werden folgende Metriken definiert~\cite[S. 3]{doi:10.1148/ryai.2021200126}:
+Anhand dieser Größen werden folgende Metriken kakuliert~\cite[S. 3]{doi:10.1148/ryai.2021200126}:
 
 \begin{description}
     \item \textit{Accuracy (Genauigkeit)}: Dieser Wert gibt an, wie das Verhältnis zwischen den klassifizierten Beobachtungen zur Gesamtzahl der Beobachtungen ist.
@@ -36,27 +35,26 @@ Anhand dieser Größen werden folgende Metriken definiert~\cite[S. 3]{doi:10.114
     \\
     $Recall = \frac{TP}{TP+FN}$
     
-    \item \textit{ F1-Score}: Der F1-Score ist das harmonische Mittel von Präzision und Recall und gibt ein besseres Maß für die unbalancierten Klassen als die Genauigkeit allein.
+    \item \textit{ f1-Score}: Der f1-Score ist das harmonische Mittel von Präzision und Recall und gibt ein besseres Maß für die unbalancierten Klassen als die Genauigkeit allein.
     \\
     \\
-    $\textit{\text{F1-Score}} = 2 * \frac{Precision * Recall}{Precision + Recall} = \frac{2*TP}{2*TP + FP + FN}$
+    $\textit{\text{f1-Score}} = 2 * \frac{Precision * Recall}{Precision + Recall} = \frac{2*TP}{2*TP + FP + FN}$
 \end{description}
 
 \pagebreak
 
 \subsection{Validierung und Optimierung von Modellen}
 
-Neben dem Zusammentragen von relevanten Datenpunkte für die Erhebung eines geeigneten Datensatzes ist das Validierung und Optimierung des Maschine Learning Modells eines der relevanten Schritte im gesamten Prozess, 
-um damit das Modell dessen Aufgabe möglichst zufriedenstellend erfüllen kann. 
-In diesem Teil der Arbeit werden Techniken bzw. Methoden erläutert, die in der Validierungs- oder Optimierungsphase angewendet werden können.
+Neben dem Zusammentragen von relevanten Datenpunkten für die Erhebung eines geeigneten Datensatzes ist die Validierung und Optimierung des Machine Learning Modells eines der relevanten Schritte im gesamten Prozess, damit das Modell dessen Aufgabe möglichst zufriedenstellend erfüllen kann. 
+In diesem Teil der Arbeit werden Techniken bzw. Methoden erläutert, die für die Validierung oder Optimierung angewendet werden können.
 
 
 \subsubsection{Kreuzvalidierung von Modellen}
-Nach dem Trainieren des Modells für einen Datensatz ist von Interesse, wie das Modell neue unbekannte Datenpunkte umgeht und diese Leistung anhand einer Metrik zu messen.
-Dies stellt den Kernpunkt der Validierungsphase dar. Ein naiver Ansatz, die gleiche Menge an Datenpunkten zu verwenden, worauf das Modell in der Trainingsphase trainiert wurde.
-Dabei ist jeder Datenpunkt des Datensatzes dem Modell bereits bekannt, wodurch es nicht auf wirklich unbekannte Datenpunkte validiert.
-Eine Möglichkeit dem entgegenzukommen ist das Aufteilen des Datensatzes in Trainings- und Validationsdatensatz, wobei meist der Trainingsdatensatz die größere Menge an Datenpunkten zugesprochen wird.
-Jedoch besteht hier der Nachteil, das in der Trainingsphase die Datenpunkte in dem Validationsdatensatz wegfallen.
+Nach dem Trainieren des Modells für einen Datensatz ist es von Interesse, wie das Modell mit neuen unbekannten Datenpunkten umgeht und diese Leistung anhand einer Metrik zu messen.
+Dies stellt den Kernpunkt der Validierungsphase dar. Ein naiver Ansatz ist es, die gleichen Datenpunkte zu verwenden, worauf das Modell in der Trainingsphase trainiert wurde.
+Dabei ist jeder Datenpunkt des Datensatzes dem Modell bereits bekannt, wodurch es nicht auf wirklich unbekannte Datenpunkte validiert wird.
+Eine Möglichkeit dem entgegenzukommen ist das Aufteilen des Datensatzes in Trainings- und Validationsdatensatz, wobei meist dem Trainingsdatensatz die größere Menge an Datenpunkten zugesprochen wird.
+Jedoch besteht hier der Nachteil, dass in der Trainingsphase die Datenpunkte in dem Validationsdatensatz wegfallen.
 Um diesen Nachteil zu negieren, kann die Technik der Cross Validation oder Kreuzvalidierung angewendet werden.
 
 Hierbei wird zunächst eine natürliche Zahl \textit{n} bestimmt, die angibt, in wie viele gleich große Teile der Datensatz aufgeteilt wird.
@@ -68,35 +66,34 @@ Die Trainings- und Validierungsphase wird hierbei zu einem Schritt zusammengefas
     \caption{Kreuzvalidierung mit \textit{n} = 5}
     \label{fig:cross_validation}
 \end{figure}
-Wie aus Abbildung \ref{fig:cross_validation} zu entnehmen ist, wird in der \textit{i}-ten Iteration das $k-i$-te Sektion des Datensatzes für die Validierung und restlichen
-für das Training des Modells verwendet. Das Resultat dieser Operation ist abhängig von Implementierung der Kreuzvalidierung die Iteration des Modells mit der besten Evaluation und eine Liste von Werten, die Leistung des Modells in der jeweiligen Iteration angibt.
+Wie aus Abbildung~\ref{fig:cross_validation} zu entnehmen ist, wird in der \textit{i}-ten Iteration das $k-i$-te Sektion des Datensatzes für die Validierung und die restlichen
+für das Training des Modells verwendet. Das Resultat dieser Operation ist die Iteration des Modells mit der besten Evaluation und eine Liste von Werten der definierten Metrik, die die Leistung des Modells in der jeweiligen Iteration angeben.
 
 \pagebreak
 
 \subsubsection*{Optimieren von Modellen durch Hyperparameter-Tuning}\label{hyper_params}
-Maschine Learning Modelle können mithilfe von Parametern konfiguriert werden. Dabei wird zwischen zwei Arten von Parametern entschieden: Modellparameter und Hyperparameter.
-Modellparameter werden während der Trainingsphase automatisiert direkt durch den Trainingsdatensatz bestimmt und sind nicht von Außen zu manipulieren. Dahingegen bestimmen Hyperparameter unter anderem wie sich das Modell während der Trainingsphase zu verhalten und beeinflussen
-dessen Architektur. Jedes Modell definiert hierbei selbst, welche Hyperparameter verfügbar sind. Hyperparameter werden während der Instantiierung des Modells definiert. Die Ermittelung der bestmöglichen Kombinationen an Hyperparametern-Werten ist hilfreich, falls Leistung des Modells nicht den Erwartungen entspricht und das verwendete Datensatz nicht weiter argumentiert werden kann.
-Um die Leistung des Modells zu evaluieren, wird wie in der Kreuzvalidierung eine Metrik bestimmt, die Leistung der jetzigen Iterationen zu beurteilen. Das Ziel der Hyperparameter-Optimierung besteht hier darin, eine Kombination an Hyperparametern-Werten zu bestimmen, wodurch die Metrik maximiert bzw. minimiert. 
-Dies kann entweder manuell durchgeführt oder es werden Methoden eingesetzt, die dies automatisiert erledigen können. Im Folgendem wird eine Auswahl an automatisierten Strategien aufgelistet und erläutert:
+Machine Learning Modelle können mithilfe von Parametern konfiguriert werden. Dabei wird zwischen zwei Arten von Parametern entschieden: Modellparameter und Hyperparameter.
+Modellparameter werden während der Trainingsphase automatisiert, direkt durch den Trainingsdatensatz bestimmt und sind nicht von Außen zu manipulieren. Dahingegen bestimmen Hyperparameter unter anderem, wie sich das Modell während der Klassifikation verhält und beeinflussen dessen Architektur. Jedes Modell definiert hierbei selbst, welche Hyperparameter verfügbar sind. Hyperparameter werden während der Instanziierung des Modells definiert. Die Ermittelung der bestmöglichen Kombinationen an Hyperparametern-Werten ist hilfreich, falls die Leistung des Modells nicht den Erwartungen entspricht und der verwendete Datensatz nicht weiter argumentiert werden kann.
+Um die Leistung des Modells zu evaluieren, wird wie in der Kreuzvalidierung eine Metrik bestimmt, die Leistung der einzelnen Iterationen numerisch bewertet. Das Ziel der Hyperparameter-Optimierung besteht hier darin, eine Kombination an Hyperparametern-Werten zu bestimmen, wodurch die Metrik maximiert bzw. minimiert wird. 
+Dies kann entweder manuell durchgeführt werden oder es werden Methoden eingesetzt, die dies automatisiert erledigen. Im Folgenden wird dazu eine Auswahl an automatisierten Strategien aufgelistet und erläutert:
 
 \begin{description}
-    \item Random Search/Grid Search: In diesen Methoden werden zunächst Wertebereiche für die jeweiligen Hyperparameter bestimmt. In der Regel wird hierbei eine Menge an diskreten Wertem bestimmt, die der jeweilige Hyperparameter annehmen kann. Jede Permutation der Hyperparameter-Konfiguration wird als eine Zelle in einem Gitter erfasst. 
+    \item Random Search/Grid Search: In diesen Methoden werden zunächst Wertebereiche für die jeweiligen Hyperparameter bestimmt. In der Regel wird hierbei eine Menge an diskreten Werten definiert, die der jeweilige Hyperparameter annehmen kann. Jede Permutation der Hyperparameter-Konfiguration wird als eine Zelle in einem Gitter erfasst. 
     Jede besuchte Zelle dient dabei als Konfiguration für eine neue Instanz des Modells, welches im weiteren Verlauf zusätzlich durch Einsatz von Kreuzvalidierung trainiert und evaluiert wird~\cite[S. 3]{DBLP:journals/corr/abs-1912-06059}. Das Ergebnis der Evaluation wird vermerkt.
     Bei Random Search wird zufällig bestimmt, welche Zellen besucht werden, während bei Grid Search alle Zellen besucht werden. Das Ergebnis ist die Konfiguration des Modells mit der besten Evaluierung.
     
-    \item Bayessche Optimierung: Bei Grid bwz. Random Search wird jede Permutation der Hyperparameter-Werte eine Instanz des Modells trainiert und evaluiert. Unter Umständen kann der Trainingsprozess je nach Modell und Datensatz rechenintensiv, wodurch es lange dauern, bis diese Methoden ein Resultat liefern.
-    In solch einem Fall kann das Verfahren der Bayesschen Optimierung angewendet, um die Dauer der Evaluierung zu verkürzen~\cite[S. 2 - 3]{snoek2012practical}. Im Kern wird das Maschine-Learning Modell als Black Box Funktion interpretiert, welches als Eingabe eine Permutation an Hyperparameter-Werten akzeptiert und der Wert der Zielmetrik für die jeweilige Permutation dient als Rückgabewert der Black Box Funktion.
-    Dadurch, dass die Optimierung der Black Box Funktion durch Ableitungsverfahren nicht möglich, wird dieses eine Ersatzfunktion substituiert, welches die Black Box Funktion approximiert.
-    Bei der Ersatzfunktion handelt es such um ein probabilistisches Modell, welches genutzt wird, um eine Wahrscheinlichkeitsverteilung über die möglichen Werte der Zielmetrik für verschiedene Kombinationen an Hyperparameter-Werten zu erstellen.
+    \item Bayessche Optimierung: Bei Grid bwz. Random Search wird für jede Permutation der Hyperparameter-Werte eine Instanz des Modells trainiert und evaluiert. Unter Umständen kann der Trainingsprozess je nach Modell und Datensatz rechenintensiv sein, wodurch es lange dauern, bis diese Methoden Resultate liefern.
+    In solch einem Fall kann das Verfahren der Bayesschen Optimierung angewendet, um die Dauer der Evaluierung zu verkürzen~\cite[S. 2 - 3]{snoek2012practical}. Im Kern wird das Machine Learning Modell als Black Box Funktion interpretiert, welches als Eingabe eine Permutation an Hyperparameter-Werten akzeptiert und der Wert der Zielmetrik für die jeweilige Permutation dient als Rückgabewert der Black Box Funktion.
+    Dadurch, dass die Optimierung der Black Box Funktion durch Ableitungsverfahren nicht möglich ist, wird dieses durch eine Ersatzfunktion substituiert, welches die Black Box Funktion approximiert.
+    Die Ersatzfunktion ist ein probabilistisches Modell, welches genutzt wird, um eine Wahrscheinlichkeitsverteilung über die möglichen Werte der Zielmetrik für verschiedene Kombinationen an Hyperparameter-Werten zu erstellen.
     Die Bayessche Optimierung beginnt typischerweise mit einer zufälligen Auswahl von Hyperparametern, um einige Datenpunkte zu generieren. Diese werden verwendet, um das probabilistische Modell zu initialisieren. Anschließend wird iterativ die Akquisitionsfunktion angewendet, um neue und vielversprechende Hyperparameter-Kombinationen zu identifizieren und zu testen. 
-    Diese Funktion bestimmt, welche Permutation am Hyperparameter-Werten auf Basis des jetzigen Standes des probabilistischen Modells als Nächstes bewertet werden soll. 
+    Diese Funktion bestimmt, welche Permutation an Hyperparameter-Werten auf Basis des jetzigen Standes des probabilistischen Modells als Nächstes bewertet werden soll. 
     Sie balanciert die Exploration unbekannter Bereiche des Hyperparameterraums mit der Exploitation von Bereichen, die voraussichtlich zu besseren Ergebnissen führen.
-    Nach jedem Schritt wird das Modell mit den neuen Ergebnissen aktualisiert, was zu einer kontinuierlichen Verbesserung der Schätzungen und Entscheidungen führt. Am Ende der Methode ist die Kombination an Hyperparameter-Werten bekannt, welches für die Zielmetrik das globale Minimum bzw. Maximum als Rückgabewert zurückgibt.
+    Nach jedem Schritt wird das Modell mit den neuen Ergebnissen aktualisiert, was zu einer kontinuierlichen Verbesserung der Schätzungen und Entscheidungen führt. Am Ende der Methode ist die Kombination an Hyperparameter-Werten bekannt, die für die Zielmetrik das globale Minimum bzw. Maximum als Rückgabewert zurückgibt.
 
     \item Tree-structured Parzen Estimators (TPE): Bei TPEs handelt es sich um einen speziellen Anwendungsfall der Bayesschen Optimierung~\cite[S. 4 - 5]{bergstra2011algorithms}. Anstatt eine Wahrscheinlichkeitsverteilung für die Kombination an Hyperparameter-Werten zu verwenden, wird diese in zwei aufgeteilt:
     eine für Kombinationen, die zu besseren Werten für die Zielmetrik führen ("gute Verteilung") und eine für solche, die zu schlechteren Ergebnissen führen ("schlechte Verteilung"). Wie bei der normalen Bayesschen Optimierung wird eine Aquisefunktion eingesetzt, um zu bestimmen, welche Kombination an Hyperparameter-Werten als Nächstes evaluiert werden soll.
-    Hierbei basiert die Akquisitionsfunktion bei TPE auf das Verhältnis der Dichten dieser beiden Verteilungen. Durch den Einsatz von Parzen Estimatoren werden für beide Wahrscheinlichkeitsverteilungen Dichtefunktionen approximiert, wodurch die Dichten in Akquisitionsfunktion bestimmt werden können.
+    Hierbei basiert die Akquisitionsfunktion bei TPE auf dem Verhältnis der Dichten dieser beiden Verteilungen. Durch den Einsatz von Parzen Estimatoren werden für beide Wahrscheinlichkeitsverteilungen Dichtefunktionen approximiert, wodurch die Dichten in Akquisitionsfunktion bestimmt werden können.
     Sie wählt die nächste zu evaluierende Hyperparameter-Kombination, indem sie Bereiche bevorzugt, in denen das Verhältnis der Dichte der "guten" Verteilung zur Dichte der "schlechten" Verteilung hoch ist.
     Wie in der normalen Bayesschen Optimierung wird das probabilistische Modell iterativ mit neuen Werten aktualisiert, um ein globales Minimum bzw. Maximum der Black Box Funktion zu ermitteln.
 
@@ -107,13 +104,12 @@ Dies kann entweder manuell durchgeführt oder es werden Methoden eingesetzt, die
 
 \subsection{Betrachtete Klassifizierer} \label{classifiers}
 Für die Bestimmung eines Design Patterns wird eine Menge an Rollen bestimmt, die die Submuster innerhalb des jeweiligen Entwurfsmusters erfüllen.
-Die Bestimmung der Rollen für einzelne Submuster fällt in dem Bereich des Maschine-Learnings in den Bereich der Klassifikation. Im Sinne dieser werden in diesem Abschnitt der Arbeit eine Auswahl von Klassifizierern betrachtet und erläutert,
-die im Kontext dieser Arbeit in Anbetracht gezogen werden.
+Die Bestimmung der Rollen für einzelne Submuster fällt in dem Bereich des Machine Learnings in den Bereich der Klassifikation. Im Sinne dieser werden in diesem Abschnitt der Arbeit eine Auswahl von Klassifizierern betrachtet und erläutert, die im Kontext dieser Arbeit in Anbetracht gezogen werden.
 
-\subsubsection*{Support Vector Maschines}
+\subsubsection*{Support Vector Machines}
 
-Support Vector Maschine oder SVM sind Maschine-Learning Modelle, die sowohl für Regressions- als auch für Klassifikationsaufgaben einsetzbar ist. Die Datenpunkte werden in einen \textit{n}-dimensionalen Raum abgebildet, wobei \textit{n} die Anzahl der Features der Datenpunkte beschreibt~\cite[S. 435]{10.5555/3133359}.
-Bei der Klassifizierung trennen SVMs den Raum der Datenpunkte in verschiedene Zonen. Jede Zone entspricht einem Label, zu welchen die Datenpunkte in der jeweiligen Zone zugeordnet werden. Die Grenzen der einzelnen Zonen werden durch Hyperplanes beschrieben. Das Ziel ist, dieses Hyperplanes so zu bestimmen,
+Support Vector Machine oder SVM sind Machine Learning Modelle, die sowohl für Regression als auch für Klassifikation einsetzbar sind. Die Datenpunkte werden in einem \textit{n}-dimensionalen Raum abgebildet, wobei \textit{n} die Anzahl der Features der Datenpunkte beschreibt~\cite[S. 435]{10.5555/3133359}.
+Bei der Klassifizierung trennen SVMs den Raum der Datenpunkte in verschiedene Zonen. Jede Zone entspricht einem Label, zu welchem die Datenpunkte in der jeweiligen Zone zugeordnet werden. Die Grenzen der einzelnen Zonen werden durch Hyperplanes beschrieben. Das Ziel ist, dieses Hyperplanes so zu bestimmen,
 sodass die Datenpunkte möglichst distinkt einer Zone zugeordnet werden.
 
 \begin{figure}[h]
@@ -123,8 +119,8 @@ sodass die Datenpunkte möglichst distinkt einer Zone zugeordnet werden.
     \label{fig:svm_graphic}
 \end{figure}
 
-Abbildung \ref{fig:svm_graphic} grafisch, wie eine SVM funktioniert~\cite[S. 437]{10.5555/3133359}. Punkte sind die Datenpunkte des Datensatzes und die Farben der Punkte die Klasse, in der die Punkte eingeordnet sind.
-Die Linien beschreiben die mögliche Hyperplanes, womit Grenzen zwischen den Klassen determiniert wird. Das Kreuz zeigt einen neuen Datenpunkt, der zu klassifizieren ist. Mit diesem neuen Datenpunkt stellt sich die Frage, welche der drei möglichen Hyperplanes zu wählen ist, um die Datenpunkte möglichst distinkt einer Klasse zuzuordnen.
+Abbildung \ref{fig:svm_graphic} zeigt grafisch, wie eine SVM funktioniert~\cite[S. 437]{10.5555/3133359}. Die Punkte sind die Datenpunkte des Datensatzes und die Farben der Punkte die Klasse, in der die Punkte eingeordnet werden.
+Die Linien beschreiben die möglichen Hyperplanes, womit die Grenzen zwischen den Klassen determiniert werden. Das Kreuz zeigt einen neuen Datenpunkt, der zu klassifizieren ist. Mit diesem neuen Datenpunkt stellt sich die Frage, welche der drei möglichen Hyperplanes zu wählen ist, um die Datenpunkte möglichst distinktiv einer Klasse zuzuordnen.
 
 \pagebreak
 
@@ -135,10 +131,9 @@ Die Linien beschreiben die mögliche Hyperplanes, womit Grenzen zwischen den Kla
     \label{fig:svm_margins}
 \end{figure}
 
-Wie in Abbildung \ref{fig:svm_margins} zu sehen ist, wird für jede Hyperplane die Marge zwischen der Hyperplane und der Datenpunkte und den nächsten Datenpunkten bestimmt~\cite[S. 438]{10.5555/3133359}.
-Die Hyperplane mit der größten Marge, die mit der größten Distanz zwischen sich und den nächsten Datenpunkten, wird als finale Hyperplane für die Grenzbildung zwischen den Klassen gewählt. Im Falle von Abbildung \ref{fig:svm_margins}
-ist dies mittlere von den drei Kandidaten. Mit jedem neuen Datenpunkt wird währed Trainings wird die ideale Hyperplane neu bestimmt.
-Jedoch stellt sich die Frage, wie mit Datensätzen umzugehen, die nicht durch lineare Hyperplanes in Klassen aufgeteilt werden.
+Wie in Abbildung \ref{fig:svm_margins} zu sehen ist, wird für jede Hyperplane die Marge zwischen der Hyperplane und den nächsten Datenpunkten bestimmt~\cite[S. 438]{10.5555/3133359}.
+Die Hyperplane mit der größten Marge, also die mit der größten Distanz zwischen sich und den nächsten Datenpunkten, wird als finale Hyperplane für die Grenzbildung zwischen den Klassen gewählt. Im Falle der Abbildung \ref{fig:svm_margins} ist es die mittlere von den drei Kandidaten. Mit jedem neuen Datenpunkt wird während Trainings  die ideale Hyperplane neu bestimmt.
+Jedoch stellt sich die Frage, wie man mit Datensätzen umgeht, die nicht durch lineare Hyperplanes in Klassen aufgeteilt werden.
 
 \pagebreak
 
@@ -150,10 +145,10 @@ Jedoch stellt sich die Frage, wie mit Datensätzen umzugehen, die nicht durch li
 \end{figure}
 
 
-Abbildung \ref{fig:svm_non_linear} zeigt einen Datensatz, dessen Datenpunkte nicht distinkt durch lineare Hyperplanes zugeordnet werden können\cite[S. 441]{10.5555/3133359}. Um trotzdem lineare Hyerplanes zu bilden,
-wird der bei SVMs Kernel verwendet. Bei dem Kernel Trick handelt es sich um eine Funktion, die den Datensatz in einen Raum mit einer höheren Dimension projektiert.
+Abbildung \ref{fig:svm_non_linear} zeigt einen Datensatz, dessen Datenpunkte nicht distinktiv durch lineare Hyperplanes zugeordnet werden können~\cite[S. 441]{10.5555/3133359}. Um trotzdem lineare Hyerplanes zu bilden,
+wird der bei SVMs Kernels verwendet. Bei dem Kernel handelt es sich um eine Funktion, die den Datensatz in einen Raum mit einer höheren Dimension projektiert.
 Durch die Projektion in einem Raum mit einer höheren Dimension ist es möglich, lineare Hyperplanes zu bestimmen.
-Diese Funktion werden als Kernel bezeichnet und werden bei der Instantiierung des Modells als Hyperparameter mitgegeben.
+Diese Funktion werden als Kernel bezeichnet und werden bei der Instanziierung des Modells als Hyperparameter mitgegeben.
 
 \begin{figure}[h]
     \centering
@@ -162,7 +157,7 @@ Diese Funktion werden als Kernel bezeichnet und werden bei der Instantiierung de
     \label{fig:svm_transformed}
 \end{figure}
 
-Abbildung \ref{fig:svm_transformed} zeigt, wie durch Anwendung des Radial-Basis-Function Kernel, das den ursprünglich zwei-dimensionalen Raum auf ein drei-dimensionales projektiert wird~\cite[S. 442]{10.5555/3133359}.
+Abbildung \ref{fig:svm_transformed} zeigt wie durch Anwendung des Radial-Basis-Function Kernels, das den ursprünglich zwei-dimensionalen Raum auf einem drei-dimensionales projektiert~\cite[S. 442]{10.5555/3133359}.
 Durch die Transformation kann nun eine Hyperplane als Ebene bestimmt werden, wodurch die Klassifikation ermöglicht wird.
 
 \pagebreak
@@ -170,7 +165,7 @@ Durch die Transformation kann nun eine Hyperplane als Ebene bestimmt werden, wod
 \subsubsection*{k-Nearest Neighbor Classifier}
 
 k-Nearest Neighbors Classifier oder KNN kann wie die SVM für Regressions- als auch für Klassifikationsprobleme eingesetzt werden. Dabei wird bei KNN unter der Annahme agiert, dass ähnliche Datenpunkte in der Nähe zueinander sind~\cite[S. 216]{10.5555/2904392}.
-Der Hyperparameter k definiert die Anzahl der nächsten Nachbarn, die verwendet werden, um den neu eingefügten Datenpunkten eine Klasse zuzuordnen. Um die k nächsten benachbarten Datenpunkte zu identifizieren, ist ein Maß erforderlich, welches die Distanz zwischen diesen beschreibt. Dieses wird als Hyperparameter bei des Instantiierung des Modells diesem übergeben.
+Der Hyperparameter k definiert die Anzahl der nächsten Nachbarn, die verwendet werden, um den neu eingefügten Datenpunkten eine Klasse zuzuordnen. Um die k nächsten benachbarten Datenpunkte zu identifizieren, ist ein Maß erforderlich, welches die Distanz zwischen diesen beschreibt. Dieses wird als Hyperparameter bei der Instanziierung des Modells diesem übergeben.
 Folgende Größen können als Metrik für die Distanz verwendet werden~\cite[S. 6]{doi:10.1089/big.2018.0175}:
 
 \begin{description}
@@ -201,7 +196,7 @@ Folgende Größen können als Metrik für die Distanz verwendet werden~\cite[S. 
          \\
          Q = (q_1, q_2, \ldots, q_n) 
     \end{math}
-    \item Minkowski Distanz ist eine allgemeinere Metrik, um die Distanz zwischen zwei Punkten im n-dimensionalen Raum zu ermitteln.
+    \item Minkowski Distanz ist eine allgemeinere Metrik, um die Distanz zwischen zwei Punkten im n-dimensionalen Raum ermittelt.
     \\
     \begin{math}
         d_{minkowski}(P, Q) = (|p_1 - q_1|^p + \ldots + |p_n - q_n|^p)^\frac{1}{p}
@@ -223,8 +218,7 @@ Die Klassifizierung des neuen Datenpunktes erfolgt im Kontext der k nächsten be
 
 \subsubsection*{Random Forest Classifier}
 Der Random Forest Classifier ist ein ensemble-basiertes Lernverfahren im Bereich des maschinellen Lernens, das für Regressions- und Klassifizierungsaufgaben eingesetzt wird. Es kombiniert die Vorhersagen mehrerer Entscheidungsbäume, um zu einer endgültigen Entscheidung zu kommen~\cite[S. 456]{10.5555/3133359}, wobei es sich durch hohe Genauigkeit und die Fähigkeit auszeichnet, Overfitting zu vermeiden~\cite[S. 455]{10.5555/3133359}.
-Overfitting beschreibt dabei das Phänomen, bei dem ein Modell zu stark an die spezifischen Details und das Rauschen des Trainingsdatensatzes angepasst ist, sodass das Erkennen zugrundeliegenden Mustern nicht erfasst wird.
-Das grundliegende Element in einem Random Forest Classifier stellen die Decision Trees oder Entscheidungsbäume dar, die in Summe den "Wald" des Random Forest Classifiers bilden. Diese werden während des Trainings erzeugt.
+Overfitting beschreibt dabei das Phänomen, bei dem ein Modell zu stark an die spezifischen Details und das Rauschen des Trainingsdatensatzes angepasst ist, sodass das Erkennen zugrundeliegender Muster nicht erfasst wird.
+Das grundlegende Element in einem Random Forest Classifier stellen die Decision Trees oder Entscheidungsbäume dar, die in Summe den "Wald" des Random Forest Classifiers bilden. Diese werden während des Trainings erzeugt.
 Ein Entscheidungsbaum ist dabei ein Modell, das Entscheidungen und deren mögliche Konsequenzen, einschließlich Zufallsereignissen, Kosten und Nutzen, in Form eines Baumdiagramms darstellt. Ein Entscheidungsbaum besteht aus Knoten, die Testfragen oder -kriterien repräsentieren, und Blättern, die die Endentscheidungen oder Ausgänge darstellen. Die Auswahl eines Pfades von der Wurzel bis zu einem Blatt repräsentiert eine Reihe von Entscheidungen, die zu einem bestimmten Ergebnis führen.
-Die Ergebnisse der einzelnen Entscheidungsbäume werden zu einem Gesamtergebnis durch Bagging aggregiert~\cite[S. 456]{10.5555/3133359}. Jedem Entscheidungsbaum im Random Forest Classifier wird aus einer zufälligen Auswahl von Trainingsdaten mit Zurücklegen gebildet. Dieser Prozess führt zu unterschiedlichen Bäumen, die unterschiedliche Aspekte der Daten erfassen.
-%%TODO
+Die Ergebnisse der einzelnen Entscheidungsbäume werden zu einem Gesamtergebnis durch Bagging aggregiert~\cite[S. 456]{10.5555/3133359}. Jeder Entscheidungsbaum im Random Forest Classifier wird aus einer zufälligen Auswahl von Trainingsdaten mit Zurücklegen gebildet. Dieser Prozess führt zu unterschiedlichen Bäumen, die unterschiedliche Aspekte der Daten erfassen.

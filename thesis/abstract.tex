@@ -1,9 +1,19 @@
 \chapter*{Kurzfassung}
 \thispagestyle{empty}
-text
+
+Design Patterns oder Entwurfsmuster sind in der Software-Entwicklung gängige Lösungsansätze für wiederkehrende Probleme.
+Von Software-Entwicklern werden diese eingesetzt, um Probleme in der Implementierung oder in der Software-Architektur zu lösen, deren Lösungsweg bereits bekannt sind und für die jeweilige Situation abgeändert werden. Die wohl bekanntesten Design Patterns sind die 23 Entwurfsmuster nach Gamma et al.
+Im weiteren Verlauf der Software-Entwicklung sind die eingesetzten Entwurfsmuster aufgrund iterativer Änderungen und steigender Komplexität im Quellcode nicht mehr einfach wiederzufinden.
+Deswegen liegt der Fokus dieser Masterthesis auf der Etablierung eines Prozesses, welcher mit Machine Learning in der Lage ist, Design Pattern im Quellcode zu erkennen.
+
+Das Ziel dieser Arbeit ist es, die Entwurfsmuster Singleton, Observer, Command und Adapter zu identifizieren. Im Kontext dieser Arbeit werden diese als Strukturen definiert, die in Summe von Rollen dargestellt werden.
+Jedes dieser Rollen übernimmt im Kontext des jeweiligen Design Patterns unterschiedliche Aufgaben und Verantwortungen.
+Dazu wird ein Klassifizierer trainiert, welches Rollen innerhalb dieser Entwurfsmuster durch Code-Metriken erkennt.
+Anhand der Klassifikation der Rollen wird im finalen Schritt ein Übereinstimmungswert berechnet, der angibt, mit welcher Zuversicht es sich hierbei um das jeweilige Entwurfsmuster handelt.
+Zum Schluss wird die Klassifikationsleistung der hier vorgestellten Methode anhand der Metriken \textit{Precision}, \textit{Recall} und \textit{f1} evaluiert. 
 
 \bigskip
 
 \noindent
-Schlagworte: 
+Schlagworte: Software-Entwicklung, Machine Learning, Design Patterns 
 

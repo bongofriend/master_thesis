@@ -1,10 +1,8 @@
 \section{Evaluation der Ergebnisse}
-
-Für die Evaluierung werden je vier zufällige Instanzen der hier betrachteten Design Pattern aus Trainingsdatensatz gewählt.
-Dabei wird die Leistungskapazität des Klassifizierers beurteilt als des Algorithmus zu der Zuweisung eines Design Patterns anhand dieser Vorhersagen.
+Hier wird die Leistungskapazität des Klassifizierers und die des Algorithmus beurteilt, der anhand der identifizierten Rollen der Mikroarchitektur ein Design Pattern zuweist. 
 Für die Evaluation werden zufällig vier Instanzen für jedes Design Patterns aus dem Validationsdatensatz ausgewählt.
 Diese repräsentieren neue Datenpunkte, worauf der Klassifizierer nicht trainiert wurde.
-Den Entitäten aus den Validierungsinstanzen wird durch den Klassifizierer Rollen zugeordnet. Die Rolle ist die, die von dem Klassifizierer am ehesten durch die ermitellten Metriken passt.
+Den Entitäten aus den Validierungsinstanzen wird durch den Klassifizierer Rollen zugeordnet. Die Rolle ist die, die nach dem Klassifizierer am ehesten für die ermittelten Metriken passt.
 
 
 \begin{table}[H]
@@ -23,10 +21,10 @@ Den Entitäten aus den Validierungsinstanzen wird durch den Klassifizierer Rolle
     \end{tabular}
 \end{table}
 
-Die Tabelle~\ref{tab:evaluation} listet die Werte der Metriken, nach dem die in dieser Arbeit vorgestellte Methode beurteilt wird.
-Je höher der Wert der Metriken aus Tabelle~\ref{tab:evaluation}, desto besser ist die Klassifizierungsleistung des Verfahrens zu beurteilen.  
-Dabei werden die Instanzen des Singletion-Entwurfsmusters nicht erkannt. Diese werden in diesem Verfahren als Instanzen des Observer-Entwurfsmusters zugordnet, da den Singleton-Instanzen der Rolle "adapter" aus dem Adapter-Design-Pattern zugewiesen.
-Die wäre damit zu erklären, dass die "singleton"-Rolle aus dem Singelton-Entwurfsmuster und die "adapter"-Rolle ähnliche Metriken ermittelt werden.
+Die Tabelle~\ref{tab:evaluation} listet die Werte der Metriken, nachdem die in dieser Arbeit vorgestellte Methode beurteilt wird.
+Je höher der Wert der Metriken aus Tabelle~\ref{tab:evaluation}, desto besser ist, die Klassifizierungsleistung des Verfahrens zu beurteilen.  
+Dabei werden die Instanzen des Singletion-Entwurfsmusters nicht erkannt. Diese werden in diesem Verfahren als Instanzen des Observer-Entwurfsmusters zugeordnet, da den Singleton-Instanzen der Rolle "adapter" aus dem Adapter-Design-Pattern zugewiesen wird.
+Die wäre damit zu erklären, dass für die "singleton"-Rolle aus dem Singleton-Entwurfsmuster und die "adapter"-Rolle ähnliche Metriken ermittelt werden.
 
 \begin{table}[H]
     \caption{Metriken für Rollen aus Validationsdatensatz}
@@ -41,10 +39,10 @@ Die wäre damit zu erklären, dass die "singleton"-Rolle aus dem Singelton-Entwu
 \end{table}
 
 Die Tabelle~\ref{tab:classifier_metrics} zeigt die Metriken für die einzelnen Rollen. Dabei wird der gesamte Validationsdatensatz verwendet.
-Dabei wird ein Random Forest Classifier verwendet. Wie aus den Werten abzulesen ist, ist der Leistung des Klassifizierers nicht zufriedenstellend. Die meisten Rollen werden nicht korrekt erkannt. 
-Zudem können sich die Werte der Features der einzelnen Quellcodeentiäten in Aspekten von Umfang und Komplexität aufgrund der Varianz an Implementierungsmöglichkeiten unterscheiden. Somit entstehen Outlier-Werte, welches die Klassifikation negativ beeinflussen kann.
+Als Klassfizier wird ein Random Forest Classifier verwendet, welches im vorherigen Schritt des Trainings die beste Leistung erbrachte. Wie aus den Werten abzulesen ist, ist die Leistung des Klassifizierers nicht zufriedenstellend. Die meisten Rollen werden nicht korrekt erkannt.  Das kann verschiedene Gründe haben.
+Zu einem können sich die Werte der Features der einzelnen Quellcodeentitäten in Aspekten von Umfang und Komplexität aufgrund der Varianz an Implementierungsmöglichkeiten unterscheiden. Entitäten mit gleicher Rolle besitzen stark voneinander abweichende Metriken. Somit entstehen Outlier-Werte, welche die Klassifikation negativ beeinflussen.
 Zusätzlich muss der Fall berücksichtigt werden, dass die Features der Rollen entweder zu ähnlich zueinander sind oder der Umfang des Datensatzes nicht ausreichend ist.
-Zusammenfassend ist die Leistung des Klassifizierers als magelhaft einzustufen und weist zuätzlichen Arbeitsbedarf auf.
+Zusammenfassend ist die Leistung des Klassifizierers als mangelhaft einzustufen und weist zusätzlichen Arbeitsbedarf auf.
 
 
 

@@ -16,7 +16,7 @@ Dabei wird bei jeder Instanz eines Design Pattern die aufkommenden Software-Enti
         JUnit v3.7 & Test-Framework für Java-Projekte & Java\\
         JHotDraw v5.1 & Framework für das Erstellen von Editoren & Java\\
         MapperXML v1.9.7 & Presentation-Framework & Java\\
-        Nutch v0.4 & Open Source Suchmaschine für das Web & Java\\
+        Nutch v0.4 & Open-Source-Suchmaschine für das Web & Java\\
         PMD v1.8 & Werkzeug für statische Codeanalyse & Java\\
         Software architecture design patterns in Java & Kollektion von Implementierung von Design Patterns nach Kuchana~\cite{10.5555/983553} & Java\\
         DrJava v20020619 & integrierte Entwicklungsumgebung für Java & Java\\
@@ -31,11 +31,10 @@ Dabei wird bei jeder Instanz eines Design Pattern die aufkommenden Software-Enti
 
 Tabelle~\ref{tab:pmart_projects} listet die Software-Systeme auf, die in P-MArt betrachtet werden. Dabei sind alle Software-Systeme in der Programmiersprache Java verfasst und unterliegen einer Open-Source-Lizenz, wodurch der Quellcode frei zugänglich ist.
 Zudem waren nicht alle Software-Systeme zugänglich. Die verschiedenen Versionen der Entwicklungsumgebung DrJava waren archiviert über die Webplattform SourceForge verfügbar. Das Werk "Software architecture design patterns in Java" von Kuchana ist ein Fachbuch für den Einsatz von Design Pattern in Java. 
-In P-MArt werden die Software-Beispiele inkludiert, die im Kontext des Werkes zur Erläuterung dienen und durch die Webplattform des Verlags zugänglich ist. Die im Werk erwähnte URL für die Bespiele zu dem Zeitpunkt der Verfassung der Arbeit nicht zugänglich.
-Der Quellcode für die restlichen Software-Systeme ist als Archiv über die Webseite der Autoren zugänglich.
+In P-MArt werden dessen Software-Beispiele inkludiert, die im Kontext des Werkes zur Erläuterung dienen und durch die Webplattform des Verlags zugänglich sind. Die im Werk erwähnte URL für die Beispiele war zu dem Zeitpunkt der Verfassung der Arbeit nicht aufrufbar.
+Der Quellcode für die restlichen Software-Systeme ist als Archiv über die Webseite der Autoren vom P-MArt zugänglich.
 
-P-MArt selbst wird in der Form einer Extensible Markup Language (XML) Datei verfügbar gestellt. Für einfachere Verarbeitung des Datensatzes werden die notwendige Information aus der XML-Datei extrahiert und in einer Comma-Separated Values (CSV) Datei abgelegt.
-
+P-MArt selbst wird in der Form einer Extensible Markup Language (XML) Datei verfügbar gestellt. Für einfachere Verarbeitung des Datensatzes werden die notwendigen Informationen aus der XML-Datei extrahiert und in einer Comma-Separated Values (CSV) Datei abgelegt.
 \begin{table}[H]
     \centering
     \begin{tabular}{|c|c|}
@@ -56,4 +55,4 @@ P-MArt selbst wird in der Form einer Extensible Markup Language (XML) Datei verf
 
 Die Tabelle~\ref{tab:pmart_roles} zeigt die Spalten der resultierenden CSV-Datei. Für die Erstellung dieser Datei wird die Skriptsprache Python und dessen Standardbibliothek verwendet.
 Neben den in Tabelle~\ref{tab:pmart_roles} aufgeführten Informationen beinhaltet die beschreibende XML-Datei von P-MArt zusätzliche Details wie Kommentare der Autoren über einzelne Mikroarchitekturen.
-Diese werden in der weiteren Verarbeitung der Daten nicht berücksichtigt. Die resultierende CSV-Datei dient zusammen den Quellcode der in P-MArt analysierten Software-Systeme als Eingabe für die Extraktion der Features.
+Diese werden in der weiteren Verarbeitung der Daten nicht berücksichtigt. Die resultierende CSV-Datei dient zusammen mit dem Quellcode der in P-MArt analysierten Software-Systeme als Eingabe für die Extraktion der Features.

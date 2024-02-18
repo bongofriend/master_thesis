@@ -44,7 +44,7 @@
     \end{algorithmic}
 \end{algorithm}
     
-Der Pseudocode~\ref{pattern_matching} beschreibt die konkrete Implementierung des in der Sektion~\ref{pattern} erläuterten Algorithmus.
-Dabei wird trainierte Klassifizierer initialisiert, die Metriken aus~\ref{tab:features} für die zu klassifizierenden Entitäten aus der Quellcode ermittelt und als Eingabeparameter für die vorgestellte Funktion verwendet.
+Der Pseudocode~\ref{pattern_matching} beschreibt die konkrete Implementierung das in der Sektion~\ref{pattern} erläuterten Algorithmus.
+Dabei wird der trainierte Klassifizierer initialisiert, die Metriken aus~\ref{tab:features} für die zu klassifizierenden Entitäten aus dem Quellcode ermittelt und als Eingabeparameter für die vorgestellte Funktion verwendet.
 Die Berechnung des Übereinstimmungswertes erfolgt, indem zunächst die Gesamtzahl möglicher Übereinstimmungen bestimmt wird, die sowohl einmalige als auch mehrfache Vorkommen von Rollen berücksichtigt. Der Übereinstimmungswert für jedes Entwurfsmuster wird als das Verhältnis der Anzahl abgeglichener Rollen zur Gesamtzahl möglicher Übereinstimmungen berechnet. 
 Dieser Wert gibt an, wie gut die vorhergesagten Rollen mit den für das Design Pattern definierten Rollen übereinstimmen. Der höchste Übereinstimmungswert wird als bestmögliche Antwort betrachtet.

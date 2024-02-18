@@ -1,14 +1,14 @@
 \section{Ermittelung des übereinstimmenden Entwurfsmusters}\label{pattern}
 
-Im in der vorherigen Sektion wird erläutert, wie anhand eines Maschine-Learning-Modells den Quellcode-Entitäten eine Rolle aus einem Entwurfsmuster zugeteilt wird.
-Das Ergebnis der Klassifikation besteht aus einem Kollektiv an Rollen, die in einem der betrachteten Design Pattern vorkommen. Diese Kollektion an Rollen allein, reicht nicht aus, um eine Aussage über die Zugehörigkeit eines Design Patterns zu tätigen.
-Daher wird in diesem Abschnitt der Arbeit ein Algorithmus in Form von Pseudocode vorgestellt, womit ein Wert berechnet werden kann, welcher angibt, zu welchem Grad die Kollektion an ermittelten Rollen am ehesten passt.
+In der vorherigen Sektion wird erläutert, wie anhand eines Machine Learning Modells den Quellcodeentitäten eine Rolle aus einem Entwurfsmuster zugeteilt wird.
+Das Ergebnis der Klassifikation besteht aus einem Kollektiv an Rollen, die in einem der betrachteten Design Pattern vorkommen. Diese Kollektion an Rollen allein reicht nicht aus, um eine Aussage über die Zugehörigkeit eines Design Patterns zu tätigen.
+Daher wird in diesem Abschnitt der Arbeit ein Algorithmus in Form von Pseudocode vorgestellt, womit ein Wert berechnet werden kann, welcher angibt, zu welchem Design Pattern die Kollektion an ermittelten Rollen am ehesten passt.
 Dieser Abschnitt wird verwendet, um die Untersuchungsfrage~\ref{RQ6} zu beantworten. Dabei werden folgende Schritte getätigt:
 
 \begin{enumerate}
     \item Extrahiere Metriken für Quellcode nach Tabelle~\ref{tab:features}
-    \item Wende Klassifizierer auf Metriken an für Vorhersagen über Rolle
-    \item Definiere jedes klassifizierbare Design Pattern (Singelton, Command, Observer und Adapter) als Menge von Rollen nach Gamma et al. Bestimme, ob Rollen öfters aufkommen dürfen.
+    \item Wende Klassifizierer auf Metriken an für Vorhersagen über Rollen
+    \item Definiere jedes klassifizierbare Design Pattern (Singleton, Command, Observer und Adapter) als Menge von Rollen nach Gamma et al. Bestimme, ob Rollen öfters aufkommen dürfen.
     \item Iteriere über Design Pattern und vergleiche Rollen mit Beachtung folgender Fälle:
         \begin{enumerate}
             \item Initialisiere eine Hash Map für die Frequenz der aufkommenden vorhergesagten Rollen

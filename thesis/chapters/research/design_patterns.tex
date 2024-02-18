@@ -1,19 +1,18 @@
 \section{Design Patterns in der Software-Entwicklung}
 
-Entwurfsmuster definieren gängige Lösungsblaupausen für häufig auftretende Probleme in Software-Entwicklung, vor allem in der Design-Phase der Architektur des Software-Systems
-als auch während der konkreten Implementierung. Jedoch sind diese als Schablone zu verstehen, die für den jeweiligen Einsatzfall angepasst werden müssen.
-Ein Werk, dass das Verständnis von Design Patterns für das objektorientierte Programmieren maßgeblich geprägt, ist das von Gamma et al. verfasste Arbeit "Design Patterns: Elements of Reusable Object-Oriented Software".
-In diesem wird ein Katalog von 23 Entwurfsmustern definiert, welche in drei Kategorien aufgeteilt. Dieser Katalog wird von Software-Entwicklern als "Gang of Four" Entwurfsmuster bezeichnet. Gamma et al. definieren folgende Elemente für die Identifikation eines Entwurfsmusters:\cite[S. 3]{gamma1994design}
+Entwurfsmuster definieren gängige Lösungsblaupausen für häufig auftretende Probleme in Software-Entwicklung, vor allem in der Design-Phase der Architektur des Software-Systems als auch während der konkreten Implementierung. Jedoch sind diese als Schablone zu verstehen, die für den jeweiligen Einsatzfall angepasst werden müssen.
+Ein Werk, das das Verständnis von Design Patterns für das objektorientierte Programmieren maßgeblich geprägt, ist die von Gamma et al. verfasste Arbeit "Design Patterns: Elements of Reusable Object-Oriented Software".
+In diesem wird ein Katalog von 23 Entwurfsmustern definiert, die in drei Kategorien aufgeteilt sind. Dieser Katalog wird von Software-Entwicklern als "Gang of Four" Entwurfsmuster bezeichnet. Gamma et al. definieren folgende Elemente für die Identifikation eines Entwurfsmusters:\cite[S. 3]{gamma1994design}
 
 \begin{itemize}
-    \item \textbf{Pattern Name}: Der Name des Entwurfsmusters beschreibt in wenigen Worten, welches das zu lösende Problem, die Lösung und welche Folgen dessen Einsatz mit sich bringt. Durch die Einführung eines Bezeichners wird eine Schicht der Abstraktion hinzugefügt, welches das Verständnis und Dokumentation des Design Patterns vereinfacht.
-    \item \textbf{Problem}: Das Problem beschreibt, wo das Entwurfsmuster angewendet werden soll. Dabei kann es sich um ein konkretes Entwurfsproblem, Klassen- oder Objektstrukturen oder eine Liste von Bedingungen darstellen, die zu erfüllen sind.
+    \item \textbf{Pattern Name}: Der Name des Entwurfsmusters beschreibt in wenigen Worten, welches das zu lösende Problem, die Lösung und welche Folgen dessen Einsatz mit sich bringt. Durch die Einführung eines Bezeichners wird eine Schicht der Abstraktion hinzugefügt, welche Verständnis und Dokumentation des Design Patterns vereinfacht.
+    \item \textbf{Problem}: Das Problem beschreibt, wo das Entwurfsmuster angewendet werden soll. Dabei kann es sich um ein konkretes Entwurfsproblem, Klassen- oder Objektstrukturen oder eine Liste von Bedingungen handeln, die zu erfüllen sind.
     \item \textbf{Solution}: Das Lösungselement beschreibt die Beziehungen, Verantwortlichkeiten und Zusammenarbeit der einzelnen Elemente, die die Struktur des Design Patterns definieren. Dabei werden diese Elemente in Objekte und Klassen, die die Grundbausteine der objektorientierten Programmierung repräsentieren, aufgeteilt und deren Interaktionen miteinander stellen die Verantwortlichkeiten und Beziehungen dar.
     \item \textbf{Consequences}: Die Folgen diskutieren, wie der Einsatz des betrachteten Entwurfsmusters sich auf das Software-System einwirkt und welche Vor- und Nachteile dadurch resultieren. Diese beeinflussen unter anderem die Zeit- und Speicherkomplexität, Erweiterbarkeit, Flexibilität und Portabilität des Software-Systems.
 \end{itemize}
 
 Im Kontext dieser Arbeit werden zu klassifizierende Strukturen, die potenziell einem Design Pattern zugeordnet werden können, als Mikroarchitekturen bezeichnet, die aus einer Menge von interagierenden Komponenten bestehen, denen je eine Rolle zugewiesen wird. Die jeweilige Rolle beschreibt, welche Funktionalität und Verantwortung diese im Kontext der Mikroarchitektur übernimmt und wie diese mit anderen Komponenten interagiert.
-Als Komponenten mit Rollen werden hier konkrete bzw\. abstrakte Klassen oder Schnittstellen definiert, die erforderte Rolle im Rahmen der Mikroarchitektur erfüllen.
+Als Komponenten mit Rollen werden hier konkrete bzw\. abstrakte Klassen oder Schnittstellen definiert, die die erforderte Rolle im Rahmen der Mikroarchitektur erfüllen.
 
 In weiteren Verlauf dieser Sektion werden die drei erwähnten Entwurfsmusterkategorien erläutert und zu dem werden im Kontext dieser Arbeit betrachte spezifische Design Pattern genauer betrachtet.
 
@@ -21,12 +20,12 @@ In weiteren Verlauf dieser Sektion werden die drei erwähnten Entwurfsmusterkate
 
 \section{Design Pattern Katalog}
 
-\subsection{Creational Design Patterns}
+\subsection*{Creational Design Patterns}
 
-Die Kategorie der Creational Design Patterns oder Erzeugungsentwurfsmuster beschäftigt sich mit der Abstraktion des Prozesses der Initialisierung\cite[S. 81]{gamma1994design}. Entwurfsmuster dieser Kategorie fokussieren sich auf die Unabhängigkeit wie Objekte erstellt, zusammengesetzt und repräsentiert werden.
-Die Entwurfsmuster dieser Kategorie mit Fokus auf Klassen nutzen den Mechanismus der Vererbung, um zu beeinflussen, wie Komponenten instantiiert werden, während dahingegen Design Patterns mit einem Fokus auf Objekten die Instantiierung auf andere Objekte delegieren.
-Creational Design Patterns werden dann bedeutend, wenn mit steigender Komplexität des Software-Systems sich von Vererbung distanziert wird und die Komposition aus einzelnen definierten Objekt mehr an Bedeutung gewinnt\cite[S. 81]{gamma1994design}. Dabei wird das Verhalten einer Komponente auf eine Menge von einzelnen kleinere Objekten delegiert und durch Zusammensetzung innerhalb der Komponente und deren Interaktion das erwünschte Verhalten erzeugt.
-Dadruch wird die Instantiierung von Software-Komponenten komplexer, da die Instantiierung von mehreren Objekten koordiniert werden muss. Creational Design Patterns liefern hierbei Hilfestellung, weil die exakte Komposition der konkreten Objekte, die Teil der zu instantiierenden Komponente sind, und der exakte Prozess der Instantiierung im Inneren des Entwurfsmusters verborgen werden. Nach außen hin sind dahingegen nur die Schnittstellen sichtbar, die die Komponente zur Verfügung stellt, während dessen interene Logik die Ausführung auf andere Objekte delegiert.
+Die Kategorie der Creational Design Patterns oder Erzeugungsentwurfsmuster beschäftigt sich mit der Abstraktion des Prozesses der Initialisierung~\cite[S. 81]{gamma1994design}. Entwurfsmuster dieser Kategorie fokussieren sich auf die Unabhängigkeit, wie Objekte erstellt, zusammengesetzt und repräsentiert werden.
+Die Entwurfsmuster dieser Kategorie mit Fokus auf Klassen nutzen den Mechanismus der Vererbung, um zu beeinflussen, wie Komponenten instantiiert werden, während dahingegen Design Patterns mit einem Fokus auf Objekten die Instanziierung auf andere Objekte delegieren.
+Creational Design Patterns werden dann bedeutend, wenn sich mit steigender Komplexität des Software-Systems von Vererbung distanziert wird und die Komposition aus einzelnen definierten Objekten mehr an Bedeutung gewinnt~\cite[S. 81]{gamma1994design}. Dabei wird das Verhalten einer Komponente auf eine Menge von einzelnen kleineren Objekten delegiert und durch Zusammensetzung innerhalb der Komponente und deren Interaktion das erwünschte Verhalten erzeugt.
+Dadurch wird die Instanziierung von Software-Komponenten komplexer, da die Instanziierung von mehreren Objekten koordiniert werden muss. Creational Design Patterns liefern hierbei Hilfestellung, weil die exakte Komposition der konkreten Objekte, die Teil der zu instantiierenden Objektes sind und der exakte Prozess der Instanziierung im Inneren des Entwurfsmusters verborgen werden. Nach außen hin sind dahingegen nur die Schnittstellen sichtbar, die das Objekt zur Verfügung stellt, während die interne Logik die Ausführung auf andere Objekte delegiert.
 Im Kontext dieser Arbeit werden folgende Entwurfsmuster aus der Kategorie der Creational Design Patterns betrachtet:
 
 \subsubsection{Singleton}
@@ -45,25 +44,26 @@ Dabei kann dieser nach Gamma et al. wie folgt beschrieben werden:
     \item[Problem] \hfill \\
     \begin{itemize}
         \item Exakt eine Instanz der Klasse zur selben Zeit verfügbar; Zugreifbar zu Klienten durch bekannten Zugangspunkt
-        \item Einzige Instanz erweiterbar durch Vererbung; Nutzbarkeit der Subklasse ohne Veränderung des Quellcodes auf Klientenseite
+        \item einzige Instanz erweiterbar durch Vererbung; Nutzbarkeit der Subklasse ohne Veränderung des Quellcodes auf Klientenseite
     \end{itemize}
     \item[Solution] \hfill
     \begin{itemize}
-        \item   Zugriff auf Singleton-Instanz durch Instance-Operation
+        \item  Zugriff auf Singleton-Instanz durch Instance-Operation
     \end{itemize}
     \item[Roles] \hfill \\
     \begin{description}
         \item[Singleton] \hfill \\
         \begin{itemize}
-            \item Definiert eine Instance-Operation für Zugriff auf einzige Instanz
-            \item Mögliche selbstsändige Instanziierung
+            \item definiert eine Instance-Operation für Zugriff auf einzige Instanz
+            \item mögliche selbstständige Instanziierung
+            \item Rolle einmal vorkommend
         \end{itemize}
     \end{description}
     \item[Consequences]  \hfill 
     \begin{itemize}
-        \item Kontrollierter Zugriff auf Instanz
-        \item Mögliche Verfeinerung der Operationen und Repräsentation durch Vererbung
-        \item Nachträgliche Änderung der Anzahl der Instanzen 
+        \item kontrollierter Zugriff auf Instanz
+        \item mögliche Verfeinerung der Operationen und Repräsentation durch Vererbung
+        \item nachträgliche Änderung der Anzahl der Instanzen 
     \end{itemize}
 \end{description}
 
@@ -84,7 +84,7 @@ Diese wird nach Gamma et al. auf folgende Art und Weise beschrieben:
     \begin{itemize}
         \item Eine Klasse kann die Klasse der Objekte, die es instantiiert, im Voraus nicht erahnen
         \item Eine Klasse verlangt, dass ihre Unterklassen die von ihr erstellten Objekte spezifizieren
-        \item Klassen delegieren die Instantiierung von Objekten an Helferklassen
+        \item Klassen delegieren die Instanziierung von Objekten an Helferklassen
     \end{itemize}
 
     \item[Role] \hfill
@@ -100,7 +100,7 @@ Diese wird nach Gamma et al. auf folgende Art und Weise beschrieben:
         \item[Creator] \hfill 
         \begin{itemize}
             \item deklariert die Factory-Methode, die ein Objekt vom Typ Product zurückgibt
-            \item kann auch eine Standardimplementierung der Factory-Methode definieren, die die ein Standard ConcreteProduct-Objekt zurückgibt
+            \item kann auch eine Standardimplementierung der Factory-Methode definieren, die ein Standard ConcreteProduct-Objekt zurückgibt
             \item kann die Factory-Methode aufrufen, um ein Product-Objekt zu erzeugen
         \end{itemize}
         \item[ConcreteCreator] \hfill
@@ -121,10 +121,10 @@ Diese wird nach Gamma et al. auf folgende Art und Weise beschrieben:
 %%TODO: Add concrete design patterns
 \subsubsection{Structural Design Patterns}
 
-Structural Design Patterns oder Strukturentwurfsmuster fokussieren sich darauf, wie einzelne Klassen und Objekte zusammengesetzt werden können, um größere Strukturen zu erzeugen\cite[S. 137]{gamma1994design}.
+Structural Design Patterns oder Strukturentwurfsmuster fokussieren sich darauf, wie einzelne Klassen und Objekte zusammengesetzt werden können, um größere Strukturen zu erzeugen~\cite[S. 137]{gamma1994design}.
 Entwurfsmuster dieser Kategorie sind vorteilhaft, wenn unabhängig voneinander entwickelte Klassen oder Objekte aus verschiedenen Bibliotheken oder Frameworks miteinander interagieren müssen.
-Anstatt konkrete Implementierung und Schnittstellen zu nutzen, bedienen sich Structural Design Patterns der Komposition aus Objekten, um neue Funktionalitäten zur Verfügung zu stellen\cite[S. 137]{gamma1994design}.
-Die dadurch gewonnene Flexibilität ermöglicht das Ändern der Zusammensetzung des Objektes dynamisch zu der Laufzeit, welches mit statischer Komposition durch Klassen nicht möglich ist.\cite[S. 137]{gamma1994design}.
+Anstatt konkrete Implementierung und Schnittstellen zu nutzen, bedienen sich Structural Design Patterns der Komposition aus Objekten, um neue Funktionalitäten zur Verfügung zu stellen~\cite[S. 137]{gamma1994design}.
+Die dadurch gewonnene Flexibilität ermöglicht das Ändern der Zusammensetzung des Objektes dynamisch zu der Laufzeit, welches mit statischer Komposition durch Klassen nicht möglich ist~\cite[S. 137]{gamma1994design}.
 Im Kontext dieser Arbeit werden folgende Entwurfsmuster aus der Kategorie der Structural Design Patterns betrachtet:
 
 \subsubsection{Adapter}
@@ -143,31 +143,35 @@ Dabei wird ein Adapter nach Gamma et al. wie gefolgt beschrieben~\cite[S. 141]{g
 .\begin{description}
     \item[Problem] \hfill
     \begin{itemize}
-        \item Eine existierende Klasse soll genutzt werden; die Schnittstelle der Klasse stimmen mit der gebrauchten nicht überein
+        \item Eine existierende Klasse soll genutzt werden; die Schnittstelle der existierenden Klasse stimmt mit der gebrauchten nicht überein
         \item Recyclebare Klasse, die mit unabhängigen Klassen kooperiert
     \end{itemize}
     \item[Roles] \hfill
     \begin{description}
         \item[Target] \hfill
         \begin{itemize}
-            \item definiert domain-spezifische Schnittstelle für das Nutzen durch Clients
+            \item definiert Domain-spezifische Schnittstelle für das Nutzen durch Clients
+            \item Rolle einmal vorkommend
         \end{itemize}
         \item[Client] \hfill 
         \begin{itemize}
             \item kollaboriert mit Objekten, die Target-Schnittstelle implementieren
+            \item Rolle mehrfach vorkommend
         \end{itemize}
         \item[Adaptee] \hfill 
         \begin{itemize}
-            \item definiert ein bereits existierende Schnittstelle, worauf Adapter abgepasst wird
+            \item definiert ein bereits existierende Schnittstelle, worauf Adapter angepasst wird
+            \item Rolle mehrfach vorkommend
         \end{itemize}
         \item[Adapter] \hfill 
         \begin{itemize}
             \item adoptiert die Schnittstelle von Adaptee zu Target-Schnittstelle
+            \item Rolle mehrfach vorkommend
         \end{itemize}
     \end{description}
     \item[Consequences] \hfill 
         \begin{itemize}
-            \item Adoptierung von Adaptee zu Target-Schnittstelle durch konkrete Adapter-Klasse
+            \item Adaptierung von Adaptee zu Target-Schnittstelle durch konkrete Adapter-Klasse
             \item Adapter überschreibt Verhalten von Adaptee-Klasse, da Adapter Subklasse von Adaptee 
         \end{itemize}
 \end{description}
@@ -176,7 +180,7 @@ Dabei wird ein Adapter nach Gamma et al. wie gefolgt beschrieben~\cite[S. 141]{g
 
 \subsubsection{Behavioral Design Patterns}
 
-Behavioral Design Patterns oder Verhaltensentwurfsmuster konzentrieren sich auf Algorithmen und der Zuweisung von Verantwortlichkeiten zwischen Objekten\cite[S. 221]{gamma1994design}.
+Behavioral Design Patterns oder Verhaltensentwurfsmuster konzentrieren sich auf Algorithmen und der Zuweisung von Verantwortlichkeiten zwischen Objekten~\cite[S. 221]{gamma1994design}.
 Dabei wird nicht nur Struktur der Entwurfsmuster betrachtet, sondern auch die Kommunikation und Interaktion der Objekte, die Teil des Entwurfsmusters sind. Charakteristisch für Design Patterns dieser Kategorie ist der Fokus auf Verknüpfung der einzelnen Teilobjekte des Entwurfsmusters,
 anstatt des Kontrollflusses, welcher zur Laufzeit schwer nachvollziehbar sein kann~\cite[S. 221]{gamma1994design}.
 Im Kontext dieser Arbeit werden folgende Entwurfsmuster aus der Kategorie der Behavioral Design Patterns betrachtet:
@@ -190,7 +194,7 @@ Im Kontext dieser Arbeit werden folgende Entwurfsmuster aus der Kategorie der Be
     \label{fig:command}
 \end{figure}
 
-Abbildung~\ref{fig:command} zeigt die Struktur des Adapter-Entwurfsmusters. 
+Abbildung~\ref{fig:command} zeigt die Struktur des Command-Entwurfsmusters. 
 Dabei wird Command nach Gamma et al. wie gefolgt beschrieben~\cite[S. 236]{gamma1994design}:
 
 \begin{description}
@@ -205,20 +209,29 @@ Dabei wird Command nach Gamma et al. wie gefolgt beschrieben~\cite[S. 236]{gamma
         \item[Command] \hfill
         \begin{itemize}
             \item deklariert eine Schnittstelle für das Ausführen von Operationen
+            \item Rolle einmal vorkommend
         \end{itemize}
         \item[ConcreteCommand] \hfill
         \begin{itemize}
             \item definiert eine Bindung zwischen einem Receiver und einer Aktion
-            \item implementiert Execute-Methode durch Ausführen des korrespondierenden Operationen auf Seite von Receiver
+            \item implementiert Execute-Methode durch Ausführen der korrespondierenden Operationen auf Seite von Receiver
+            \item Rolle mehrfach vorkommend
         \end{itemize}
         \item[Invoker] \hfill
         \begin{itemize}
             \item initialisiert die Ausführung eines Commands
+            \item Rolle einmal vorkommend
+        \end{itemize}
+        \item[Client] \hfill
+        \begin{itemize}
+            \item instanziiert ConcreteCommand
+            \item Rolle einmal vorkommend
         \end{itemize}
         \item[Receiver] \hfill
         \begin{itemize}
             \item Empfänger von Commands
-            \item Wissen, wie empfangene Commands auszuführen sind  
+            \item Wissen, wie empfangene Commands auszuführen sind
+            \item Rolle einmal vorkommend  
         \end{itemize}
     \end{description}
     \item[Consequences] \hfill
@@ -226,7 +239,7 @@ Dabei wird Command nach Gamma et al. wie gefolgt beschrieben~\cite[S. 236]{gamma
         \item Entkoppelung zwischen Objekt, welches Operation initialisiert, und Objekt, das Operation durchführt
         \item Erweiterung von Manipulation von Verhalten von Command-Klassen durch Vererbung
         \item Zusammensetzung von Command-Klassen durch andere Command-Klassen
-        \item Erleichtertes Hinzufügen von neuen Command-Klassen
+        \item erleichtertes Hinzufügen von neuen Command-Klassen
     \end{itemize}
 \end{description}
 
@@ -245,37 +258,41 @@ Dabei kann dieser nach Gamma et al. wie folgt beschrieben werden:
 \begin{description}
     \item[Problem] \hfill 
     \begin{itemize}
-        \item Benachrichtigung von Objekten ohne Annahmen über diese
-        \item Änderung in einem Objekt erfordert Änderungen in abhängigen Objekten; Kein Wissen wie abhängige Objekte auf Änderung reagieren
+        \item Benachrichtigung von Objekten ohne Annahmen über deren Existenz
+        \item Änderung in einem Objekt erfordert Änderungen in abhängigen Objekten; kein Wissen wie abhängige Objekte auf Änderung reagieren
     \end{itemize}
     \item[Roles] \hfill
     \begin{description}
         \item[Subject] \hfill 
         \begin{itemize}
-            \item Wissen über dessen Observer; beliebige Anzahl an Observern an einem Subject möglich
+            \item Wissen über dessen Observer; beliebige Anzahl vom Observern an einem Subject möglich
             \item Schnittstelle für das Hinzufügen und Entfernen von Observern
+            \item Rolle einmal vorkommend 
         \end{itemize}
         \item[Observer] \hfill 
         \begin{itemize}
             \item definiert Schnittstelle für das Reagieren von Änderungen am Subject seitens der abhängigen Objekte
+            \item Rolle einmal vorkommend  
         \end{itemize}
         \item[ConcreteSubject] \hfill 
         \begin{itemize}
             \item implementiert Subject-Schnittstelle
             \item beinhaltet relevanten Zustand von ConcreteObserver-Objekten
             \item Benachrichtigung von dessen Observer-Objekten bei Änderungen am relevanten Zustand
+            \item Rolle einmal vorkommend  
         \end{itemize}
         \item[ConcreteObserver] \hfill 
         \begin{itemize}
             \item hält Referenz zu ConcreteSubject-Objekt
-            \item Speichert selbst Zustand; konsistent zu dem von Subject
-            \item implementiert Observer-Schnittstelle für das Synchronisieren der Zustände  
+            \item speichert selbst Zustand; konsistent zu dem von Subject
+            \item implementiert Observer-Schnittstelle für das Synchronisieren der Zustände
+            \item Rolle mehrfach vorkommend     
         \end{itemize}
     \end{description}
     \item[Consequences]:
     \begin{itemize}
         \item Abstrakte Koppelung zwischen Observer und Subject; Keine Annahmen von Subject über Observer außer Observer-Schnittstelle
         \item Broadcast an Observer; Benachrichtigung aller registrierten Observer
-        \item Einspielen von unerwarteten Benachrichtigung 
+        \item Einspielen von unerwarteter Benachrichtigungen 
     \end{itemize}
 \end{description}
